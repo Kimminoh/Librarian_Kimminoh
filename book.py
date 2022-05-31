@@ -1,4 +1,6 @@
 from tkinter import *
+#추가 주석 : 수정 테스트!
+
 
 # 도서관리 UI
 def book_manager():
@@ -28,7 +30,6 @@ def book_manager():
     window_book_manager.mainloop()
 
 # 도서 등록/수정 UI
-#테스트 주석추
 
 def book_reg_edit():
     window_book_reg_edit_main=Tk()
@@ -99,64 +100,3 @@ def book_delete():
 
 
     window_book_delete_main.mainloop()
-
-
-
-# 회원관리 UI
-def user_manager():
-    window_user_manager=Tk()
-
-    user_reg_btn=Button(window_user_manager,text="회원등록",command=user_reg)
-    user_search_edit_quit_btn=Button(window_user_manager,text="회원검색/수정/탈퇴",command=user_search_edit_quit)
-    user_reg_btn.pack()
-    user_search_edit_quit_btn.pack()
-
-
-
-
-    window_user_manager.mainloop()
-
-
-def user_reg():
-    window_user_reg=Tk()
-
-
-
-    window_user_reg.mainloop()
-
-def user_search_edit_quit():
-    window_user_search_edit_quit=Tk()
-
-
-
-
-    window_user_search_edit_quit.mainloop()
-
-
-
-
-# 메인 UI
-window = Tk()
-window.title("도서관리 프로그램")
-window.geometry("700x500")
-
-label1 = Label(window, text = '도서관리프로그램', bg = 'gray', width = 700, height = 5)
-window.configure(background = 'sky blue')
-
-book_manager_btn=Button(window,text="도서관리",fg="black", bg="orange", width='20',
-                  height='10',command=book_manager)
-user_manager_btn=Button(window,text="회원관리",fg="black", bg="orange", width='20',
-                    height='10',command=user_manager)
-
-label1.pack()
-book_manager_btn.pack()
-book_manager_btn.place(x=150,y=150)
-
-user_manager_btn.pack()
-user_manager_btn.place(x=450,y=150)
-
-
-
-
-
-window.mainloop()
