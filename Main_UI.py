@@ -28,6 +28,7 @@ def book_manager():
     window_book_manager.mainloop()
 
 # 도서 등록/수정 UI
+#테스트 주석추
 
 def book_reg_edit():
     window_book_reg_edit_main=Tk()
