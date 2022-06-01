@@ -36,25 +36,42 @@ def BOOK_MANAGEMENT_FIRST():
     window = Tk()
     window.title("도서 등록/수정")
     window.geometry("700x500")
-    label1 = Label(window, text = '도서 등록/수정', bg = 'gray', width = 700, height = 5)
+    label1 = Label(window, text = '도서 등록/수정', bg = 'gray',width = 700, height = 5)
     window.configure(background = 'sky blue')
     #공통부분 ↑
 
     BTN_CANCEL = Button(window, text='뒤로가기', bg='orange', width='8', height='2')
     BTN_NEW_REG = Button(window, text='도서 신규 등록', bg='orange', width='15', height='2')
 
-    label2 = Label(window, text='수정할 도서 검색하기',fg='black' ,font=(10), width=20,height=1) 
+    label2 = Label(window, text='수정할 도서 검색하기 :',fg='black' ,
+                   font=('맑은 고딕',10), width=20,height=1) 
+
+    USER_SEARCH_LABEL = Entry(window)
+    USER_SEARCH_LABEL.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
+    USER_SEARCH_LABEL.insert(END, "도서명 혹은 저자를 입력하세요")
+    
+    USER_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black')
+    USER_SEARCH_BTN.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
+
+    USER_SELECT_BOX = Listbox(window, width=70, height = 8)
+    USER_SELECT_BOX.place(relx=0.05,rely=0.4,relwidth=0.8,relheight = 0.5)
+    USER_SELECT_BOX.insert(0,"윤도운 : 010-1234-5678")
+    USER_SELECT_BOX.insert(1,"김민오 : 010-1234-5678")
+    USER_SELECT_BOX.insert(2,"남강민 : 010-1234-5678")
+    USER_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black')
+    USER_SELECT_BTN.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
+    
     
     label1.pack()
 
     label2.pack()
-    label2.place(x=5, y=205)
+    label2.place(x=5, y=155)
     
     BTN_CANCEL.pack()
     BTN_CANCEL.place(x=5,y=25)
 
     BTN_NEW_REG.pack()
-    BTN_NEW_REG.place(x=5,y=105)
+    BTN_NEW_REG.place(x=5,y=90)
     
     
     
