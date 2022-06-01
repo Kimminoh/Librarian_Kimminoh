@@ -1,4 +1,7 @@
+from email.mime import image
 from tkinter import *
+from tkinter import filedialog
+from PIL import ImageTk, Image
 
 # 도서관리 UI
 def book_manager():
@@ -75,12 +78,50 @@ def book_edit():
 # 도서 신규등록 버튼 눌렀을 때 나오는 UI
 def book_new_reg():
     window_book_new_reg=Tk()
+
+    # 정보 입력하는 창, 값을 input_정보 변수에 담음 (현재 디폴트 : 문자열)
+    input_isbn= Entry(window_book_new_reg)
+    input_bookname=Entry(window_book_new_reg)
+    input_publish=Entry(window_book_new_reg)
+    input_author=Entry(window_book_new_reg)
+    input_price=Entry(window_book_new_reg)
+    input_url=Entry(window_book_new_reg)
+    input_description=Entry(window_book_new_reg)
+
+    input_isbn.pack()
+    input_bookname.pack()
+    input_publish.pack()
+    input_author.pack()
+    input_price.pack()
+    input_url.pack()
+    input_description.pack()
     
-    # 값 입력하는 UI만들기
+    photo=PhotoImage()
+    plabel=Label(window_book_new_reg,image=photo)
+    plabel.pack()
+
+    image_btn=Button(window_book_new_reg, text="사진찾기",command=open_button)
+    image_btn.pack()
+
+
+#함수 안에 함수 선언(오픈 버튼 누를 시)
+def open_button():
+    filename=filedialog.askopenfilename(initialdir='', title='파일선택', filetypes=(
+        ('png files', '*.png'), ('jpg files', '*.jpg'), ('all files', '*.*')))
+    photo=PhotoImage(file=filename)
+    
+
+    label_reg=Label(window,text=window.filename)
+    label_reg.pack()
+
+
+        
 
     
-    window_book_new_reg.mainloop()
+    #메인 루프는 어떻게 할 것인가?
 
+
+#----------------------------------------------------------------------
 
 
 def book_search__lend():
@@ -100,6 +141,9 @@ def book_delete():
     window_book_delete_main.mainloop()
 
 
+
+
+#------------------------------------------------------------------------
 
 # 회원관리 UI
 def user_manager():
@@ -159,3 +203,4 @@ user_manager_btn.place(x=450,y=150)
 
 
 window.mainloop()
+
