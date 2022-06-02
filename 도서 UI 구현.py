@@ -9,9 +9,6 @@ def BOOK_MANAGEMENT():
     label1 = Label(window, text = '도서관리프로그램', bg = 'gray', width = 700, height = 5)
     window.configure(background = 'sky blue')
 
-
-
-    
     #공통부분 ↑---------------------------------------------------------------------
     # ㉮
     BTN_REG_EDIT = Button(window, text='도서\n등록/수정', bg='orange', width='18',
@@ -22,7 +19,7 @@ def BOOK_MANAGEMENT():
     # ㉰
     BTN_DELETE = Button(window, text='도서삭제', bg='orange', width='18',
                           height='8', command = BOOK_DELETE)    
-                          height='8')
+
       
     BTN_CANCEL = Button(window, text='뒤로가기', bg='orange'
     , width='8', height='2',command=window.destroy)    
@@ -227,33 +224,34 @@ def BOOK_EDIT():
     BTN_EDIT('BTN_CANCEL', '취소', 'gray', '7', '1', 400, 420)
 
 
-# ㉰의 화면
+# ㉰의 화면----------------------------------------------------
 def BOOK_DELETE():
-    DLT = Tk()
-    DLT.title("도서 삭제")
-    DLT.geometry("700x500")
-    label1 = Label(DLT, text = '도서 삭제', bg = 'gray',width = 700, height = 5)
-    DLT.configure(background = 'sky blue')
+    window = Tk()
+    window.title("도서 삭제")
+    window.geometry("700x500")
+    label1 = Label(window, text = '도서 삭제', bg = 'gray',width = 700, height = 5)
+    window.configure(background = 'sky blue')
 
-    label2 = Label(DLT, text='삭제할 도서 검색하기 :',fg='black' ,
+    label2 = Label(window, text='삭제할 도서 검색하기 :',fg='black' ,
                    font=('맑은 고딕',10), width=20,height=1)
 
-    BTN_CANCEL = Button(DLT, text='뒤로가기', bg='orange', width='8', height='2')
+    BTN_CANCEL = Button(window, text='뒤로가기', bg='orange'
+    , width='8', height='2',command=window.destroy)
     
     
-    BOOK_SEARCH_LABEL = Entry(DLT)
+    BOOK_SEARCH_LABEL = Entry(window)
     BOOK_SEARCH_LABEL.insert(END, "도서명 혹은 저자를 입력하세요")
     BOOK_SEARCH_LABEL.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
 
-    BOOK_SEARCH_BTN = Button(DLT, text = '검색', fg='white' ,bg='black')
+    BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black')
     BOOK_SEARCH_BTN.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
 
-    BOOK_SELECT_BOX = Listbox(DLT, width=70, height = 8, highlightcolor = 'blue') # 선택시 파란색으로 표시
+    BOOK_SELECT_BOX = Listbox(window, width=70, height = 8, highlightcolor = 'blue') # 선택시 파란색으로 표시
     BOOK_SELECT_BOX.place(relx=0.25,rely=0.4,relwidth=0.6,relheight = 0.5)
     BOOK_SELECT_BOX.insert(0,"도서명 : 불멸의 이순신 / 저자 : 윤도운")
     BOOK_SELECT_BOX.insert(1,"도서명 : 동물농장 / 저자 : 조지 오웰")
     BOOK_SELECT_BOX.insert(2,"도서명 : 1984 / 저자 : 조지 오웰")
-    BOOK_SELECT_BTN = Button(DLT, text = '선택하기', fg='white', bg = 'black')
+    BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black')
     BOOK_SELECT_BTN.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
 
     BTN_CANCEL.pack()
@@ -265,7 +263,7 @@ def BOOK_DELETE():
 
 
   
-# 첫번째 화면(메인화면)
+# 첫번째 화면(메인화면)------------------------------------------
 
 window = Tk()
 window.title("도서관리 프로그램")
