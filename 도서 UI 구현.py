@@ -1,16 +1,18 @@
 from tkinter import*
 
-
 # 2번째 화면
 def BOOK_MANAGEMENT():
-    #공통부분 ↓
+    #공통부분 ↓---------------------------------------------------------------------
     window = Tk()
     window.title("도서관리")
     window.geometry("700x500")
     label1 = Label(window, text = '도서관리프로그램', bg = 'gray', width = 700, height = 5)
     window.configure(background = 'sky blue')
-    #공통부분 ↑
 
+
+
+    
+    #공통부분 ↑---------------------------------------------------------------------
     # ㉮
     BTN_REG_EDIT = Button(window, text='도서\n등록/수정', bg='orange', width='18',
                           height='8', command = BOOK_MANAGEMENT_FIRST)
@@ -20,17 +22,26 @@ def BOOK_MANAGEMENT():
     # ㉰
     BTN_DELETE = Button(window, text='도서삭제', bg='orange', width='18',
                           height='8', command = BOOK_DELETE)    
+                          height='8')
+      
+    BTN_CANCEL = Button(window, text='뒤로가기', bg='orange'
+    , width='8', height='2',command=window.destroy)    
+
 
     label1.pack()
     BTN_REG_EDIT.pack()
     BTN_SEARCH_RENT.pack()
     BTN_DELETE.pack()
+    BTN_CANCEL.pack()
     
     BTN_REG_EDIT.place(x=100,y=170)
     BTN_SEARCH_RENT.place(x=300,y=170)
     BTN_DELETE.place(x=500,y=170)
+    BTN_CANCEL.place(x=5,y=25)
+
 
 # ㉮의 화면
+# 도서 등록/수정 화면
 def BOOK_MANAGEMENT_FIRST():
     #공통부분 ↓
     window = Tk()
@@ -38,13 +49,15 @@ def BOOK_MANAGEMENT_FIRST():
     window.geometry("700x500")
     label1 = Label(window, text = '도서 등록/수정', bg = 'gray',width = 700, height = 5)
     window.configure(background = 'sky blue')
-    #공통부분 ↑
-
-    BTN_CANCEL = Button(window, text='뒤로가기', bg='orange', width='8', height='2')
-                        
+    #공통부분 ↑   
+    
     BTN_NEW_REG = Button(window, text='도서 신규 등록', bg='orange', width='15', height='2',
                          command = BOOK_NEW_REG)
+    BTN_CANCEL = Button(window, text='뒤로가기', bg='orange'
+    , width='8', height='2',command=window.destroy)
 
+    
+    
     label2 = Label(window, text='수정할 도서 검색하기 :',fg='black' ,
                    font=('맑은 고딕',10), width=20,height=1) 
 
@@ -55,6 +68,7 @@ def BOOK_MANAGEMENT_FIRST():
     BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black')
     BOOK_SEARCH_BTN.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
 
+    
     # 등록되어 있는 도서 리스트
     # 실제 구현시에는 데이터프레임에 있는 데이터 목록을 가져와서 출력해야함
     BOOK_SELECT_BOX = Listbox(window, width=70, height = 8, highlightcolor = 'blue') # 선택시 파란색으로 표시
@@ -226,6 +240,7 @@ def BOOK_DELETE():
 
     BTN_CANCEL = Button(DLT, text='뒤로가기', bg='orange', width='8', height='2')
     
+    
     BOOK_SEARCH_LABEL = Entry(DLT)
     BOOK_SEARCH_LABEL.insert(END, "도서명 혹은 저자를 입력하세요")
     BOOK_SEARCH_LABEL.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
@@ -250,7 +265,8 @@ def BOOK_DELETE():
 
 
   
-# 1번째 화면
+# 첫번째 화면(메인화면)
+
 window = Tk()
 window.title("도서관리 프로그램")
 window.geometry("700x500")
@@ -261,6 +277,8 @@ window.configure(background = 'sky blue')
 #도서관리 누르면 2번째 창으로 넘어감
 BTN_BOOK = Button(window, text='도서관리',fg="black", bg="orange", width='20',
                   height='10', command=BOOK_MANAGEMENT)
+                  
+# 우선적으로 해당 파일에서 회원관리 클릭시 프로그램 종료!                  
 BTN_MEMBER = Button(window, text='회원관리',fg="black", bg="orange", width='20',
                     height='10')
 
