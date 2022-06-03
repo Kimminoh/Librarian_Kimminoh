@@ -1,4 +1,6 @@
 from tkinter import*
+import tkinter.messagebox
+
 
 # 2번째 화면
 def BOOK_MANAGEMENT():
@@ -15,7 +17,7 @@ def BOOK_MANAGEMENT():
                           height='8', command = BOOK_MANAGEMENT_FIRST)
     # ㉯
     BTN_SEARCH_RENT = Button(window, text='도서\n조회/대출', bg='orange', width='18',
-                          height='8')
+                          height='8', command = BOOK_LOOKUP)
     # ㉰
     BTN_DELETE = Button(window, text='도서삭제', bg='orange', width='18',
                           height='8', command = BOOK_DELETE)    
@@ -40,18 +42,18 @@ def BOOK_MANAGEMENT():
 # ㉮의 화면
 # 도서 등록/수정 화면
 def BOOK_MANAGEMENT_FIRST():
-    #공통부분 ↓
+    #공통부분 ↓-----------------------------------------------------------------------
     window = Tk()
     window.title("도서 등록/수정")
     window.geometry("700x500")
     label1 = Label(window, text = '도서 등록/수정', bg = 'gray',width = 700, height = 5)
     window.configure(background = 'sky blue')
-    #공통부분 ↑   
+    #공통부분 ↑-----------------------------------------------------------------------  
     
     BTN_NEW_REG = Button(window, text='도서 신규 등록', bg='orange', width='15', height='2',
                          command = BOOK_NEW_REG)
-    BTN_CANCEL = Button(window, text='뒤로가기', bg='orange'
-    , width='8', height='2',command=window.destroy)
+    BTN_CANCEL = Button(window, text='뒤로가기', bg='orange',
+     width='8', height='2',command=window.destroy)
 
     
     
@@ -78,57 +80,55 @@ def BOOK_MANAGEMENT_FIRST():
     
     
     label1.pack()
-
-    label2.pack()
     label2.place(x=5, y=155)
-    
-    BTN_CANCEL.pack()
     BTN_CANCEL.place(x=5,y=25)
-
-    BTN_NEW_REG.pack()
     BTN_NEW_REG.place(x=5,y=90)
     
     
 # ㉮-1 신규 도서 추가     
 def BOOK_NEW_REG():
+    #공통부분 ↓-----------------------------------------------------------------------
     window = Tk()
     window.title("도서 신규등록")
     window.geometry("700x500")
     label1 = Label(window, text = '도서 신규 등록', bg = 'gray', width = 700, height = 3)
     window.configure(background = 'sky blue')    
-
+    #공통부분 ↑-----------------------------------------------------------------------  
     label1.pack() # 창 제목 레이블
     
     def BTN_EDIT(a, b, c, d,e, f,g):
         a = Button(window, text=b, bg=c, width=d, height=e)
-        a.pack()
         a.place(x=f, y = g)    
 
     def BLANK(a,b,c,d,e):
         a = Entry(window)
         a.place(x= b, y= c,relwidth=d,relheight=e)
 
-    # 사진 미리 보기 창
-    IMAGE_PREVIEW = Button(window, text='사진\n미리보기', bg='orange', width='15', height='10')
-    IMAGE_PREVIEW.pack()
-    IMAGE_PREVIEW.place(x=30, y = 80)
-    
-    BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
-    BTN_BOOK_ISBN.pack()
-    BTN_BOOK_ISBN.place(x=170, y = 80)
-    SEARCH_BOOK_ISBN = Entry(window)
-    SEARCH_BOOK_ISBN.place(x= 250, y= 80,relwidth=0.5,relheight=0.05)
+    # 중복확인시 이벤트 발생
+    def ERROR_1():   # 예외처리 1
+        tkinter.messagebox.showinfo("ERROR","해당 도서는 등록 가능 합니다 !")
+    def ERROR_2():   # 예외처리 2
+        tkinter.messagebox.showinfo("ERROR","해당 도서는 등록 불가능 합니다 !")
+    def ERROR_3():   # 예외처리 3
+        tkinter.messagebox.showinfo("ERROR","중복 확인 후 도서 등록이 가능합니다 !")
+    def ERROR_4():   # 예외처리 4
+        tkinter.messagebox.showinfo("ERROR","현재 도서는 이미 등록되어 있는 도서입니다. !")
+    def ERROR_5():   # 예외처리 5
+        tkinter.messagebox.showinfo("ERROR","해당 부분은 숫자로만 입력이 가능합니다 !")
+    def ERROR_6():   # 예외처리 6
+        tkinter.messagebox.showinfo("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
 
+    # 사진 미리 보기 창
     # 예외처리 (사진을 등록하지 않았을 때) => 메세지 창 띄우기
     BTN_EDIT('IMAGE_PREVIEW', '사진\n미리보기','orange','15','10',30,80)
 
     BTN_EDIT('BTN_BOOK_ISBN', 'ISBN', 'orange','8','1', 170, 80)
     BLANK('BTN_BOOK_ISBN',250,80,0.5,0.05)
 
-    # 중복확인시 이벤트 발생 추가해야함 (예외처리 4가지)
-    # (중복 확인 누르지 않을 때 / ISBN 동일 / 정수 이외의 값 / 정보 다 입력하지 않을 때)
-    # => 메세지 창으로 이벤트 발생 시키기 추가 해야 함
-    BTN_EDIT('OVERLAP_CHECK', '중복확인', 'orange', '7', '1', 620, 80)
+    # 중복확인시 이벤트 추가함
+    OVERLAP_CHECK = Button(window, text='중복확인', bg='orange', width='7', height='1',
+                           command = ERROR_1)
+    OVERLAP_CHECK.place(x=620, y = 80)    
 
     BTN_EDIT('BTN_BOOK_TITLE', '도서명','orange', '8',  '1', 170,120)
     BLANK('SEARCH_BOOK_TITLE', 250,120,0.5,0.05)
@@ -155,24 +155,26 @@ def BOOK_NEW_REG():
     
     BTN_EDIT('BTN_OK', '확인', 'gray', '7', '1', 300, 420)
 
-    BTN_EDIT('BTN_CANCEL', '취소', 'gray', '7', '1', 400, 420)
+    BTN_CANCEL = Button(window, text='취소', bg='gray', width='7', height='1',
+                        command=window.destroy )
+    BTN_CANCEL.place(x=400, y = 420)
 
 
 # ㉮-2번째 창 / 도서 수정하기
 # 도서 목록중 하나 선택해서 도서 수정하기 
 def BOOK_EDIT():
+    #공통부분 ↓-----------------------------------------------------------------------
     window = Tk()
     window.title("도서 수정하기")
     window.geometry("700x500")
     label1 = Label(window, text = '도서 수정하기', bg = 'gray', width = 700, height = 3)
     window.configure(background = 'sky blue')    
-
+    #공통부분 ↑-----------------------------------------------------------------------
     label1.pack() # 창 제목 레이블
     
     # 함수안의 함수 => 버튼 형식 생성
     def BTN_EDIT(a, b, c, d,e, f,g):
         a = Button(window, text=b, bg=c, width=d, height=e)
-        a.pack()
         a.place(x=f, y = g)    
 
     def BLANK(a,b,c,d,e):
@@ -182,18 +184,28 @@ def BOOK_EDIT():
     # 리스트 박스 목록 더블클릭시 창 띄우기 아직 구현 X
     # 선택하기 눌러야 함
       
-    # 예외처리 2개
-    # (적용 버튼 누르지 않을 때 / 사진 없을 때)
+    # 예외처리 이벤트
+    def ERROR_7():     # 예외처리 7
+        tkinter.messagebox.showinfo("ERROR","해당 ISBN으로 수정이 가능합니다 !")
+    def ERROR_8():     # 예외처리 8
+        tkinter.messagebox.showinfo("ERROR","해당 ISBN으로는 수정하실 수 없습니다 !")
+    def ERROR_9():     # 예외처리 9
+        tkinter.messagebox.showinfo("ERROR","변경사항을 적용 하여야지 등록/수정이 가능합니다 !")
+    def ERROR_10():     # 예외처리 10
+        tkinter.messagebox.showinfo("ERROR","해당 부분은 숫자로만 입력이 가능합니다 !")
+
+
+
     BTN_EDIT('IMAGE_PREVIEW', '사진\n미리보기','orange','15','10',30,80)
 
     BTN_EDIT('BTN_BOOK_ISBN', 'ISBN', 'orange','8','1', 170, 80)
     BLANK('BTN_BOOK_ISBN',250,80,0.5,0.05)
 
-    # 중복확인시 이벤트 발생 추가해야함 (예외처리 4가지)
-    # (중복 확인 누르지 않을 때 / ISBN 동일 / 정수 이외의 값 / 정보 다 입력하지 않을 때)
-    # => 메세지 창으로 이벤트 발생 시키기 추가 해야 함
-    BTN_EDIT('OVERLAP_CHECK', '중복확인', 'orange', '7', '1', 620, 80)
-
+    # 중복확인시 이벤트 발생 추가
+    OVERLAP_CHECK = Button(window, text='중복확인', bg='orange', width='7', height='1',
+                           command = ERROR_7)
+    OVERLAP_CHECK.place(x=620, y = 80)
+    
     BTN_EDIT('BTN_BOOK_TITLE', '도서명','orange', '8',  '1', 170,120)
     BLANK('SEARCH_BOOK_TITLE', 250,120,0.5,0.05)
 
@@ -221,23 +233,93 @@ def BOOK_EDIT():
     
     BTN_EDIT('BTN_OK', '확인', 'gray', '7', '1', 300, 420)
 
-    BTN_EDIT('BTN_CANCEL', '취소', 'gray', '7', '1', 400, 420)
+    BTN_CANCEL = Button(window, text='취소', bg='gray', width='7', height='1',command=window.destroy )
+    BTN_CANCEL.place(x=400, y = 420)
+    
+
+
+# ㉯의 화면----------------------------------------------------
+def BOOK_LOOKUP():
+    window = Tk()
+    window.title('도서 조회/대출')
+    window.geometry("700x500")
+    label1 = Label(window, text = '도서 조회/대출', bg ='gray', width = 700, height = 5)
+    window.configure(background = 'sky blue')
+
+    label1.pack()
+    
+    def BTN_EDIT(a, b, c, d,e, f,g):
+        a = Button(window, text=b, bg=c, width=d, height=e)
+        a.place(x=f, y = g)    
+
+    def BLANK(a,b,c,d,e) :
+        a = Entry(window)
+        a.place(x= b, y= c,relwidth=d,relheight=e)
+
+    BTN_CANCEL = Button(window, text='뒤로가기', bg='orange',
+     width='8', height='2',command=window.destroy)
+    BTN_CANCEL.place(x=5,y=25)
+    
+    BTN_SEARCH = Button(window, text='도서 검색', bg='orange', width='10', height='2')         
+    BTN_SEARCH.place(x=30,y=95)
+    
+    BLANK_SEARCH = Entry(window)
+    BLANK_SEARCH.place(x= 150, y= 100,relwidth=0.6,relheight=0.06)
+
+    BOOK_SELECT_BOX = Listbox(window, width=70, height = 8, highlightcolor = 'blue') # 선택시 파란색으로 표시
+    BOOK_SELECT_BOX.place(relx=0.04,rely=0.3,relwidth=0.8,relheight = 0.3)
+    BOOK_SELECT_BOX.insert(0,"도서명 : 불멸의 이순신 / 저자 : 윤도운")
+    BOOK_SELECT_BOX.insert(1,"도서명 : 동물농장 / 저자 : 조지 오웰")
+    BOOK_SELECT_BOX.insert(2,"도서명 : 1984 / 저자 : 조지 오웰")
+
+    BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black')
+    BOOK_SEARCH_BTN.place(x=600,y=95,relwidth=0.1,relheight = 0.07)
+
+    BOOK_INF = Button(window, text = '선택하기', fg='white', bg = 'black')
+    BOOK_INF.place(x=600,y=150,relwidth=0.1,relheight=0.05)
+
+    BTN_EDIT('BTN_IMAGE', '사진', 'gray', '7', '1', 30, 320)
+    BTN_EDIT('BTN_ISBN', 'ISBN', 'gray', '7', '1', 120, 320)
+    BTN_EDIT('BTN_TITLE', '도서명', 'gray', '7', '1', 210, 320)
+    BTN_EDIT('BTN_AUTHOR', '저자', 'gray', '7', '1', 300, 320)
+    BTN_EDIT('BTN_PRICE', '가격', 'gray', '7', '1', 390, 320)
+    BTN_EDIT('BTN_URL', 'URL', 'gray', '7', '1', 480, 320)
+    BTN_EDIT('BTN_RENT', '대출여부', 'gray', '7', '1', 570, 320)
+
+    BLANK('example', 120, 380, 0.08, 0.05)
+    BLANK('example', 210, 380, 0.08, 0.05)
+    BLANK('example', 300, 380, 0.08, 0.05)
+    BLANK('example', 390, 380, 0.08, 0.05)
+    BLANK('example', 480, 380, 0.08, 0.05)
+    BLANK('example', 570, 380, 0.08, 0.05)
+
+    BTN_EDIT("example", '대출하기\n반납하기','gray','10','2',560,430)
+    
+    
+    
 
 
 # ㉰의 화면----------------------------------------------------
 def BOOK_DELETE():
+    #공통부분 ↓-----------------------------------------------------------------------
     window = Tk()
     window.title("도서 삭제")
     window.geometry("700x500")
     label1 = Label(window, text = '도서 삭제', bg = 'gray',width = 700, height = 5)
     window.configure(background = 'sky blue')
-
+    #공통부분 ↑-----------------------------------------------------------------------
     label2 = Label(window, text='삭제할 도서 검색하기 :',fg='black' ,
                    font=('맑은 고딕',10), width=20,height=1)
 
     BTN_CANCEL = Button(window, text='뒤로가기', bg='orange'
     , width='8', height='2',command=window.destroy)
-    
+
+    def DLT_ASK():
+        tkinter.messagebox.askquestion("도서 삭제"," (책 이름)을 삭제하시겠습니까?")
+    def DLT_DONE():
+        tkinter.messagebox.askquestion("삭제 완료"," (책 이름)을 삭제되었습니다 !")
+    def DLT_ERROR():
+        tkinter.messagebox.askquestion("삭제 실패"," 해당 도서를 반납하고 삭제해주세요 !")
     
     BOOK_SEARCH_LABEL = Entry(window)
     BOOK_SEARCH_LABEL.insert(END, "도서명 혹은 저자를 입력하세요")
@@ -251,7 +333,7 @@ def BOOK_DELETE():
     BOOK_SELECT_BOX.insert(0,"도서명 : 불멸의 이순신 / 저자 : 윤도운")
     BOOK_SELECT_BOX.insert(1,"도서명 : 동물농장 / 저자 : 조지 오웰")
     BOOK_SELECT_BOX.insert(2,"도서명 : 1984 / 저자 : 조지 오웰")
-    BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black')
+    BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black', command = DLT_ASK)
     BOOK_SELECT_BTN.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
 
     BTN_CANCEL.pack()
