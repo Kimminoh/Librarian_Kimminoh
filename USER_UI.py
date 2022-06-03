@@ -1,3 +1,4 @@
+import pandas as pd
 from tkinter import *
 from tkinter.simpledialog import *
 
@@ -20,6 +21,22 @@ def create_entry(entry_name,font,width,x,y):                             # 엔�
     return entry_name
 
 def user_reg():
+    def inuser_csv():
+        df_user = pd.read_csv('csv/user.csv', encoding='CP949')
+        df_user = df_user.set_index(df_user['USER_PHONE'])
+
+        new_user = { "USER_PHONE": phone_entry.get(),             # -(하이픈) 포함
+                    "USER_NAME": name_entry.get(),                     # 영문일 시 공백포함
+                    "USER_BIRTH": birth_entry.get(),                    # YYYYMMDD 
+                    #"USER_SEX": ''sex_button.get()'',                          # TRUE : 남자, FALSE : 여자
+                    "USER_MAIL": mail_entry.get(),
+                    "USER_IMAGE": image_entry.get(),                     # 기본값 None(흰 배경)
+                    "USER_REG": phone_entry.get(),                          # TRUE : 등록, FALSE : 탈퇴
+                    "USER_RENT_CNT": 0 }                                 # +1, -1 하는 방식
+        df_user = df_user.append(new_user, ignore_index=True)           # 데이터프레임을 추가하고 행 인덱스를 재배열
+        df_user = df_user.set_index(df_user['USER_PHONE'])               # USER_PHONE을 인덱스로 사용
+
+        df_user.to_csv('csv/user.csv', index=False, encoding='CP949')
 
     sub_label = Label(mainwindow, text ="회원 등록",font=("맑은 고딕",9),bg='gray',height=3)
     image_label = Label(mainwindow, text='사진\n미리보기', bg='orange', width=15, height=10)
@@ -48,10 +65,12 @@ def user_reg():
     image_button = create_button('image_button','orange','사진',9,170,280)
     image_entry = create_entry('image_entry',("맑은 고딕",12),35,250,280)
     reg_button = create_button('mail_button','gray','등록',9,150,400)
-    ok_button = create_button('mail_button','gray','확인',9,300,400)
+    ok_button = Button(mainwindow,text='등록',command=inuser_csv)
+#   ok_button.config()
+    ok_button.place(x=300,y=400)
     cancel_button = create_button('mail_button','gray','취소',9,450,400)
 
- 
+
 
 mainwindow = Tk()
 user_reg()
