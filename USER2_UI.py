@@ -16,8 +16,9 @@ def create_button(button_name,color,text,width,x,y):                   # 버튼 
 def create_label(label_name,x,y):                                       # 라벨 배치 함수
     label_name.place(x=x, y = y)
 
-def create_entry(entry_name,font,width,x,y):                             # 엔트리 배치 함수
-    entry_name = Entry(mainwindow, font=font,width=width)
+def create_entry(entry_name,text,font,width,x,y):                             # 엔트리 배치 함수
+    entry_name = Entry(mainwindow,font=font,width=width)
+    entry_name.insert(0,text)
     entry_name.place(x=x, y = y)
     return entry_name
 
@@ -56,20 +57,20 @@ def user_update():
     create_label(image_label,30,80)
     state_label.place(x=60,y=250)
     name_button = create_button('name_button','orange','이름',9,170,80)
-    name_entry = create_entry('name_entry',("맑은 고딕",12),35,250,80)
+    name_entry = create_entry('name_entry','조회된 이름',("맑은 고딕",12),35,250,80)
     birth_button = create_button('birth_button','orange','생년월일',9,170,120)
-    birth_entry = create_entry('birth_entry',("맑은 고딕",12),35,250,120)
+    birth_entry = create_entry('birth_entry','조회된 생년월일',("맑은 고딕",12),35,250,120)
     sex_button = create_button('sex_button','orange','성별',9,170,160)
     male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','남',var,1,250,160)
     female_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','여',var,2,300,160)
     phone_button = create_button('phone_button','orange','전화번호',9,170,200)
-    phone_entry = create_entry('phone_entry',("맑은 고딕",12),35,250,200)
-    phone_check = create_button('phone_check','gray','중복확인',9,580,200)
+    phone_entry = create_entry('phone_entry','조회된 번호',("맑은 고딕",12),35,250,200)
+    phone_check = create_button('phone_check','gray','중복확인',9,580,200)                          # 중복확인 버튼 미구현
     mail_button = create_button('mail_button','orange','이메일 주소',9,170,240)
-    mail_entry = create_entry('mail_entry',("맑은 고딕",12),35,250,240)
+    mail_entry = create_entry('mail_entry','조회된 이메일주소',("맑은 고딕",12),35,250,240)
     image_find = create_button('image_find','gray','찾아보기',9,580,280)
     image_button = create_button('image_button','orange','사진',9,170,280)
-    image_entry = create_entry('image_entry',("맑은 고딕",12),35,250,280)
+    image_entry = create_entry('image_entry','조회된 이미지 경로',("맑은 고딕",12),35,250,280)
     reg_button = Button(mainwindow,text='수정',bg='gray',width=9,command=update_csv)
     reg_button.place(x=150,y=400)
     ok_button = create_button('mail_button','gray','확인',9,300,400)
