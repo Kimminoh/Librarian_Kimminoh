@@ -1,42 +1,80 @@
+import pandas as pd
 from tkinter import *
 from tkinter.simpledialog import *
 
-def in_label(label,title,x,y):
-    label = Label(mainwindow, text= "{}".format(title))
-    label.place(x=x,y=y)
+def create_rbutton(rbutton_name,font,color,text,var,value,x,y):         # 라디오 버튼 배치 함수
+    rbutton_name = Radiobutton(mainwindow,font=font,bg=color,text=text,variable=var,value=1)
+    rbutton_name.place(x=x, y = y)
+    return rbutton_name
 
+def create_button(button_name,color,text,width,x,y):                   # 버튼 배치 함수
+    button_name = Button(mainwindow,bg=color,text=text,width=width)
+    button_name.place(x=x, y = y)
+    return button_name
 
-def input(input_text,x,y):
-    input_text = Entry(mainwindow, width=60)
-    input_text.place(x=x,y=y)
+def create_label(label_name,x,y):                                       # 라벨 배치 함수
+    label_name.place(x=x, y = y)
+
+def create_entry(entry_name,font,width,x,y):                             # 엔트리 배치 함수
+    entry_name = Entry(mainwindow, font=font,width=width)
+    entry_name.place(x=x, y = y)
+    return entry_name
+
+def user_reg():
+    def inuser_csv():
+        df_user = pd.read_csv('csv/user.csv', encoding='CP949')
+        df_user = df_user.set_index(df_user['USER_PHONE'])
+
+        new_user = { "USER_PHONE": phone_entry.get(),             # -(하이픈) 포함
+                    "USER_NAME": name_entry.get(),                     # 영문일 시 공백포함
+                    "USER_BIRTH": birth_entry.get(),                    # YYYYMMDD 
+                    #"USER_SEX": ''sex_button.get()'',                          # TRUE : 남자, FALSE : 여자
+                    "USER_MAIL": mail_entry.get(),
+                    "USER_IMAGE": image_entry.get(),                     # 기본값 None(흰 배경)
+                    "USER_REG": phone_entry.get(),                          # TRUE : 등록, FALSE : 탈퇴
+                    "USER_RENT_CNT": 0 }                                 # +1, -1 하는 방식
+        df_user = df_user.append(new_user, ignore_index=True)           # 데이터프레임을 추가하고 행 인덱스를 재배열
+        df_user = df_user.set_index(df_user['USER_PHONE'])               # USER_PHONE을 인덱스로 사용
+
+        df_user.to_csv('csv/user.csv', index=False, encoding='CP949')
+
+    sub_label = Label(mainwindow, text ="회원 등록",font=("맑은 고딕",9),bg='gray',height=3)
+    image_label = Label(mainwindow, text='사진\n미리보기', bg='orange', width=15, height=10)
+    state_label = Label(mainwindow, text ="등록 상태",bg='gray')
+    mainwindow.configure(background = 'sky blue')
+    
+    var = IntVar()
+
+    # 위젯 배치
+    sub_label.pack(fill=X)
+    create_label(image_label,30,80)
+    state_label.place(x=60,y=250)
+    name_button = create_button('name_button','orange','이름',9,170,80)
+    name_entry = create_entry('name_entry',("맑은 고딕",12),35,250,80)
+    birth_button = create_button('birth_button','orange','생년월일',9,170,120)
+    birth_entry = create_entry('birth_entry',("맑은 고딕",12),35,250,120)
+    sex_button = create_button('sex_button','orange','성별',9,170,160)
+    male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','남',var,1,250,160)
+    female_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','여',var,2,300,160)
+    phone_button = create_button('phone_button','orange','전화번호',9,170,200)
+    phone_entry = create_entry('phone_entry',("맑은 고딕",12),35,250,200)
+    phone_check = create_button('phone_check','gray','중복확인',9,580,200)
+    mail_button = create_button('mail_button','orange','이메일 주소',9,170,240)
+    mail_entry = create_entry('mail_entry',("맑은 고딕",12),35,250,240)
+    image_find = create_button('image_find','gray','찾아보기',9,580,280)
+    image_button = create_button('image_button','orange','사진',9,170,280)
+    image_entry = create_entry('image_entry',("맑은 고딕",12),35,250,280)
+    reg_button = create_button('mail_button','gray','등록',9,150,400)
+    ok_button = Button(mainwindow,text='등록',command=inuser_csv)
+#   ok_button.config()
+    ok_button.place(x=300,y=400)
+    cancel_button = create_button('mail_button','gray','취소',9,450,400)
+
 
 
 mainwindow = Tk()
+user_reg()
 mainwindow.title("회원 등록")
-mainwindow.geometry("800x800")
-
-name_label = None
-birth_label=None
-phone_label=None
-mail_label=None
-image_label=None
-
-in_label(name_label,'이름',60,100)
-in_label(birth_label,'생년월일',60,140)
-in_label(phone_label,'전화번호',60,180)
-in_label(mail_label,'이메일 주소',60,220)
-in_label(image_label,'사진',60,260)
-
-
-name = None
-birth=None
-phone=None
-mail=None
-image=None
-input(name,140,100)
-input(birth,140,140)
-input(phone,140,180)
-input(mail,140,220)
-input(image,140,260)
-
+mainwindow.geometry("700x500")
+mainwindow.resizable(width=FALSE, height=FALSE)
 mainwindow.mainloop()
