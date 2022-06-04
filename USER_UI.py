@@ -40,7 +40,7 @@ def user_reg():
 
     sub_label = Label(mainwindow, text ="회원 등록",font=("맑은 고딕",9),bg='gray',height=3)
     image_label = Label(mainwindow, text='사진\n미리보기', bg='orange', width=15, height=10)
-    state_label = Label(mainwindow, text ="등록 상태",bg='gray')
+    #state_label = Label(mainwindow, text ="등록 상태",bg='gray')
     mainwindow.configure(background = 'sky blue')
     
     var = IntVar()
@@ -48,7 +48,7 @@ def user_reg():
     # 위젯 배치
     sub_label.pack(fill=X)
     create_label(image_label,30,80)
-    state_label.place(x=60,y=250)
+    #state_label.place(x=60,y=250)
     name_button = create_button('name_button','orange','이름',9,170,80)
     name_entry = create_entry('name_entry',("맑은 고딕",12),35,250,80)
     birth_button = create_button('birth_button','orange','생년월일',9,170,120)
@@ -64,10 +64,9 @@ def user_reg():
     image_find = create_button('image_find','gray','찾아보기',9,580,280)
     image_button = create_button('image_button','orange','사진',9,170,280)
     image_entry = create_entry('image_entry',("맑은 고딕",12),35,250,280)
-    reg_button = create_button('mail_button','gray','등록',9,150,400)
-    ok_button = Button(mainwindow,text='등록',command=inuser_csv)
-#   ok_button.config()
-    ok_button.place(x=300,y=400)
+    reg_button = Button(mainwindow,text='등록',bg='gray',width=9,command=inuser_csv)
+    reg_button.place(x=150,y=400)
+    ok_button = create_button('mail_button','gray','확인',9,300,400)
     cancel_button = create_button('mail_button','gray','취소',9,450,400)
 
 
