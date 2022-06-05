@@ -168,13 +168,8 @@ def BOOK_NEW_REG():
 
 
 
-
-                        
-
-            
             
     def ISBN_OVERLAP():
-        print(" ISBN 중복 확인 ")
         csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
         csv_pull = csv_pull.set_index("BOOK_ISBN")
         
@@ -190,6 +185,7 @@ def BOOK_NEW_REG():
             ERROR_1()
             # 중복 확인 완료시 버튼 비활성화 
             OVERLAP_CHECK['state'] = 'disabled'
+            SEARCH_BOOK_ISBN['state'] = 'disabled'
 
 
 
