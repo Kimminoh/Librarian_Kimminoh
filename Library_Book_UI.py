@@ -5,7 +5,7 @@ from tabulate import tabulate
 import tkinter as tk
 import tkinter.ttk as ttk
 
-# 22/06/5 폴리퀘 안되서 다시 커밋
+
 
 # 2번째 화면
 def BOOK_MANAGEMENT():
@@ -59,17 +59,32 @@ def BOOK_MANAGEMENT_FIRST():
                          command = BOOK_NEW_REG)
     BTN_CANCEL = Button(window, text='뒤로가기', bg='orange',
      width='8', height='2',command=window.destroy)
+    
+    '''#  도서명과 저자로 검색하기 / 이거 아직 구현 안 됨
+    def search ():        
+        for ISBN in csv_pull.index.tolist():
+            BOOK_SEARCH_LABEL = "파이썬"
+            search1 = csv_pull["BOOK_TITLE"].str.contains(BOOK_SEARCH_LABEL)
+            search2 = csv_pull["BOOK_AUTHOR"].str.contains(BOOK_SEARCH_LABEL)
 
+            search_Book1 = csv_pull.loc[search1 | search2,["BOOK_TITLE"]]
+            search_Book2 = csv_pull.loc[search1 | search2,["BOOK_AUTHOR"]]
+            search_Book3 = csv_pull.loc[search1 | search2,["BOOK_PUBLIC"]]
+            book_add = (ISBN, search_Book1,search_Book2,search_Book3)
+            BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0]) '''
     
     
     label2 = Label(window, text='수정할 도서 검색하기 :',fg='black' ,
-                   font=('맑은 고딕',10), width=20,height=1) 
+                   font=('맑은 고딕',10), width=20,height=1)
+    
+    label3 = Label(window, text='도서명 혹은 저자로 검색해주세요 ↓',fg='black' ,
+                   font=('맑은 고딕',10), width=30,height=1) 
 
     BOOK_SEARCH_LABEL = Entry(window)
     BOOK_SEARCH_LABEL.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
-    BOOK_SEARCH_LABEL.insert(END, "도서명 혹은 저자를 입력하세요")
     
-    BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black')
+    
+    BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black') # command=search
     BOOK_SEARCH_BTN.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
 
     
@@ -93,28 +108,32 @@ def BOOK_MANAGEMENT_FIRST():
     BOOK_SELECT_BOX.column(2, width='130')
     BOOK_SELECT_BOX.column(3, width='120')
     BOOK_SELECT_BOX.column(4, width='80')
-    #스크롤바
+    #스크롤바 (안생기는데 왜 안생기는지 모르겠음)
     scroll = ttk.Scrollbar(window, orient="vertical", command=BOOK_SELECT_BOX.yview)
     scroll.pack(side='right', fill='y')
     BOOK_SELECT_BOX.configure(yscrollcommand=scroll.set)
 
     # 목록 출력할 데이터 
+    # 데이터 프레임 출력
     
     for ISBN in csv_pull.index.tolist():
-
         book_title = csv_pull.loc[ISBN, "BOOK_TITLE"]
         book_author = csv_pull.loc[ISBN, "BOOK_AUTHOR"]
         book_publish = csv_pull.loc[ISBN, "BOOK_PUBLIC"]
+        
         book_add = (ISBN, book_title, book_author, book_publish)
         BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
-    
+
+    def click_item(event):
+        BOOK_EDIT()
 
 
-    
-    
+    BOOK_SELECT_BOX.bind('<Double-Button-1>', click_item)
+        
     BOOK_SELECT_BOX.place(x=90, y=200)
     label1.pack()
-    label2.place(x=5, y=155)
+    label2.place(x=15, y=155)
+    label3.place(x=177, y=125)
     BTN_CANCEL.place(x=5,y=25)
     BTN_NEW_REG.place(x=5,y=90)
     
@@ -303,7 +322,6 @@ def BOOK_EDIT():
     
     # 리스트 박스 목록 더블클릭시 창 띄우기 아직 구현 X
     # 선택하기 눌러야 함
-    window.lift()
     # 예외처리 이벤트
     def ERROR_7():     # 예외처리 7
         tkinter.messagebox.showerror("ERROR","해당 ISBN으로 수정이 가능합니다 !")
@@ -316,7 +334,8 @@ def BOOK_EDIT():
 
     #def APPLY():
         
-
+    csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+    csv_pull = csv_pull.set_index("BOOK_ISBN")
     
 
     BTN_EDIT('IMAGE_PREVIEW', '사진\n미리보기','orange','15','10',30,80)
@@ -333,6 +352,8 @@ def BOOK_EDIT():
     BTN_BOOK_TITLE.place(x=170, y = 120)
     SEARCH_BOOK_TITLE = Entry(window)
     SEARCH_BOOK_TITLE.place(x= 250, y= 120,relwidth=0.5,relheight=0.05)
+    #SEARCH_BOOK_TITLE.insert("","end",text="",value=book_add,iid=book_add[0])
+    
 
     BTN_BOOK_AUTHOR = Button(window, text='저자', bg='orange', width='8', height='1')
     BTN_BOOK_AUTHOR.place(x=170, y = 160)
@@ -403,12 +424,48 @@ def BOOK_LOOKUP():
     
     BLANK_SEARCH = Entry(window)
     BLANK_SEARCH.place(x= 150, y= 100,relwidth=0.6,relheight=0.06)
+# Treeview---------------------------------------------------------------------
+    # csv 파일 가져오기
+    csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+    csv_pull = csv_pull.set_index("BOOK_ISBN")
 
-    BOOK_SELECT_BOX = Listbox(window, width=70, height = 8, highlightcolor = 'blue') # 선택시 파란색으로 표시
-    BOOK_SELECT_BOX.place(relx=0.04,rely=0.3,relwidth=0.8,relheight = 0.3)
-    BOOK_SELECT_BOX.insert(0,"도서명 : 불멸의 이순신 / 저자 : 윤도운")
-    BOOK_SELECT_BOX.insert(1,"도서명 : 동물농장 / 저자 : 조지 오웰")
-    BOOK_SELECT_BOX.insert(2,"도서명 : 1984 / 저자 : 조지 오웰")
+    # 도서 목록 창 (Treeview)
+    BOOK_SELECT_BOX = ttk.Treeview(window, columns=(1,2,3,4), height = 6,show="headings")
+
+    # 필드명
+    BOOK_SELECT_BOX.heading(1, text='ISBN')
+    BOOK_SELECT_BOX.heading(2, text='도서명')
+    BOOK_SELECT_BOX.heading(3, text='저자')
+    BOOK_SELECT_BOX.heading(4, text='출판사')
+    # 기본 너비 
+    BOOK_SELECT_BOX.column(1, width='170')
+    BOOK_SELECT_BOX.column(2, width='130')
+    BOOK_SELECT_BOX.column(3, width='120')
+    BOOK_SELECT_BOX.column(4, width='80')
+    #스크롤바 (안생기는데 왜 안생기는지 모르겠음)
+    scroll = ttk.Scrollbar(window, orient="vertical", command=BOOK_SELECT_BOX.yview)
+    scroll.pack(side='right', fill='y')
+    BOOK_SELECT_BOX.configure(yscrollcommand=scroll.set)
+
+    # 목록 출력할 데이터 
+    # 데이터 프레임 출력
+    
+    for ISBN in csv_pull.index.tolist():
+        book_title = csv_pull.loc[ISBN, "BOOK_TITLE"]
+        book_author = csv_pull.loc[ISBN, "BOOK_AUTHOR"]
+        book_publish = csv_pull.loc[ISBN, "BOOK_PUBLIC"]
+        
+        book_add = (ISBN, book_title, book_author, book_publish)
+        BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
+
+    def click_item(event):
+        window = Tk()
+
+    # 더블 클릭시 이벤트 발생 
+    BOOK_SELECT_BOX.bind('<Double-Button-1>', click_item)
+
+    BOOK_SELECT_BOX.place(x=90, y=150)
+#---------------------------------------------------------------------------
 
     BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black')
     BOOK_SEARCH_BTN.place(x=600,y=95,relwidth=0.1,relheight = 0.07)
@@ -463,41 +520,80 @@ def BOOK_DELETE():
         csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
         csv_pull = csv_pull.set_index("BOOK_ISBN")
 
-        
-        MSB = messagebox.askquestion("도서 삭제", "{}을 삭제하시겠습니까?".
-                                         format(BOOK_TITLE))
-        if MSB == "yes":
-            if BOOK_RENTAL == True :
-                messagebox.showerror("삭제 오류", " 이미 대출 중인 도서입니다.")
+        MB = tkinter.messagebox.askquestion("도서 삭제", "을 삭제하시겠습니까?")
+        #if MB == "yes":
+        #    if BOOK_RENTAL == True :    도서 정보 가져와야함 / 아직 구현 X
+        #        messagebox.showerror("삭제 오류", " 이미 대출 중인 도서입니다.")
 
-            else:
-                csv_pull.drop
+         #   else:
+         #       csv_pull.drop
 
 
 
+    # 레이블 1 
+    label3 = Label(window, text='도서명 혹은 저자로 검색해주세요 ↓',fg='black' ,
+                   font=('맑은 고딕',10), width=30,height=1)         
 
-        
-
-    
+    # 레이블 2
     BOOK_SEARCH_LABEL = Entry(window)
-    BOOK_SEARCH_LABEL.insert(END, "도서명 혹은 저자를 입력하세요")
     BOOK_SEARCH_LABEL.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
 
+    # 버튼 1
     BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black')
     BOOK_SEARCH_BTN.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
 
-    BOOK_SELECT_BOX = Listbox(window, width=70, height = 8, highlightcolor = 'blue') # 선택시 파란색으로 표시
-    BOOK_SELECT_BOX.place(relx=0.25,rely=0.4,relwidth=0.6,relheight = 0.5)
-    BOOK_SELECT_BOX.insert(0,"도서명 : 불멸의 이순신 / 저자 : 윤도운")
-    BOOK_SELECT_BOX.insert(1,"도서명 : 동물농장 / 저자 : 조지 오웰")
-    BOOK_SELECT_BOX.insert(2,"도서명 : 1984 / 저자 : 조지 오웰")
+    # 버튼 2
     BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black', command = DLT_BOOK)
     BOOK_SELECT_BTN.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
 
+    # csv 파일 가져오기
+    csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+    csv_pull = csv_pull.set_index("BOOK_ISBN")
+
+    # 도서 목록 창 (Treeview)
+    BOOK_SELECT_BOX = ttk.Treeview(window, columns=(1,2,3,4), height = 13,show="headings")
+    
+    BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black',command=DLT_BOOK)
+    BOOK_SELECT_BTN.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
+
+    # 필드명
+    BOOK_SELECT_BOX.heading(1, text='ISBN')
+    BOOK_SELECT_BOX.heading(2, text='도서명')
+    BOOK_SELECT_BOX.heading(3, text='저자')
+    BOOK_SELECT_BOX.heading(4, text='출판사')
+    # 기본 너비 
+    BOOK_SELECT_BOX.column(1, width='170')
+    BOOK_SELECT_BOX.column(2, width='130')
+    BOOK_SELECT_BOX.column(3, width='120')
+    BOOK_SELECT_BOX.column(4, width='80')
+    #스크롤바 (안생기는데 왜 안생기는지 모르겠음)
+    scroll = ttk.Scrollbar(window, orient="vertical", command=BOOK_SELECT_BOX.yview)
+    scroll.pack(side='right', fill='y')
+    BOOK_SELECT_BOX.configure(yscrollcommand=scroll.set)
+
+    # 목록 출력할 데이터 
+    # 데이터 프레임 출력
+    
+    for ISBN in csv_pull.index.tolist():
+        book_title = csv_pull.loc[ISBN, "BOOK_TITLE"]
+        book_author = csv_pull.loc[ISBN, "BOOK_AUTHOR"]
+        book_publish = csv_pull.loc[ISBN, "BOOK_PUBLIC"]
+        
+        book_add = (ISBN, book_title, book_author, book_publish)
+        BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
+
+    def click_item(event):
+        DLT_BOOK()
+
+    # 더블 클릭시 이벤트 발생 
+    BOOK_SELECT_BOX.bind('<Double-Button-1>', click_item)
+
+    BOOK_SELECT_BOX.place(x=90, y=200)
     BTN_CANCEL.pack()
     BTN_CANCEL.place(x=5,y=25)
     label1.pack()
     label2.pack()
+    label3.place(x=177, y=125)
     label2.place(x=5, y=155)
     
      
