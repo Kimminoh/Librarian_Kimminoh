@@ -1,4 +1,5 @@
 import pandas as pd
+import csv
 from tabulate import tabulate
 from tkinter import *
 from tkinter import ttk
@@ -28,21 +29,30 @@ def user_search():
     update_button = create_button('update_button','gray','수정',9,560,120)
     info_button = create_button('info_button','gray','상세 정보',9,560,160)
     treeview = ttk.Treeview(mainwindow,column=['이름','전화번호','성별','도서대여권수'],displaycolumns=['이름','전화번호','성별','도서대여권수'])
+    csv_list = []
+    f = open('csv/USER1.csv','r')
+    reader = csv.reader(f)
+    for row in reader:
+        csv_list.append(row)
+    f.close()
+    
+    for a,b,c,d,e,f,g,h in csv_list:
+        treeview.insert('','end',values=[b,a,d,h])
     #yscrollbar = Scrollbar(mainwindow,orient='vertical',command=user_list.yview)
     #yscrollbar.pack()
     #yscrollbar.place(x=640, y=220)
-    treeview.column("이름",width=70,anchor="center")
+    treeview.column("이름",width=70,anchor="center",stretch=True)
     treeview.heading("이름",text="이름",anchor="center")
-    treeview.column("전화번호",width=150,anchor="center")
+    treeview.column("전화번호",width=150,anchor="center",stretch=True)
     treeview.heading("전화번호",text="전화번호",anchor="center")
-    treeview.column("성별",width=50,anchor="center")
+    treeview.column("성별",width=50,anchor="center",stretch=True)
     treeview.heading("성별",text="성별",anchor="center")
-    treeview.column("도서대여권수",width=50,anchor="center")
+    treeview.column("도서대여권수",width=150,anchor="center",stretch=True)
     treeview.heading("도서대여권수",text="도서대여권수",anchor="center")
     treeview["show"] = "headings"
 
     #user_list.config(yscrollcommand=yscrollbar.set)
-    treeview.yview()
+    #treeview.xview()
     treeview.place(x=50,y=220)
     sub_label.pack(fill=X)
 
