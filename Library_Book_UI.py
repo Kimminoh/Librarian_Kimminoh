@@ -127,9 +127,7 @@ def BOOK_MANAGEMENT_FIRST():
     def click_item(event):
         BOOK_EDIT()
 
-
     BOOK_SELECT_BOX.bind('<Double-Button-1>', click_item)
-        
     BOOK_SELECT_BOX.place(x=90, y=200)
     label1.pack()
     label2.place(x=15, y=155)
@@ -242,7 +240,10 @@ def BOOK_NEW_REG():
 
     # 사진 미리 보기 창
     # 예외처리 (사진을 등록하지 않았을 때) => 메세지 창 띄우기
-    BTN_EDIT('IMAGE_PREVIEW', '사진\n미리보기','orange','15','10',30,80)
+
+    IMAGE_label = Label(window, text="사진\n미리보기",bg="orange",width='15',height='10')
+    IMAGE_label.place(x=30,y=80)
+
 
     BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
     BTN_BOOK_ISBN.place(x=170, y = 80)
@@ -310,7 +311,6 @@ def BOOK_EDIT():
     window.configure(background = 'sky blue')    
     #공통부분 ↑-----------------------------------------------------------------------
     label1.pack() # 창 제목 레이블
-    
     # 함수안의 함수 => 버튼 형식 생성
     def BTN_EDIT(a, b, c, d,e, f,g):
         a = Button(window, text=b, bg=c, width=d, height=e)
@@ -323,7 +323,7 @@ def BOOK_EDIT():
     # 리스트 박스 목록 더블클릭시 창 띄우기 아직 구현 X
     # 선택하기 눌러야 함
     # 예외처리 이벤트
-    def ERROR_7():     # 예외처리 7
+    def ERROR_7():     # 예외처리 7 #수정 불가인데 에러메세지?
         tkinter.messagebox.showerror("ERROR","해당 ISBN으로 수정이 가능합니다 !")
     def ERROR_8():     # 예외처리 8
         tkinter.messagebox.showerror("ERROR","해당 ISBN으로는 수정하실 수 없습니다 !")
@@ -338,10 +338,13 @@ def BOOK_EDIT():
     csv_pull = csv_pull.set_index("BOOK_ISBN")
     
 
-    BTN_EDIT('IMAGE_PREVIEW', '사진\n미리보기','orange','15','10',30,80)
+    IMAGE_label = Label(window, text="사진\n미리보기",bg="orange",width='15',height='10')
+    IMAGE_label.place(x=30,y=80)
 
-    BTN_EDIT('BTN_BOOK_ISBN', 'ISBN', 'orange','8','1', 170, 80)
-    BLANK('BTN_BOOK_ISBN',250,80,0.5,0.05)
+    BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
+    BTN_BOOK_ISBN.place(x=170, y = 80)
+    SEARCH_BOOK_ISBN = Entry(window)
+    SEARCH_BOOK_ISBN.place(x= 250, y= 80,relwidth=0.5,relheight=0.05)
 
     # 중복확인시 이벤트 발생 추가
     OVERLAP_CHECK = Button(window, text='중복확인', bg='orange', width='7', height='1',
@@ -387,6 +390,10 @@ def BOOK_EDIT():
     
     BTN_EDIT('BTN_FIND', '찾아 보기', 'gray', '8', '1', 620, 360)
 
+
+
+
+    # 적용 버튼 누를 시 수정!
     BTN_APPLY = Button(window, text='적용', bg = 'gray', width='7', height='1')
     
     BTN_OK = Button(window, text='확인', bg='gray',width='7', height='1')
