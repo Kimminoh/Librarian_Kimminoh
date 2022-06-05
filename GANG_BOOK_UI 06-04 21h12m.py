@@ -239,7 +239,7 @@ def BOOK_EDIT():
 # 도서 대출하기 버튼 누를 시 생성되는 회원 선택 창 -강민-(2022-06-04 21:11)--------
 def bookrent_selectuser():
      def rentbutton():
-     rentMsgBox = tkinter.messagebox.askyesno(" ",'"불멸의 이순신"을 대출하시겠습니까? 반납 예정일: 2022-03-11')
+        rentMsgBox = tkinter.messagebox.askyesno(" ",'"불멸의 이순신"을 대출하시겠습니까? 반납 예정일: 2022-03-11')
           # '불멸의 이순신' 부분을 BOOK_TITLE, '2022-03-11' 부분을 RENT_RDATE로 format
           # if rentMsgBox == 'yes':  (확인버튼 누를 시)
           # today_D = datetime.now().date() # datetime 모듈이용하여 현재 날짜 저장

@@ -111,51 +111,68 @@ def BOOK_NEW_REG():
     def ERROR_1():   # 예외처리 1
         tkinter.messagebox.showinfo("ERROR","해당 도서는 등록 가능 합니다 !")
     def ERROR_2():   # 예외처리 2
-        tkinter.messagebox.showinfo("ERROR","해당 도서는 등록 불가능 합니다 !")
+        tkinter.messagebox.showerror("ERROR","해당 도서는 등록 불가능 합니다 !")
     def ERROR_3():   # 예외처리 3
-        tkinter.messagebox.showinfo("ERROR","중복 확인 후 도서 등록이 가능합니다 !")
+        tkinter.messagebox.showerror("ERROR","중복 확인 후 도서 등록이 가능합니다 !")
     def ERROR_4():   # 예외처리 4
-        tkinter.messagebox.showinfo("ERROR","현재 도서는 이미 등록되어 있는 도서입니다. !")
+        tkinter.messagebox.showerror("ERROR","가격은 정수로만 입력 가능합니다 !")
     def ERROR_5():   # 예외처리 5
-        tkinter.messagebox.showinfo("ERROR","해당 부분은 숫자로만 입력이 가능합니다 !")
+        tkinter.messagebox.showerror("ERROR","해당 정보는 숫자로만 입력이 가능합니다 !")
     def ERROR_6():   # 예외처리 6
-        tkinter.messagebox.showinfo("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
+        tkinter.messagebox.showerror("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
 
-    def REG():
-        csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
-        csv_pull = csv_pull.set_index("BOOK_ISBN")
-        
-        a = SEARCH_BOOK_ISBN.get()
+    def REG():  # 확인 버튼 눌렀을 시
+        MSB = tkinter.messagebox.askquestion ('신규 도서 등록','도서를 등록 하시겠습니까?')
 
-        b = SEARCH_BOOK_TITLE.get()
-        csv_pull.loc[a, 'BOOK_TITLE']= b
-        
-        c = SEARCH_BOOK_AUTHOR.get()
-        csv_pull.loc[a, 'BOOK_AUTHOR']= c
-        
-        d = SEARCH_BOOK_PUBLIC.get()
-        csv_pull.loc[a, 'BOOK_PUBLIC']= d
+        if MSB == 'yes':
+            a = SEARCH_BOOK_ISBN.get()
+            b = SEARCH_BOOK_TITLE.get()
+            c = SEARCH_BOOK_AUTHOR.get()
+            d = SEARCH_BOOK_PUBLIC.get()
+            e = SEARCH_BOOK_PRICE.get()
+            f = SEARCH_BOOK_LINK.get()
+            g = SEARCH_IMAGE_FIND.get()
+            h = SEARCH_BOOK_DESCRIPTION.get()
+            #i = SEARCH_BOOK_RENTAL
 
-        e = SEARCH_BOOK_PRICE.get()
-        csv_pull.loc[a, 'BOOK_PRICE']= int(e)
-        
-        f = SEARCH_BOOK_LINK.get()
-        csv_pull.loc[a, 'BOOK_LINK']= f
-        
-        g = SEARCH_IMAGE_FIND.get()
-        csv_pull.loc[a, 'BOOK_IMAGE']= g
-        
-        h = SEARCH_BOOK_DESCRIPTION.get()
-        csv_pull.loc[a, 'BOOK_DESCRIPTION']= h
-        
-        #i = SEARCH_BOOK_RENTAL
-        #csv_pull.loc[a, 'BOOK_RENTAL']= "FALSE"
+            #하나라도 입력하지 않았을 때
+            if a.strip()=="" or b.strip()=="" or c.strip()=="" or d.strip()=="" or e.strip()=="" \
+               or f.strip()=="" or g.strip()=="" or h.strip()=="":
+                ERROR_6()
+                return 0
 
-        #csv 저장하기 
-        csv_pull.to_csv("csv/book_1.csv", index = True)
+            # 중복확인 안했을 때 
+            if not OVERLAP_CHECK['state'] == 'disabled' :
+                ERROR_3()
 
-        print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
+            # 가격이 정수가 아닐 때
+            if not e.isdigit():
+                ERROR_4()
+                
+            else:
+                csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+                csv_pull = csv_pull.set_index("BOOK_ISBN")
+                csv_pull.loc[a, 'BOOK_TITLE']= b
+                csv_pull.loc[a, 'BOOK_AUTHOR']= c  
+                csv_pull.loc[a, 'BOOK_PUBLIC']= d 
+                csv_pull.loc[a, 'BOOK_PRICE']= int(e)
+                csv_pull.loc[a, 'BOOK_LINK']= f
+                csv_pull.loc[a, 'BOOK_IMAGE']= g
+                csv_pull.loc[a, 'BOOK_DESCRIPTION']= h
+                #csv_pull.loc[a, 'BOOK_RENTAL']= "FALSE"
+                #csv 저장하기 
+                csv_pull.to_csv("csv/book_1.csv", index = True)
 
+                print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
+                window.destroy()
+
+
+
+
+                        
+
+            
+            
     def ISBN_OVERLAP():
         print(" ISBN 중복 확인 ")
         csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
@@ -163,16 +180,16 @@ def BOOK_NEW_REG():
         
         a = SEARCH_BOOK_ISBN.get()
         ISBN_OVERLAP = csv_pull.index.tolist()
-        if ISBN_OVERLAP in [a] :
-            print("이 ISBN은 사용하실 수 없습니다 !")
-            print("")
-            print("")
+        if  a in ISBN_OVERLAP:
+            ERROR_2()
+            
+        elif not a.isdigit():
+            ERROR_5()
                 
         else :
-            print("사용가능한 ISBN입니다 !")
-            print("")
-            print("")
-
+            ERROR_1()
+            # 중복 확인 완료시 버튼 비활성화 
+            OVERLAP_CHECK['state'] = 'disabled'
 
 
 
@@ -262,13 +279,13 @@ def BOOK_EDIT():
     window.lift()
     # 예외처리 이벤트
     def ERROR_7():     # 예외처리 7
-        tkinter.messagebox.showinfo("ERROR","해당 ISBN으로 수정이 가능합니다 !")
+        tkinter.messagebox.showerror("ERROR","해당 ISBN으로 수정이 가능합니다 !")
     def ERROR_8():     # 예외처리 8
-        tkinter.messagebox.showinfo("ERROR","해당 ISBN으로는 수정하실 수 없습니다 !")
+        tkinter.messagebox.showerror("ERROR","해당 ISBN으로는 수정하실 수 없습니다 !")
     def ERROR_9():     # 예외처리 9
-        tkinter.messagebox.showinfo("ERROR","변경사항을 적용 하여야지 등록/수정이 가능합니다 !")
+        tkinter.messagebox.showerror("ERROR","변경사항을 적용 하여야지 등록/수정이 가능합니다 !")
     def ERROR_10():     # 예외처리 10
-        tkinter.messagebox.showinfo("ERROR","해당 부분은 숫자로만 입력이 가능합니다 !")
+        tkinter.messagebox.showerror("ERROR","해당 부분은 숫자로만 입력이 가능합니다 !")
 
 
 
