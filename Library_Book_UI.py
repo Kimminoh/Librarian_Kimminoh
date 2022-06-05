@@ -5,7 +5,7 @@ from tabulate import tabulate
 import tkinter as tk
 import tkinter.ttk as ttk
 
-
+# 22/06/5 폴리퀘 안되서 다시 커밋
 
 # 2번째 화면
 def BOOK_MANAGEMENT():
