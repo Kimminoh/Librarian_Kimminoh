@@ -50,3 +50,4 @@ userselectlistbox.insert(2,"남강민 : 010-1234-5678")
 userselectbutton = Button(rent1, text = '선택하기',command = rentbutton)
 userselectbutton.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
 
+rent1.mainloop()

@@ -72,11 +72,43 @@ def BOOK_MANAGEMENT_FIRST():
     
     # 등록되어 있는 도서 리스트
     # 실제 구현시에는 데이터프레임에 있는 데이터 목록을 가져와서 출력해야함
+    csv_pull = pd.read_csv("csv/book_1.csv",encoding = 'utf-8')
+    csv_pull = csv_pull.set_index("BOOK_ISBN")
+
+    
+    
+
+    
+    # 해당 데이터 프레임에서 마지막 행 추출 csv_pull.shape만 할 시, 행과 열의 갯수 추출
+    index_num=csv_pull.shape[0] #index_num : 인덱스 갯수 변수
+
+    #시나리오 1
+
+    # 인덱스 해제 후 0~현재갯수까지있는 인덱스 설정 
+    #-> 그 후, 인덱스 순서대로 isbn 추출 -> 추출한 isbn으로 인덱스 설정 후 도서명, 저자명 불러오기
+
+    #시나리오 2
+    # isbnlist로 isbn 정보를 리스트로 다 받고 그 리스트를 for문을 이용해서 리스트 내용 출력
+    
+    
+    """
+    isbn=344343343
+
     BOOK_SELECT_BOX = Listbox(window, width=70, height = 8, highlightcolor = 'blue') # 선택시 파란색으로 표시
     BOOK_SELECT_BOX.place(relx=0.05,rely=0.4,relwidth=0.8,relheight = 0.5)
     BOOK_SELECT_BOX.insert(0,"도서명 : 불멸의 이순신 / 저자 : 윤도운")
     BOOK_SELECT_BOX.insert(1,"도서명 : 동물농장 / 저자 : 조지 오웰")
     BOOK_SELECT_BOX.insert(2,"도서명 : 1984 / 저자 : 조지 오웰")
+    """
+    BOOK_SELECT_BOX = Listbox(window, width=70, height = 8, highlightcolor = 'blue') # 선택시 파란색으로 표시
+    BOOK_SELECT_BOX.place(relx=0.05,rely=0.4,relwidth=0.8,relheight = 0.5)
+    isbnlist=list(csv_pull.loc[csv_pull["BOOK_ISBN"]])
+
+    for i in isbnlist:
+        isbn=i
+        BOOK_SELECT_BOX.insert(i,"도서명 : {}/ 저자 : {}".format(csv_pull.loc[isbn,"BOOK_TITLE"],csv_pull.loc[isbn,"BOOK_AUTHOR"]))
+
+
     BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black',command=BOOK_EDIT)
     BOOK_SELECT_BTN.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
     
@@ -123,9 +155,24 @@ def BOOK_NEW_REG():
         tkinter.messagebox.showinfo("ERROR","해당 ISBN으로 수정이 가능합니다 !")
 
     def REG():
-        csv_pull = pd.read_csv("csv/book_1.csv",encoding = 'CP949')
+        csv_pull = pd.read_csv("csv/book_1.csv")
         csv_pull = csv_pull.set_index("BOOK_ISBN")
 
+        new_book = { "BOOK_ISBN": SEARCH_BOOK_ISBN.get(),             # -(하이픈) 포함
+                    "BOOK_TITLE": SEARCH_BOOK_TITLE.get(),                     # 영문일 시 공백포함
+                    "BOOK_AUTHOR": SEARCH_BOOK_AUTHOR.get(),                    # YYYYMMDD 
+                    #"USER_SEX": ''sex_button.get()'',                          # TRUE : 남자, FALSE : 여자
+                    "BOOK_PUBLIC": SEARCH_BOOK_PUBLIC.get(),
+                    "BOOK_PRICE": SEARCH_BOOK_PRICE.get(),                     # 기본값 None(흰 배경)
+                    "BOOK_LINK": SEARCH_BOOK_LINK.get(),                          # TRUE : 등록, FALSE : 탈퇴
+                    "BOOK_IMAGE": 0 ,
+                    "BOOK_DESCRIPTION": SEARCH_BOOK_DESCRIPTION.get(),
+                    "BOOK_RENTAL": True }                                 # +1, -1 하는 방식
+        csv_pull = csv_pull.append(new_book, ignore_index=True)           # 데이터프레임을 추가하고 행 인덱스를 재배열
+        csv_pull = csv_pull.set_index("BOOK_ISBN") 
+
+
+        """
         a = SEARCH_BOOK_ISBN.get()
 
         b = SEARCH_BOOK_TITLE.get()
@@ -153,11 +200,13 @@ def BOOK_NEW_REG():
 
         #csv 저장하기 
         csv_pull.to_csv("csv/book_1.csv", index = True)
+
+        """
         print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
 
     def ISBN_OVERLAP():
         print(" ISBN 중복 확인 ")
-        csv_pull = pd.read_csv("csv/book_1.csv",encoding = 'CP949')
+        csv_pull = pd.read_csv("csv/book_1.csv",encoding = 'utf-8')
         csv_pull = csv_pull.set_index("BOOK_ISBN")
 
         a = SEARCH_BOOK_ISBN.get()
@@ -243,6 +292,9 @@ def BOOK_NEW_REG():
     SEARCH_IMAGE_FIND = Entry(window)
     SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
     
+
+
+
     BTN_EDIT('BTN_FIND', '찾아 보기', 'gray', '8', '1', 620, 360)
     
     BTN_EDIT('BTN_OK', '확인', 'gray', '7', '1', 300, 420)
