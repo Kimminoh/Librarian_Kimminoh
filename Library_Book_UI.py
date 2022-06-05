@@ -54,6 +54,11 @@ def BOOK_MANAGEMENT_FIRST():
     label1 = Label(window, text = '도서 등록/수정', bg = 'gray',width = 700, height = 5)
     window.configure(background = 'sky blue')
     #공통부분 ↑-----------------------------------------------------------------------  
+    def click_item(event):
+        selected=BOOK_SELECT_BOX.focus()
+        print(selected)
+        BOOK_EDIT()
+        
     
     BTN_NEW_REG = Button(window, text='도서 신규 등록', bg='orange', width='15', height='2',
                          command = BOOK_NEW_REG)
@@ -95,8 +100,12 @@ def BOOK_MANAGEMENT_FIRST():
     BOOK_SELECT_BOX = ttk.Treeview(window, columns=(1,2,3,4), height = 13,show="headings")
     
     
-    BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black',command=BOOK_EDIT)
+
+    BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black')
     BOOK_SELECT_BTN.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
+    BOOK_SELECT_BTN.bind('<Button-1>',click_item)
+
+
 
     # 필드명
     BOOK_SELECT_BOX.heading(1, text='ISBN')
@@ -124,8 +133,7 @@ def BOOK_MANAGEMENT_FIRST():
         book_add = (ISBN, book_title, book_author, book_publish)
         BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
 
-    def click_item(event):
-        BOOK_EDIT()
+    
 
     BOOK_SELECT_BOX.bind('<Double-Button-1>', click_item)
     BOOK_SELECT_BOX.place(x=90, y=200)
@@ -135,7 +143,7 @@ def BOOK_MANAGEMENT_FIRST():
     BTN_CANCEL.place(x=5,y=25)
     BTN_NEW_REG.place(x=5,y=90)
     
-    
+
 # ㉮-1 신규 도서 추가     
 def BOOK_NEW_REG():
     #공통부분 ↓-----------------------------------------------------------------------
@@ -319,6 +327,9 @@ def BOOK_EDIT():
     def BLANK(a,b,c,d,e):
         a = Entry(window)
         a.place(x= b, y= c,relwidth=d,relheight=e)
+
+
+    
     
     # 리스트 박스 목록 더블클릭시 창 띄우기 아직 구현 X
     # 선택하기 눌러야 함
@@ -340,6 +351,12 @@ def BOOK_EDIT():
 
     IMAGE_label = Label(window, text="사진\n미리보기",bg="orange",width='15',height='10')
     IMAGE_label.place(x=30,y=80)
+
+    #포토 이미지 ! -> 해서 적용해보기
+
+
+
+
 
     BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
     BTN_BOOK_ISBN.place(x=170, y = 80)
