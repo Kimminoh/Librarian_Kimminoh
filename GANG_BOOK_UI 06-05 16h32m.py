@@ -57,12 +57,6 @@ def BOOK_MANAGEMENT_FIRST():
     BTN_CANCEL = Button(window, text='뒤로가기', bg='orange',
      width='8', height='2',command=window.destroy)
 
-    csv_pull = pd.read_csv("csv/book_1.csv",encoding = 'utf-8')
-    csv_pull = csv_pull.set_index("BOOK_ISBN")
-    
-    # 해당 데이터 프레임에서 마지막 행 추출 csv_pull.shape만 할 시, 행과 열의 갯수 추출
-    index_num=csv_pull.shape[0] #index_num : 인덱스 갯수 변수
-
     
     
     label2 = Label(window, text='수정할 도서 검색하기 :',fg='black' ,
@@ -78,15 +72,41 @@ def BOOK_MANAGEMENT_FIRST():
     
     # 등록되어 있는 도서 리스트
     # 실제 구현시에는 데이터프레임에 있는 데이터 목록을 가져와서 출력해야함
+    csv_pull = pd.read_csv("csv/book_1.csv",encoding = 'utf-8')
+    csv_pull = csv_pull.set_index("BOOK_ISBN")
+
+    
+    
+
+    
+    # 해당 데이터 프레임에서 마지막 행 추출 csv_pull.shape만 할 시, 행과 열의 갯수 추출
+    index_num=csv_pull.shape[0] #index_num : 인덱스 갯수 변수
+
+    #시나리오 1
+
+    # 인덱스 해제 후 0~현재갯수까지있는 인덱스 설정 
+    #-> 그 후, 인덱스 순서대로 isbn 추출 -> 추출한 isbn으로 인덱스 설정 후 도서명, 저자명 불러오기
+
+    #시나리오 2
+    # isbnlist로 isbn 정보를 리스트로 다 받고 그 리스트를 for문을 이용해서 리스트 내용 출력
+    
+    
+    """
+    isbn=344343343
+
     BOOK_SELECT_BOX = Listbox(window, width=70, height = 8, highlightcolor = 'blue') # 선택시 파란색으로 표시
     BOOK_SELECT_BOX.place(relx=0.05,rely=0.4,relwidth=0.8,relheight = 0.5)
-    
-    isbnlist=list(csv_pull.index)
+    BOOK_SELECT_BOX.insert(0,"도서명 : 불멸의 이순신 / 저자 : 윤도운")
+    BOOK_SELECT_BOX.insert(1,"도서명 : 동물농장 / 저자 : 조지 오웰")
+    BOOK_SELECT_BOX.insert(2,"도서명 : 1984 / 저자 : 조지 오웰")
+    """
+    BOOK_SELECT_BOX = Listbox(window, width=70, height = 8, highlightcolor = 'blue') # 선택시 파란색으로 표시
+    BOOK_SELECT_BOX.place(relx=0.05,rely=0.4,relwidth=0.8,relheight = 0.5)
+    isbnlist=list(csv_pull.loc[csv_pull["BOOK_ISBN"]])
 
     for i in isbnlist:
         isbn=i
         BOOK_SELECT_BOX.insert(i,"도서명 : {}/ 저자 : {}".format(csv_pull.loc[isbn,"BOOK_TITLE"],csv_pull.loc[isbn,"BOOK_AUTHOR"]))
-
 
 
     BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black',command=BOOK_EDIT)
@@ -97,10 +117,6 @@ def BOOK_MANAGEMENT_FIRST():
     label2.place(x=5, y=155)
     BTN_CANCEL.place(x=5,y=25)
     BTN_NEW_REG.place(x=5,y=90)
-    
-
-
-
     
     
 # ㉮-1 신규 도서 추가     
@@ -135,13 +151,85 @@ def BOOK_NEW_REG():
         tkinter.messagebox.showinfo("ERROR","해당 부분은 숫자로만 입력이 가능합니다 !")
     def ERROR_6():   # 예외처리 6
         tkinter.messagebox.showinfo("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
+    def ERROR_7():   # 예외처리 7
+        tkinter.messagebox.showinfo("ERROR","해당 ISBN으로 수정이 가능합니다 !")
 
+    def REG():
+        csv_pull = pd.read_csv("csv/book_1.csv",encoding="UTF-8")
+        csv_pull = csv_pull.set_index("BOOK_ISBN")
+
+        new_book = { "BOOK_ISBN": SEARCH_BOOK_ISBN.get(),             # -(하이픈) 포함
+                    "BOOK_TITLE": SEARCH_BOOK_TITLE.get(),                     # 영문일 시 공백포함
+                    "BOOK_AUTHOR": SEARCH_BOOK_AUTHOR.get(),                    # YYYYMMDD 
+                    #"USER_SEX": ''sex_button.get()'',                          # TRUE : 남자, FALSE : 여자
+                    "BOOK_PUBLIC": SEARCH_BOOK_PUBLIC.get(),
+                    "BOOK_PRICE": SEARCH_BOOK_PRICE.get(),                     # 기본값 None(흰 배경)
+                    "BOOK_LINK": SEARCH_BOOK_LINK.get(),                          # TRUE : 등록, FALSE : 탈퇴
+                    "BOOK_IMAGE": 0 ,
+                    "BOOK_DESCRIPTION": SEARCH_BOOK_DESCRIPTION.get(),
+                    "BOOK_RENTAL": True }                                 # +1, -1 하는 방식
+        csv_pull = csv_pull.append(new_book, ignore_index=True)           # 데이터프레임을 추가하고 행 인덱스를 재배열
+        csv_pull = csv_pull.set_index("BOOK_ISBN") 
+
+
+        """
+        a = SEARCH_BOOK_ISBN.get()
+
+        b = SEARCH_BOOK_TITLE.get()
+        csv_pull.loc[a, 'BOOK_TITLE']= b
+
+        c = SEARCH_BOOK_AUTHOR.get()
+        csv_pull.loc[a, 'BOOK_AUTHOR']= c
+
+        d = SEARCH_BOOK_PUBLIC.get()
+        csv_pull.loc[a, 'BOOK_PUBLIC']= d
+
+        e = SEARCH_BOOK_PRICE.get()
+        csv_pull.loc[a, 'BOOK_PRICE']= int(e)
+
+        f = SEARCH_BOOK_LINK.get()
+        csv_pull.loc[a, 'BOOK_LINK']= f
+
+        g = SEARCH_IMAGE_FIND.get()
+        csv_pull.loc[a, 'BOOK_IMAGE']= g
+
+        h = SEARCH_BOOK_DESCRIPTION.get()
+        csv_pull.loc[a, 'BOOK_DESCRIPTION']= h
+        #i = SEARCH_BOOK_RENTAL
+        #csv_pull.loc[a, 'BOOK_RENTAL']= "FALSE"
+
+        #csv 저장하기 
+        csv_pull.to_csv("csv/book_1.csv", index = True)
+
+        """
+        print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
+
+    def ISBN_OVERLAP():
+        print(" ISBN 중복 확인 ")
+        csv_pull = pd.read_csv("csv/book_1.csv",encoding = 'utf-8')
+        csv_pull = csv_pull.set_index("BOOK_ISBN")
+
+        a = SEARCH_BOOK_ISBN.get()
+        ISBN_OVERLAP = csv_pull.index.tolist()
+        if ISBN_OVERLAP in [a] :
+            print("이 ISBN은 사용하실 수 없습니다 !")
+            print("")
+            print("")
+
+        else :
+            print("사용가능한 ISBN입니다 !")
+            print("")
+            print("")
     # 사진 미리 보기 창
     # 예외처리 (사진을 등록하지 않았을 때) => 메세지 창 띄우기
     BTN_EDIT('IMAGE_PREVIEW', '사진\n미리보기','orange','15','10',30,80)
 
     BTN_EDIT('BTN_BOOK_ISBN', 'ISBN', 'orange','8','1', 170, 80)
     BLANK('BTN_BOOK_ISBN',250,80,0.5,0.05)
+    BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
+    BTN_BOOK_ISBN.place(x=170, y = 80)
+    SEARCH_BOOK_ISBN = Entry(window)
+    SEARCH_BOOK_ISBN.place(x= 250, y= 80,relwidth=0.5,relheight=0.05)
 
     # 중복확인시 이벤트 추가함
     OVERLAP_CHECK = Button(window, text='중복확인', bg='orange', width='7', height='1',
@@ -162,16 +250,57 @@ def BOOK_NEW_REG():
 
     BTN_EDIT('BTN_BOOK_LINK', 'URL', 'orange', '8', '1', 170, 280)
     BLANK('SEARCH_BOOK_LINK', 250, 280, 0.5, 0.05)
+
+    BTN_BOOK_TITLE = Button(window, text='도서명', bg='orange', width='8', height='1')
+    BTN_BOOK_TITLE.place(x=170, y = 120)
+    SEARCH_BOOK_TITLE = Entry(window)
+    SEARCH_BOOK_TITLE.place(x= 250, y= 120,relwidth=0.5,relheight=0.05)
+
+    BTN_BOOK_AUTHOR = Button(window, text='저자', bg='orange', width='8', height='1')
+    BTN_BOOK_AUTHOR.place(x=170, y = 160)
+    SEARCH_BOOK_AUTHOR = Entry(window)
+    SEARCH_BOOK_AUTHOR.place(x= 250, y= 160,relwidth=0.5,relheight=0.05)
+
+    BTN_BOOK_PUBLIC = Button(window, text='출판사', bg='orange', width='8', height='1')
+    BTN_BOOK_PUBLIC.place(x=170, y = 200)
+    SEARCH_BOOK_PUBLIC = Entry(window)
+    SEARCH_BOOK_PUBLIC.place(x= 250, y= 200,relwidth=0.5,relheight=0.05)
+
+    BTN_BOOK_PRICE = Button(window, text='가격', bg='orange', width='8', height='1')
+    BTN_BOOK_PRICE.place(x=170, y = 240)
+    SEARCH_BOOK_PRICE = Entry(window)
+    SEARCH_BOOK_PRICE.place(x= 250, y= 240,relwidth=0.5,relheight=0.05)
+
+    BTN_BOOK_LINK = Button(window, text='URL', bg='orange', width='8', height='1') 
+    BTN_BOOK_LINK.place(x=170, y = 280)
+    SEARCH_BOOK_LINK = Entry(window)
+    SEARCH_BOOK_LINK.place(x= 250, y= 280,relwidth=0.5,relheight=0.05)
     
     BTN_EDIT('BTN_BOOK_DESCRIPTION', '도서 설명', 'orange', '8', '1', 170, 320)
     BLANK('SEARCH_BOOK_DESCRIPTION', 250, 320, 0.5, 0.05)
 
     BTN_EDIT('BTN_IMAGE_FIND', '사진 찾기', 'orange', '8', '1', 170, 360)
     BLANK('SEARCH_IMAGE_FIND', 250, 360, 0.5, 0.05)
+
+    BTN_BOOK_DESCRIPTION = Button(window, text='도서 설명', bg='orange', width='8', height='1')
+    BTN_BOOK_DESCRIPTION.place(x=170, y = 320)
+    SEARCH_BOOK_DESCRIPTION = Entry(window)
+    SEARCH_BOOK_DESCRIPTION.place(x= 250, y= 320,relwidth=0.5,relheight=0.05)
+
+    BTN_IMAGE_FIND = Button(window, text='사진 찾기', bg='orange', width='8', height='1')
+    BTN_IMAGE_FIND.place(x=170, y = 360)
+    SEARCH_IMAGE_FIND = Entry(window)
+    SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
     
+
+
+
     BTN_EDIT('BTN_FIND', '찾아 보기', 'gray', '8', '1', 620, 360)
     
     BTN_EDIT('BTN_OK', '확인', 'gray', '7', '1', 300, 420)
+
+    BTN_OK = Button(window, text='확인', bg='gray',width='7', height='1', command = REG)
+    BTN_OK.place(x=300, y = 420)
 
     BTN_CANCEL = Button(window, text='취소', bg='gray', width='7', height='1',
                         command=window.destroy )
@@ -256,8 +385,8 @@ def BOOK_EDIT():
     
 # 도서 대출하기 버튼 누를 시 생성되는 회원 선택 창 -강민-(2022-06-04 21:11)--------
 def bookrent_selectuser():
-    #def rentbutton():
-     #rentMsgBox = tkinter.messagebox.askyesno(" ",'"불멸의 이순신"을 대출하시겠습니까? 반납 예정일: 2022-03-11')
+    def rentbutton():
+        rentMsgBox = tkinter.messagebox.askyesno(" ",'"불멸의 이순신"을 대출하시겠습니까? 반납 예정일: 2022-03-11')
           # '불멸의 이순신' 부분을 BOOK_TITLE, '2022-03-11' 부분을 RENT_RDATE로 format
           # if rentMsgBox == 'yes':  (확인버튼 누를 시)
           # today_D = datetime.now().date() # datetime 모듈이용하여 현재 날짜 저장

@@ -22,7 +22,9 @@ def create_entry(entry_name,font,width,x,y):                             # 엔�
 
 def user_reg():
     def inuser_csv():
-        df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
+
+        df_user = pd.read_csv('csv/user.csv', encoding='CP949')
+
         df_user = df_user.set_index(df_user['USER_PHONE'])
 
         new_user = { "USER_PHONE": phone_entry.get(),                     # -(하이픈) 포함
@@ -36,7 +38,7 @@ def user_reg():
         df_user = df_user.append(new_user, ignore_index=True)           # 데이터프레임을 추가하고 행 인덱스를 재배열
         df_user = df_user.set_index(df_user['USER_PHONE'])               # USER_PHONE을 인덱스로 사용
 
-        df_user.to_csv('csv/USER1.csv', index=False, encoding='CP949')
+        df_user.to_csv('csv/user.csv', index=False, encoding='CP949')
 
     sub_label = Label(mainwindow, text ="회원 등록",font=("맑은 고딕",9),bg='gray',height=3)
     image_label = Label(mainwindow, text='사진\n미리보기', bg='orange', width=15, height=10)
