@@ -1,5 +1,8 @@
 from tkinter import*
 import tkinter.messagebox
+import pandas as pd
+from tabulate import tabulate
+
 
 
 # 2번째 화면
@@ -99,7 +102,7 @@ def BOOK_NEW_REG():
     def BTN_EDIT(a, b, c, d,e, f,g):
         a = Button(window, text=b, bg=c, width=d, height=e)
         a.place(x=f, y = g)    
-
+        
     def BLANK(a,b,c,d,e):
         a = Entry(window)
         a.place(x= b, y= c,relwidth=d,relheight=e)
@@ -118,42 +121,115 @@ def BOOK_NEW_REG():
     def ERROR_6():   # 예외처리 6
         tkinter.messagebox.showinfo("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
 
+    def REG():
+        csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+        csv_pull = csv_pull.set_index("BOOK_ISBN")
+        
+        a = SEARCH_BOOK_ISBN.get()
+
+        b = SEARCH_BOOK_TITLE.get()
+        csv_pull.loc[a, 'BOOK_TITLE']= b
+        
+        c = SEARCH_BOOK_AUTHOR.get()
+        csv_pull.loc[a, 'BOOK_AUTHOR']= c
+        
+        d = SEARCH_BOOK_PUBLIC.get()
+        csv_pull.loc[a, 'BOOK_PUBLIC']= d
+
+        e = SEARCH_BOOK_PRICE.get()
+        csv_pull.loc[a, 'BOOK_PRICE']= int(e)
+        
+        f = SEARCH_BOOK_LINK.get()
+        csv_pull.loc[a, 'BOOK_LINK']= f
+        
+        g = SEARCH_IMAGE_FIND.get()
+        csv_pull.loc[a, 'BOOK_IMAGE']= g
+        
+        h = SEARCH_BOOK_DESCRIPTION.get()
+        csv_pull.loc[a, 'BOOK_DESCRIPTION']= h
+        
+        #i = SEARCH_BOOK_RENTAL
+        #csv_pull.loc[a, 'BOOK_RENTAL']= "FALSE"
+
+        #csv 저장하기 
+        csv_pull.to_csv("csv/book_1.csv", index = True)
+
+        print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
+
+    def ISBN_OVERLAP():
+        print(" ISBN 중복 확인 ")
+        csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+        csv_pull = csv_pull.set_index("BOOK_ISBN")
+        
+        a = SEARCH_BOOK_ISBN.get()
+        ISBN_OVERLAP = csv_pull.index.tolist()
+        if ISBN_OVERLAP in [a] :
+            print("이 ISBN은 사용하실 수 없습니다 !")
+            print("")
+            print("")
+                
+        else :
+            print("사용가능한 ISBN입니다 !")
+            print("")
+            print("")
+
+
+
+
+
     # 사진 미리 보기 창
     # 예외처리 (사진을 등록하지 않았을 때) => 메세지 창 띄우기
     BTN_EDIT('IMAGE_PREVIEW', '사진\n미리보기','orange','15','10',30,80)
 
-    BTN_EDIT('BTN_BOOK_ISBN', 'ISBN', 'orange','8','1', 170, 80)
-    BLANK('BTN_BOOK_ISBN',250,80,0.5,0.05)
+    BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
+    BTN_BOOK_ISBN.place(x=170, y = 80)
+    SEARCH_BOOK_ISBN = Entry(window)
+    SEARCH_BOOK_ISBN.place(x= 250, y= 80,relwidth=0.5,relheight=0.05)
 
     # 중복확인시 이벤트 추가함
     OVERLAP_CHECK = Button(window, text='중복확인', bg='orange', width='7', height='1',
-                           command = ERROR_1)
+                           command = ISBN_OVERLAP)
     OVERLAP_CHECK.place(x=620, y = 80)    
 
-    BTN_EDIT('BTN_BOOK_TITLE', '도서명','orange', '8',  '1', 170,120)
-    BLANK('SEARCH_BOOK_TITLE', 250,120,0.5,0.05)
+    BTN_BOOK_TITLE = Button(window, text='도서명', bg='orange', width='8', height='1')
+    BTN_BOOK_TITLE.place(x=170, y = 120)
+    SEARCH_BOOK_TITLE = Entry(window)
+    SEARCH_BOOK_TITLE.place(x= 250, y= 120,relwidth=0.5,relheight=0.05)
 
-    BTN_EDIT('BTN_BOOK_AUTHOR', '저자', 'orange', '8', '1', 170, 160)
-    BLANK('SEARCH_BOOK_AUTHOR', 250, 160, 0.5, 0.05)
+    BTN_BOOK_AUTHOR = Button(window, text='저자', bg='orange', width='8', height='1')
+    BTN_BOOK_AUTHOR.place(x=170, y = 160)
+    SEARCH_BOOK_AUTHOR = Entry(window)
+    SEARCH_BOOK_AUTHOR.place(x= 250, y= 160,relwidth=0.5,relheight=0.05)
 
-    BTN_EDIT('BTN_BOOK_PUBLIC', '출판사', 'orange', '8', '1', 170, 200)
-    BLANK('SEARCH_BOOK_PUBLIC', 250, 200, 0.5, 0.05)
+    BTN_BOOK_PUBLIC = Button(window, text='출판사', bg='orange', width='8', height='1')
+    BTN_BOOK_PUBLIC.place(x=170, y = 200)
+    SEARCH_BOOK_PUBLIC = Entry(window)
+    SEARCH_BOOK_PUBLIC.place(x= 250, y= 200,relwidth=0.5,relheight=0.05)
 
-    BTN_EDIT('BTN_BOOK_PRICE', '가격', 'orange', '8', '1', 170, 240)
-    BLANK('SEARCH_BOOK_PRICE', 250, 240, 0.5, 0.05)
+    BTN_BOOK_PRICE = Button(window, text='가격', bg='orange', width='8', height='1')
+    BTN_BOOK_PRICE.place(x=170, y = 240)
+    SEARCH_BOOK_PRICE = Entry(window)
+    SEARCH_BOOK_PRICE.place(x= 250, y= 240,relwidth=0.5,relheight=0.05)
 
-    BTN_EDIT('BTN_BOOK_LINK', 'URL', 'orange', '8', '1', 170, 280)
-    BLANK('SEARCH_BOOK_LINK', 250, 280, 0.5, 0.05)
+    BTN_BOOK_LINK = Button(window, text='URL', bg='orange', width='8', height='1') 
+    BTN_BOOK_LINK.place(x=170, y = 280)
+    SEARCH_BOOK_LINK = Entry(window)
+    SEARCH_BOOK_LINK.place(x= 250, y= 280,relwidth=0.5,relheight=0.05)
     
-    BTN_EDIT('BTN_BOOK_DESCRIPTION', '도서 설명', 'orange', '8', '1', 170, 320)
-    BLANK('SEARCH_BOOK_DESCRIPTION', 250, 320, 0.5, 0.05)
+    BTN_BOOK_DESCRIPTION = Button(window, text='도서 설명', bg='orange', width='8', height='1')
+    BTN_BOOK_DESCRIPTION.place(x=170, y = 320)
+    SEARCH_BOOK_DESCRIPTION = Entry(window)
+    SEARCH_BOOK_DESCRIPTION.place(x= 250, y= 320,relwidth=0.5,relheight=0.05)
 
-    BTN_EDIT('BTN_IMAGE_FIND', '사진 찾기', 'orange', '8', '1', 170, 360)
-    BLANK('SEARCH_IMAGE_FIND', 250, 360, 0.5, 0.05)
+    BTN_IMAGE_FIND = Button(window, text='사진 찾기', bg='orange', width='8', height='1')
+    BTN_IMAGE_FIND.place(x=170, y = 360)
+    SEARCH_IMAGE_FIND = Entry(window)
+    SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
     
     BTN_EDIT('BTN_FIND', '찾아 보기', 'gray', '8', '1', 620, 360)
     
-    BTN_EDIT('BTN_OK', '확인', 'gray', '7', '1', 300, 420)
+    BTN_OK = Button(window, text='확인', bg='gray',width='7', height='1', command = REG)
+    BTN_OK.place(x=300, y = 420)
 
     BTN_CANCEL = Button(window, text='취소', bg='gray', width='7', height='1',
                         command=window.destroy )
@@ -183,7 +259,7 @@ def BOOK_EDIT():
     
     # 리스트 박스 목록 더블클릭시 창 띄우기 아직 구현 X
     # 선택하기 눌러야 함
-      
+    window.lift()
     # 예외처리 이벤트
     def ERROR_7():     # 예외처리 7
         tkinter.messagebox.showinfo("ERROR","해당 ISBN으로 수정이 가능합니다 !")
@@ -302,7 +378,7 @@ def BOOK_LOOKUP():
 # ㉰의 화면----------------------------------------------------
 def BOOK_DELETE():
     #공통부분 ↓-----------------------------------------------------------------------
-    window = Tk()
+    window = tkinter.Tk()
     window.title("도서 삭제")
     window.geometry("700x500")
     label1 = Label(window, text = '도서 삭제', bg = 'gray',width = 700, height = 5)
@@ -342,6 +418,10 @@ def BOOK_DELETE():
     label2.pack()
     label2.place(x=5, y=155)
     
+     
+
+   
+    
 
 
   
@@ -356,11 +436,11 @@ window.configure(background = 'sky blue')
 
 #도서관리 누르면 2번째 창으로 넘어감
 BTN_BOOK = Button(window, text='도서관리',fg="black", bg="orange", width='20',
-                  height='10', command=BOOK_MANAGEMENT)
-                  
+                      height='10', command=BOOK_MANAGEMENT)
+                      
 # 우선적으로 해당 파일에서 회원관리 클릭시 프로그램 종료!                  
 BTN_MEMBER = Button(window, text='회원관리',fg="black", bg="orange", width='20',
-                    height='10')
+                        height='10')
 
 label1.pack()
 
@@ -372,3 +452,5 @@ BTN_MEMBER.pack()
 BTN_MEMBER.place(x=450,y=150)
 
 window.mainloop()
+    
+
