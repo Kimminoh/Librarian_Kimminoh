@@ -1,4 +1,2 @@
 BOOK_ISBN,BOOK_TITLE,BOOK_AUTHOR,BOOK_PUBLIC,BOOK_PRICE,BOOK_LINK,BOOK_IMAGE,BOOK_DESCRIPTION,BOOK_RENTAL
-344343343,불멸의 이순신,윤도운,생능출판사,15000.0,www.naver.com,대충 사진,대충 설명하는 글,True
-566454545,파이썬 책,이승진,생능출판,100.0,github.com/2sjin,img.png,설명,False
-312,test1,김민오,생능출판사,15000.0,http://naver.com,no image,테스트용입니다.,
+1234567890,테스트12,테스트1,테스트1,1000023,테스트111,테스트1,테스트1,

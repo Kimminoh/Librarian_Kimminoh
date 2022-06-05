@@ -57,7 +57,7 @@ def BOOK_MANAGEMENT_FIRST():
     def click_item(event):
         selected=BOOK_SELECT_BOX.focus()
         print(selected)
-        BOOK_EDIT()
+        BOOK_EDIT(int(selected))
         
     
     BTN_NEW_REG = Button(window, text='도서 신규 등록', bg='orange', width='15', height='2',
@@ -310,7 +310,7 @@ def BOOK_NEW_REG():
 
 # ㉮-2번째 창 / 도서 수정하기
 # 도서 목록중 하나 선택해서 도서 수정하기 
-def BOOK_EDIT():
+def BOOK_EDIT(selected):
     #공통부분 ↓-----------------------------------------------------------------------
     window = Tk()
     window.title("도서 수정하기")
@@ -355,23 +355,20 @@ def BOOK_EDIT():
     #포토 이미지 ! -> 해서 적용해보기
 
 
-
-
-
     BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
     BTN_BOOK_ISBN.place(x=170, y = 80)
     SEARCH_BOOK_ISBN = Entry(window)
     SEARCH_BOOK_ISBN.place(x= 250, y= 80,relwidth=0.5,relheight=0.05)
+    SEARCH_BOOK_ISBN.insert(0,selected)
+    
 
-    # 중복확인시 이벤트 발생 추가
-    OVERLAP_CHECK = Button(window, text='중복확인', bg='orange', width='7', height='1',
-                           command = ERROR_7)
-    OVERLAP_CHECK.place(x=620, y = 80)
+
     
     BTN_BOOK_TITLE = Button(window, text='도서명', bg='orange', width='8', height='1')
     BTN_BOOK_TITLE.place(x=170, y = 120)
     SEARCH_BOOK_TITLE = Entry(window)
     SEARCH_BOOK_TITLE.place(x= 250, y= 120,relwidth=0.5,relheight=0.05)
+    SEARCH_BOOK_TITLE.insert(0,csv_pull.loc[selected]["BOOK_TITLE"])
     #SEARCH_BOOK_TITLE.insert("","end",text="",value=book_add,iid=book_add[0])
     
 
@@ -379,42 +376,133 @@ def BOOK_EDIT():
     BTN_BOOK_AUTHOR.place(x=170, y = 160)
     SEARCH_BOOK_AUTHOR = Entry(window)
     SEARCH_BOOK_AUTHOR.place(x= 250, y= 160,relwidth=0.5,relheight=0.05)
+    SEARCH_BOOK_AUTHOR.insert(0,csv_pull.loc[selected]["BOOK_AUTHOR"])
 
     BTN_BOOK_PUBLIC = Button(window, text='출판사', bg='orange', width='8', height='1')
     BTN_BOOK_PUBLIC.place(x=170, y = 200)
     SEARCH_BOOK_PUBLIC = Entry(window)
     SEARCH_BOOK_PUBLIC.place(x= 250, y= 200,relwidth=0.5,relheight=0.05)
+    SEARCH_BOOK_PUBLIC.insert(0,csv_pull.loc[selected]["BOOK_PUBLIC"])
 
     BTN_BOOK_PRICE = Button(window, text='가격', bg='orange', width='8', height='1')
     BTN_BOOK_PRICE.place(x=170, y = 240)
     SEARCH_BOOK_PRICE = Entry(window)
     SEARCH_BOOK_PRICE.place(x= 250, y= 240,relwidth=0.5,relheight=0.05)
+    SEARCH_BOOK_PRICE.insert(0,csv_pull.loc[selected]["BOOK_PRICE"])
 
     BTN_BOOK_LINK = Button(window, text='URL', bg='orange', width='8', height='1') 
     BTN_BOOK_LINK.place(x=170, y = 280)
     SEARCH_BOOK_LINK = Entry(window)
     SEARCH_BOOK_LINK.place(x= 250, y= 280,relwidth=0.5,relheight=0.05)
+    SEARCH_BOOK_LINK.insert(0,csv_pull.loc[selected]["BOOK_LINK"])
     
     BTN_BOOK_DESCRIPTION = Button(window, text='도서 설명', bg='orange', width='8', height='1')
     BTN_BOOK_DESCRIPTION.place(x=170, y = 320)
     SEARCH_BOOK_DESCRIPTION = Entry(window)
     SEARCH_BOOK_DESCRIPTION.place(x= 250, y= 320,relwidth=0.5,relheight=0.05)
+    SEARCH_BOOK_DESCRIPTION.insert(0,csv_pull.loc[selected]["BOOK_DESCRIPTION"])
 
     BTN_IMAGE_FIND = Button(window, text='사진 찾기', bg='orange', width='8', height='1')
     BTN_IMAGE_FIND.place(x=170, y = 360)
     SEARCH_IMAGE_FIND = Entry(window)
     SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
+    SEARCH_IMAGE_FIND.insert(0,csv_pull.loc[selected]["BOOK_IMAGE"])
     
     BTN_EDIT('BTN_FIND', '찾아 보기', 'gray', '8', '1', 620, 360)
 
 
 
 
-    # 적용 버튼 누를 시 수정!
-    BTN_APPLY = Button(window, text='적용', bg = 'gray', width='7', height='1')
+
+
+    #중복확인 시, 예외처리
+    def ERROR_1():   # 예외처리 1
+        tkinter.messagebox.showinfo("ERROR","해당 도서는 등록 가능 합니다 !")
+    def ERROR_2():   # 예외처리 2
+        tkinter.messagebox.showerror("ERROR","해당 도서는 등록 불가능 합니다 !")
+    def ERROR_3():   # 예외처리 3
+        tkinter.messagebox.showerror("ERROR","중복 확인 후 도서 등록이 가능합니다 !")
+    def ERROR_4():   # 예외처리 4
+        tkinter.messagebox.showerror("ERROR","가격은 정수로만 입력 가능합니다 !")
+    def ERROR_5():   # 예외처리 5
+        tkinter.messagebox.showerror("ERROR","해당 정보는 숫자로만 입력이 가능합니다 !")
+    def ERROR_6():   # 예외처리 6
+        tkinter.messagebox.showerror("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
     
-    BTN_OK = Button(window, text='확인', bg='gray',width='7', height='1')
-    BTN_OK.place(x=300, y = 420)
+    def APPLY():  # 확인,적용  버튼 눌렀을 시
+        MSB = tkinter.messagebox.askquestion ('도서 수정','도서를 수정 하시겠습니까?')
+
+        if MSB == 'yes':
+            a = SEARCH_BOOK_ISBN.get()
+            b = SEARCH_BOOK_TITLE.get()
+            c = SEARCH_BOOK_AUTHOR.get()
+            d = SEARCH_BOOK_PUBLIC.get()
+            e = SEARCH_BOOK_PRICE.get()
+            f = SEARCH_BOOK_LINK.get()
+            g = SEARCH_IMAGE_FIND.get()
+            h = SEARCH_BOOK_DESCRIPTION.get()
+            #i = SEARCH_BOOK_RENTAL
+
+            #하나라도 입력하지 않았을 때
+            if a.strip()=="" or b.strip()=="" or c.strip()=="" or d.strip()=="" or e.strip()=="" \
+               or f.strip()=="" or g.strip()=="" or h.strip()=="":
+                ERROR_6()
+                return 0
+
+            # 중복확인 안했을 때 
+            if not OVERLAP_CHECK['state'] == 'disabled' :
+                ERROR_3()
+
+            # 가격이 정수가 아닐 때
+            if not e.isdigit():
+                ERROR_4()
+                
+            else:
+                csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+                csv_pull = csv_pull.set_index("BOOK_ISBN")
+                csv_pull.loc[selected, 'BOOK_TITLE']= b
+                csv_pull.loc[selected, 'BOOK_AUTHOR']= c  
+                csv_pull.loc[selected, 'BOOK_PUBLIC']= d 
+                csv_pull.loc[selected, 'BOOK_PRICE']= int(e)
+                csv_pull.loc[selected, 'BOOK_LINK']= f
+                csv_pull.loc[selected, 'BOOK_IMAGE']= g
+                csv_pull.loc[selected, 'BOOK_DESCRIPTION']= h
+                #csv_pull.loc[a, 'BOOK_RENTAL']= "FALSE"
+                #csv 저장하기 
+                csv_pull.to_csv("csv/book_1.csv", index = True)
+
+                print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
+                window.destroy()
+
+
+
+    def ISBN_OVERLAP():
+        csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+        csv_pull = csv_pull.set_index("BOOK_ISBN")
+        
+        a = SEARCH_BOOK_ISBN.get()
+        ISBN_OVERLAP = csv_pull.index.tolist()
+        if  a in ISBN_OVERLAP:
+            ERROR_2()
+            
+        elif not a.isdigit():
+            ERROR_5()
+                
+        else :
+            ERROR_1()
+            # 중복 확인 완료시 버튼 비활성화 
+            OVERLAP_CHECK['state'] = 'disabled'
+            SEARCH_BOOK_ISBN['state'] = 'disabled'
+
+    # 중복확인시 이벤트 발생 추가
+    OVERLAP_CHECK = Button(window, text='중복확인', bg='orange', width='7', height='1',
+                           command = ISBN_OVERLAP)
+    OVERLAP_CHECK.place(x=620, y = 80)
+
+        # 적용 버튼 누를 시 수정!
+    BTN_APPLY = Button(window, text='적용', bg = 'gray', width='7', height='1',command=APPLY)
+    BTN_APPLY.place(x=300, y = 420)
+
 
     BTN_CANCEL = Button(window, text='취소', bg='gray', width='7', height='1',command=window.destroy )
     BTN_CANCEL.place(x=400, y = 420)
