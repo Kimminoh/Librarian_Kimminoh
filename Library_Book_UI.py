@@ -84,10 +84,10 @@ def BOOK_MANAGEMENT_FIRST():
     BOOK_SELECT_BTN.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
 
     # 필드명
-    BOOK_SELECT_BOX.heading(1, text='도서명')
-    BOOK_SELECT_BOX.heading(2, text='저자')
-    BOOK_SELECT_BOX.heading(3, text='출판사')
-    BOOK_SELECT_BOX.heading(4, text='대여 여부')
+    BOOK_SELECT_BOX.heading(1, text='ISBN')
+    BOOK_SELECT_BOX.heading(2, text='도서명')
+    BOOK_SELECT_BOX.heading(3, text='저자')
+    BOOK_SELECT_BOX.heading(4, text='출판사')
     # 기본 너비 
     BOOK_SELECT_BOX.column(1, width='170')
     BOOK_SELECT_BOX.column(2, width='130')
@@ -99,11 +99,17 @@ def BOOK_MANAGEMENT_FIRST():
     BOOK_SELECT_BOX.configure(yscrollcommand=scroll.set)
 
     # 목록 출력할 데이터 
-    data = csv_pull[['BOOK_TITLE','BOOK_AUTHOR','BOOK_PUBLIC','BOOK_RENTAL']]
-
-    for val in data:
-        BOOK_SELECT_BOX.insert('','end',values=(val[0], val[1], val[2], val[3]))
     
+    for ISBN in csv_pull.index.tolist():
+
+        book_title = csv_pull.loc[ISBN, "BOOK_TITLE"]
+        book_author = csv_pull.loc[ISBN, "BOOK_AUTHOR"]
+        book_publish = csv_pull.loc[ISBN, "BOOK_PUBLIC"]
+        book_add = (ISBN, book_title, book_author, book_publish)
+        BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
+    
+
+
     
     
     BOOK_SELECT_BOX.place(x=90, y=200)
