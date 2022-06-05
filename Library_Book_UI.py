@@ -65,6 +65,8 @@ def BOOK_MANAGEMENT_FIRST():
     label2 = Label(window, text='수정할 도서 검색하기 :',fg='black' ,
                    font=('맑은 고딕',10), width=20,height=1) 
 
+
+    #검색기능 미구현
     BOOK_SEARCH_LABEL = Entry(window)
     BOOK_SEARCH_LABEL.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
     BOOK_SEARCH_LABEL.insert(END, "도서명 혹은 저자를 입력하세요")
@@ -74,12 +76,13 @@ def BOOK_MANAGEMENT_FIRST():
 
     
     # 등록되어 있는 도서 리스트
+
     csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
     csv_pull = csv_pull.set_index("BOOK_ISBN")
 
     BOOK_SELECT_BOX = ttk.Treeview(window, columns=(1,2,3,4), height = 13,show="headings")
-    
-    
+
+
     BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black',command=BOOK_EDIT)
     BOOK_SELECT_BTN.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
 
@@ -115,14 +118,14 @@ def BOOK_MANAGEMENT_FIRST():
     
 # ㉮-1 신규 도서 추가     
 def BOOK_NEW_REG():
-    #공통부분 ↓-----------------------------------------------------------------------
+    #공통부분 ↓--------------------------------------------------------------------------------------
     window = Tk()
     window.title("도서 신규등록")
     window.geometry("700x500")
     label1 = Label(window, text = '도서 신규 등록', bg = 'gray', width = 700, height = 3)
     window.configure(background = 'sky blue')    
-    #공통부분 ↑-----------------------------------------------------------------------  
     label1.pack() # 창 제목 레이블
+    #공통부분 ↑----------------------------------------------------------------------------------------
     
     def BTN_EDIT(a, b, c, d,e, f,g):
         a = Button(window, text=b, bg=c, width=d, height=e)
@@ -200,6 +203,8 @@ def BOOK_NEW_REG():
         
         a = SEARCH_BOOK_ISBN.get()
         ISBN_OVERLAP = csv_pull.index.tolist()
+
+
         if  a in ISBN_OVERLAP:
             ERROR_2()
             
@@ -266,13 +271,15 @@ def BOOK_NEW_REG():
     
     BTN_EDIT('BTN_FIND', '찾아 보기', 'gray', '8', '1', 620, 360)
     
+    #등록하기 위한 확인 버튼과 창 닫기 위한 취소 버튼 
+
     BTN_OK = Button(window, text='확인', bg='gray',width='7', height='1', command = REG)
     BTN_OK.place(x=300, y = 420)
 
     BTN_CANCEL = Button(window, text='취소', bg='gray', width='7', height='1',
                         command=window.destroy )
     BTN_CANCEL.place(x=400, y = 420)
-
+    
 
 # ㉮-2번째 창 / 도서 수정하기
 # 도서 목록중 하나 선택해서 도서 수정하기 
@@ -400,8 +407,8 @@ def BOOK_LOOKUP():
 
     BOOK_SELECT_BOX = Listbox(window, width=70, height = 8, highlightcolor = 'blue') # 선택시 파란색으로 표시
     BOOK_SELECT_BOX.place(relx=0.04,rely=0.3,relwidth=0.8,relheight = 0.3)
-    BOOK_SELECT_BOX.insert(0,"도서명 : 불멸의 이순신 / 저자 : 윤도운")
-    BOOK_SELECT_BOX.insert(1,"도서명 : 동물농장 / 저자 : 조지 오웰")
+    BOOK_SELECT_BOX.insert(1,"도서명 : 불멸의 이순신 / 저자 : 윤도운")
+    BOOK_SELECT_BOX.insert(0,"도서명 : 동물농장 / 저자 : 조지 오웰")
     BOOK_SELECT_BOX.insert(2,"도서명 : 1984 / 저자 : 조지 오웰")
 
     BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black')

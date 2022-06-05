@@ -1,5 +1,7 @@
 from tkinter import*
 import tkinter.messagebox
+import pandas as pd
+from tabulate import tabulate
 
 
 # 2번째 화면
@@ -55,6 +57,12 @@ def BOOK_MANAGEMENT_FIRST():
     BTN_CANCEL = Button(window, text='뒤로가기', bg='orange',
      width='8', height='2',command=window.destroy)
 
+    csv_pull = pd.read_csv("csv/book_1.csv",encoding = 'utf-8')
+    csv_pull = csv_pull.set_index("BOOK_ISBN")
+    
+    # 해당 데이터 프레임에서 마지막 행 추출 csv_pull.shape만 할 시, 행과 열의 갯수 추출
+    index_num=csv_pull.shape[0] #index_num : 인덱스 갯수 변수
+
     
     
     label2 = Label(window, text='수정할 도서 검색하기 :',fg='black' ,
@@ -72,9 +80,15 @@ def BOOK_MANAGEMENT_FIRST():
     # 실제 구현시에는 데이터프레임에 있는 데이터 목록을 가져와서 출력해야함
     BOOK_SELECT_BOX = Listbox(window, width=70, height = 8, highlightcolor = 'blue') # 선택시 파란색으로 표시
     BOOK_SELECT_BOX.place(relx=0.05,rely=0.4,relwidth=0.8,relheight = 0.5)
-    BOOK_SELECT_BOX.insert(0,"도서명 : 불멸의 이순신 / 저자 : 윤도운")
-    BOOK_SELECT_BOX.insert(1,"도서명 : 동물농장 / 저자 : 조지 오웰")
-    BOOK_SELECT_BOX.insert(2,"도서명 : 1984 / 저자 : 조지 오웰")
+    
+    isbnlist=list(csv_pull.index)
+
+    for i in isbnlist:
+        isbn=i
+        BOOK_SELECT_BOX.insert(i,"도서명 : {}/ 저자 : {}".format(csv_pull.loc[isbn,"BOOK_TITLE"],csv_pull.loc[isbn,"BOOK_AUTHOR"]))
+
+
+
     BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black',command=BOOK_EDIT)
     BOOK_SELECT_BTN.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
     
@@ -83,6 +97,10 @@ def BOOK_MANAGEMENT_FIRST():
     label2.place(x=5, y=155)
     BTN_CANCEL.place(x=5,y=25)
     BTN_NEW_REG.place(x=5,y=90)
+    
+
+
+
     
     
 # ㉮-1 신규 도서 추가     
@@ -238,8 +256,8 @@ def BOOK_EDIT():
     
 # 도서 대출하기 버튼 누를 시 생성되는 회원 선택 창 -강민-(2022-06-04 21:11)--------
 def bookrent_selectuser():
-     def rentbutton():
-        rentMsgBox = tkinter.messagebox.askyesno(" ",'"불멸의 이순신"을 대출하시겠습니까? 반납 예정일: 2022-03-11')
+    #def rentbutton():
+     #rentMsgBox = tkinter.messagebox.askyesno(" ",'"불멸의 이순신"을 대출하시겠습니까? 반납 예정일: 2022-03-11')
           # '불멸의 이순신' 부분을 BOOK_TITLE, '2022-03-11' 부분을 RENT_RDATE로 format
           # if rentMsgBox == 'yes':  (확인버튼 누를 시)
           # today_D = datetime.now().date() # datetime 모듈이용하여 현재 날짜 저장
@@ -257,35 +275,35 @@ def bookrent_selectuser():
           # book_df.replace('BOOK_RENTAL':num,True) # book 데이터프레임에서 BOOK_RENTAL의 num 번째를 True로 변경
           # user_df.replace('USER_RENT_CNT':num,rent_cnt+1) # (임의)rent_cnt는 user테이블에서 대여권수가 담긴 변수
           # num += 1
-     rent1 = Tk()
-     rent1.title("도서 대출하기")
-     rent1.geometry("700x500")
+    rent1 = Tk()
+    rent1.title("도서 대출하기")
+    rent1.geometry("700x500")
 
-     rent1label = Label(rent1, text = '도서 대출하기', bg = 'gray', width = 700, height = 4)
-     rent1.configure(background = 'sky blue')
-     rent1label.pack()
+    rent1label = Label(rent1, text = '도서 대출하기', bg = 'gray', width = 700, height = 4)
+    rent1.configure(background = 'sky blue')
+    rent1label.pack()
 
-     rent1booklabel = Label(rent1, text = '대출할 도서', bg='orange')
-     rent1booklabel.place(relx=0.05,rely=0.2,relwidth=0.15,relheight=0.07)
+    rent1booklabel = Label(rent1, text = '대출할 도서', bg='orange')
+    rent1booklabel.place(relx=0.05,rely=0.2,relwidth=0.15,relheight=0.07)
 
-     booknamelabel = Label(rent1, text = '불멸의 이순신', bg = 'gray') # 텍스트는 선택한 도서 이름
-     booknamelabel.place(relx=0.25,rely=0.2,relwidth=0.6,relheight=0.07)
+    booknamelabel = Label(rent1, text = '불멸의 이순신', bg = 'gray') # 텍스트는 선택한 도서 이름
+    booknamelabel.place(relx=0.25,rely=0.2,relwidth=0.6,relheight=0.07)
 
-     searchuserlabel = Label(rent1, text = '회원정보 입력', bg = 'orange')
-     searchuserlabel.place(relx = 0.05,rely=0.3,relwidth=0.15,relheight=0.07)
+    searchuserlabel = Label(rent1, text = '회원정보 입력', bg = 'orange')
+    searchuserlabel.place(relx = 0.05,rely=0.3,relwidth=0.15,relheight=0.07)
 
-     searchuserentry = Entry(rent1)
-     searchuserentry.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
-     searchuserbutton = Button(rent1, text = "검색")
-     searchuserbutton.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
+    searchuserentry = Entry(rent1)
+    searchuserentry.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
+    searchuserbutton = Button(rent1, text = "검색")
+    searchuserbutton.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
 
-     userselectlistbox = Listbox(rent1, width=70, height = 8)
-     userselectlistbox.place(relx=0.05,rely=0.4,relwidth=0.8,relheight = 0.5)
-     userselectlistbox.insert(0,"윤도운 : 010-1234-5678")
-     userselectlistbox.insert(1,"김민오 : 010-1234-5678")
-     userselectlistbox.insert(2,"남강민 : 010-1234-5678")
-     userselectbutton = Button(rent1, text = '선택하기',command = rentbutton)
-     userselectbutton.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
+    userselectlistbox = Listbox(rent1, width=70, height = 8)
+    userselectlistbox.place(relx=0.05,rely=0.4,relwidth=0.8,relheight = 0.5)
+    userselectlistbox.insert(0,"윤도운 : 010-1234-5678")
+    userselectlistbox.insert(1,"김민오 : 010-1234-5678")
+    userselectlistbox.insert(2,"남강민 : 010-1234-5678")
+    userselectbutton = Button(rent1, text = '선택하기',command = rentbutton)
+    userselectbutton.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
 
 # ㉯의 화면----------------------------------------------------
 def BOOK_LOOKUP():
