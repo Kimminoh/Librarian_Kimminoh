@@ -4,6 +4,7 @@ import pandas as pd
 from tabulate import tabulate
 import tkinter as tk
 import tkinter.ttk as ttk
+from tkinter.filedialog import *
 
 
 
@@ -65,6 +66,17 @@ def BOOK_MANAGEMENT_FIRST():
     BTN_CANCEL = Button(window, text='뒤로가기', bg='orange',
      width='8', height='2',command=window.destroy)
     
+
+    
+    
+    label2 = Label(window, text='수정할 도서 검색하기 :',fg='black' ,
+                   font=('맑은 고딕',10), width=20,height=1)
+    
+    label3 = Label(window, text='도서명 혹은 저자로 검색해주세요 ↓',fg='black' ,
+                   font=('맑은 고딕',10), width=30,height=1) 
+
+    BOOK_SEARCH_LABEL = Entry(window)
+    BOOK_SEARCH_LABEL.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
     '''#  도서명과 저자로 검색하기 / 이거 아직 구현 안 됨
     def search ():        
         for ISBN in csv_pull.index.tolist():
@@ -77,17 +89,6 @@ def BOOK_MANAGEMENT_FIRST():
             search_Book3 = csv_pull.loc[search1 | search2,["BOOK_PUBLIC"]]
             book_add = (ISBN, search_Book1,search_Book2,search_Book3)
             BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0]) '''
-    
-    
-    label2 = Label(window, text='수정할 도서 검색하기 :',fg='black' ,
-                   font=('맑은 고딕',10), width=20,height=1)
-    
-    label3 = Label(window, text='도서명 혹은 저자로 검색해주세요 ↓',fg='black' ,
-                   font=('맑은 고딕',10), width=30,height=1) 
-
-    BOOK_SEARCH_LABEL = Entry(window)
-    BOOK_SEARCH_LABEL.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
-    
     
     BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black') # command=search
     BOOK_SEARCH_BTN.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
@@ -243,14 +244,14 @@ def BOOK_NEW_REG():
             OVERLAP_CHECK['state'] = 'disabled'
             SEARCH_BOOK_ISBN['state'] = 'disabled'
 
-
-
-
     # 사진 미리 보기 창
     # 예외처리 (사진을 등록하지 않았을 때) => 메세지 창 띄우기
 
-    IMAGE_label = Label(window, text="사진\n미리보기",bg="orange",width='15',height='10')
+
+    photo=PhotoImage(master=window)
+    IMAGE_label = Label(window,image=photo,text="사진\n미리보기",bg="orange",width='80',height='100')
     IMAGE_label.place(x=30,y=80)
+
 
 
     BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
@@ -298,8 +299,19 @@ def BOOK_NEW_REG():
     SEARCH_IMAGE_FIND = Entry(window)
     SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
     
-    BTN_EDIT('BTN_FIND', '찾아 보기', 'gray', '8', '1', 620, 360)
+    def find_image_name():
+        file_name=askopenfilename(parent=window,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
+
+        photo=PhotoImage(file=file_name,master=window)
+        IMAGE_label.configure(image=photo)
+        IMAGE_label.image=photo
+        SEARCH_IMAGE_FIND.insert(0,file_name)
+
+    BTN_FIND=Button(window, text="찾아보기",bg='gray',width='8',height='1',command=find_image_name)
+    BTN_FIND.place(x=620,y=360)
     
+
+
     BTN_OK = Button(window, text='확인', bg='gray',width='7', height='1', command = REG)
     BTN_OK.place(x=300, y = 420)
 
@@ -349,11 +361,11 @@ def BOOK_EDIT(selected):
     csv_pull = csv_pull.set_index("BOOK_ISBN")
     
 
-    IMAGE_label = Label(window, text="사진\n미리보기",bg="orange",width='15',height='10')
+    photo=PhotoImage(file=csv_pull.loc[selected]["BOOK_IMAGE"],master=window)
+    IMAGE_label = Label(window,image=photo,text="사진\n미리보기",bg="orange",width='80',height='100')
+    IMAGE_label.configure(image=photo)
+    IMAGE_label.image=photo
     IMAGE_label.place(x=30,y=80)
-
-    #포토 이미지 ! -> 해서 적용해보기
-
 
     BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
     BTN_BOOK_ISBN.place(x=170, y = 80)
@@ -406,11 +418,22 @@ def BOOK_EDIT(selected):
     BTN_IMAGE_FIND.place(x=170, y = 360)
     SEARCH_IMAGE_FIND = Entry(window)
     SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
-    SEARCH_IMAGE_FIND.insert(0,csv_pull.loc[selected]["BOOK_IMAGE"])
+    #SEARCH_IMAGE_FIND.insert(0,csv_pull.loc[selected]["BOOK_IMAGE"])
     
-    BTN_EDIT('BTN_FIND', '찾아 보기', 'gray', '8', '1', 620, 360)
+
+    def find_image_name():
+        file_name=askopenfilename(parent=window,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
+
+        photo=PhotoImage(file=file_name,master=window)
+        IMAGE_label.configure(image=photo)
+        IMAGE_label.image=photo
 
 
+        SEARCH_IMAGE_FIND.insert(0,file_name)
+
+    
+    BTN_FIND=Button(window, text="찾아보기",bg='gray',width='8',height='1',command=find_image_name)
+    BTN_FIND.place(x=620,y=360)
 
 
 
@@ -715,7 +738,7 @@ def BOOK_DELETE():
 
 
   
-# 첫번째 화면(메인화면)------------------------------------------
+# 첫번째 화면(메인화면)--------------------------------------------------------------------------------
 
 window = Tk()
 window.title("도서관리 프로그램")
