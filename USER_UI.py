@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter.simpledialog import *
 from tkinter.filedialog import *
 from PIL import Image,ImageTk
+import tkinter.messagebox
 
 
 def create_rbutton(rbutton_name,font,color,text,var,value,x,y):         # 라디오 버튼 배치 함수
@@ -27,44 +28,52 @@ def create_entry(entry_name,font,width,x,y):                             # 엔�
 
 def user_reg():
     
-    '''
-    def image_search():
-        filename = askopenfilename(parent = mainwindow, filetypes =(("JPG 파일","*.jpg"),("GIF 파일","*.GIF"),("모든 파일","*.*")))
-        
-        
-        photo1 = PhotoImage(file = filename)
-        image_label.image=photo1
-        image_label.configure(image=photo1)
-        '''
-    
-
     def inuser_csv():
-        df_user = pd.read_csv('csv/USER1.csv', encoding='UTF-8')
+        
+        df_user = pd.read_csv('csv/USER1.csv', encoding='utf-8')
         df_user = df_user.set_index(df_user['USER_PHONE'])
+        def ERROR_2():   # 예외처리 2
+            tkinter.messagebox.showinfo("정보","등록이 완료 되었습니다.")
+        def ERROR_6():   # 예외처리 6
+            tkinter.messagebox.showerror("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
 
-        new_user = { "USER_PHONE": phone_entry.get(),                     # -(하이픈) 포함
+
+        a = phone_entry.get()
+        b = name_entry.get()
+        c= birth_entry.get()
+        d = mail_entry.get()
+        e = image_entry.get('1.0','end')
+        
+
+        if a.strip()=="" or b.strip()==""or c.strip()=="" or d.strip()=="" or e.strip()=="":               
+            ERROR_6()
+            return 0
+        else:
+            new_user = { "USER_PHONE": phone_entry.get(),                     # -(하이픈) 포함
                     "USER_NAME": name_entry.get(),                         # 영문일 시 공백포함
                     "USER_BIRTH": birth_entry.get(),                       # YYYYMMDD 
-                    "USER_SEX": bool(var),                                # TRUE : 남자, FALSE : 여자
+                    "USER_SEX": var.get(),                                # TRUE : 남자, FALSE : 여자
                     "USER_MAIL": mail_entry.get(),
-                    "USER_IMAGE": image_entry.get(),                     # 기본값 None(흰 배경)
-                    "USER_REG": phone_entry.get(),                          # TRUE : 등록, FALSE : 탈퇴
+                    "USER_REG" : True,
+                    "USER_IMAGE": image_entry.get('1.0','end'),                     # 기본값 None(흰 배경)
                     "USER_RENT_CNT": 0 }                                 # +1, -1 하는 방식
-        df_user = df_user.append(new_user, ignore_index=True)           # 데이터프레임을 추가하고 행 인덱스를 재배열
-        df_user = df_user.set_index(df_user['USER_PHONE'])               # USER_PHONE을 인덱스로 사용
+            df_user = df_user.append(new_user, ignore_index=True)           # 데이터프레임을 추가하고 행 인덱스를 재배열
+            df_user = df_user.set_index(df_user['USER_PHONE'])               # USER_PHONE을 인덱스로 사용
 
-        df_user.to_csv('csv/USER1.csv', index=False, encoding='UTF-8')
+            df_user.to_csv('csv/USER1.csv', index=False, encoding='utf-8')
+            ERROR_2()
+            mainwindow.destroy()
     
     photo = PhotoImage()
     sub_label = Label(mainwindow, text ="회원 등록",font=("맑은 고딕",9),bg='gray',height=3)
-    image_label = Label(mainwindow,image=photo,width=120, height=200)
+    image_label = Label(mainwindow,image=photo,width=120, height=150)
 
     mainwindow.configure(background = 'sky blue')
     
-    var = BooleanVar()
+    var = StringVar(mainwindow)
     
     def phonenum_check():
-        df_user = pd.read_csv("csv/USER1.csv",encoding = 'UTF-8')
+        df_user = pd.read_csv("csv/USER1.csv",encoding='utf-8')
         df_user = df_user.set_index(df_user['USER_PHONE'])
         
         a = phone_entry.get()
@@ -72,15 +81,19 @@ def user_reg():
 
         if  str(a) not in phone_number:
             phone_check['state'] = 'disabled'
+            phone_entry['state'] = 'disabled'
+            reg_button['state']='normal'
 
     def find_image_name():
         file_name=askopenfilename(parent=mainwindow,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
 
-        photo=PhotoImage(file=file_name,master=mainwindow)
-        image_label.configure(image=photo)
-        image_label.image=photo
-        image_entry.insert(0,file_name)
-
+        photo = Image.open(file_name)
+        photo2 = photo.resize((120, 150))
+        photo3 = ImageTk.PhotoImage(photo2,master=mainwindow)
+        image_label.configure(image=photo3, width=120, height=150)
+        image_label.image=photo3
+        image_entry.insert(1.0,file_name)
+        
     # 위젯 배치
     sub_label.pack(fill=X)
     image_label.pack()
@@ -90,22 +103,26 @@ def user_reg():
     birth_button = create_button('birth_button','orange','생년월일',9,170,120)
     birth_entry = create_entry('birth_entry',("맑은 고딕",12),35,250,120)
     sex_button = create_button('sex_button','orange','성별',9,170,160)
-    male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','남',var,True,250,160)
-    female_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','여',var,False,300,160)
+    male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','남',var,'남자',250,160)
+    female_rbutton = create_rbutton('female_rbutton',("맑은 고딕",10),'sky blue','여',var,'여자',300,160)
     phone_button = create_button('phone_button','orange','전화번호',9,170,200)
     phone_entry = create_entry('phone_entry',("맑은 고딕",12),35,250,200)
     phone_check = Button(mainwindow,text='중복확인',bg='gray',width=9,command=phonenum_check)
-    phone_check.place(x=580,y=200)                      # 중복확인 버튼 미구현
+    phone_check.place(x=580,y=200)                      
     mail_button = create_button('mail_button','orange','이메일 주소',9,170,240)
     mail_entry = create_entry('mail_entry',("맑은 고딕",12),35,250,240)
     image_find = Button(mainwindow,text='찾아보기',bg='gray',width=9,command=find_image_name) #,command=image_search
     image_find.place(x=580,y=280)
     image_button = create_button('image_button','orange','사진',9,170,280)
-    image_entry = create_entry('image_entry',("맑은 고딕",12),35,250,280)
+    image_entry = Text(mainwindow, font=("맑은 고딕",12),width=35,height=4)
+    image_entry.place(x=250, y = 280)
     reg_button = Button(mainwindow,text='등록',bg='gray',width=9,command=inuser_csv)
-    reg_button.place(x=150,y=400)
-    ok_button = create_button('mail_button','gray','확인',9,300,400)
-    cancel_button = create_button('mail_button','gray','취소',9,450,400)
+    reg_button.place(x=200,y=400)
+    reg_button['state']='disabled'
+    cancel_button = Button(mainwindow,bg='gray',text='취소',width=9,command=mainwindow.destroy)
+        
+    cancel_button.place(x=400,y=400)
+    
 
 
 

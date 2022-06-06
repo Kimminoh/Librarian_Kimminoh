@@ -1,8 +1,8 @@
 import USER2_UI
 import USER4_UI
 import pandas as pd
+from PIL import Image,ImageTk
 import csv
-from tabulate import tabulate
 from tkinter import *
 from tkinter import ttk
 from tkinter.simpledialog import *
@@ -32,7 +32,7 @@ def user_search():
     phone=None
     
     csv_list = []
-    f = open('csv/USER1.csv','r', encoding = 'utf-8')
+    f = open('csv/USER1.csv','r',encoding='utf-8')
     reader = csv.reader(f)
 
     def user_search ():   
@@ -77,12 +77,14 @@ def user_search():
         getvalue = treeview.item(chioce_info).get('values')
         phone=getvalue[1]
         USER4_UI.user_2(phone)
+        
 
     def button_item2():
         chioce_info = treeview.focus()
         getvalue = treeview.item(chioce_info).get('values')
         phone=getvalue[1]
         USER4_UI.user_2(phone)
+
 
     for row in reader:
         csv_list.append(row)
