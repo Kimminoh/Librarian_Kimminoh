@@ -2,6 +2,10 @@ import pandas as pd
 from tabulate import tabulate
 from tkinter import *
 from tkinter.simpledialog import *
+from PIL import Image,ImageTk
+from tkinter.filedialog import *
+
+
 
 def user_2(phone1):
     phone = phone1
@@ -27,13 +31,13 @@ def user_2(phone1):
     def user_update():
         df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
-
         sub_label = Label(mainwindow, text ="회원 상세 정보",font=("맑은 고딕",9),bg='gray',height=3)
-        image_label = Label(mainwindow, text='사진\n미리보기', bg='orange', width=15, height=10)
+        image_label = Label(mainwindow,width=120, height=150)
+        
         state_label = Label(mainwindow, text ="등록 상태",bg='orange')
-        if df_user.loc[phone,'USER_REG'] == TRUE:
+        if df_user.loc[phone,'USER_REG'] == True:
             state_label.config(text='등록 상태')
-        elif df_user.loc[phone,'USER_REG'] == FALSE:
+        elif df_user.loc[phone,'USER_REG'] == False:
             state_label.config(text='탈퇴 상태')
         
         mainwindow.configure(background = 'sky blue')
@@ -65,6 +69,7 @@ def user_2(phone1):
             else:
                 df_user.loc[phone,'USER_REG'] = True
             df_user.to_csv('csv/USER1.csv', index=False, encoding='CP949')
+            mainwindow.destroy()
 
         phone_button = create_button('phone_button','orange','전화번호',9,170,200)
         phone_entry = create_entry('phone_entry',phone,("맑은 고딕",12),35,250,200)
@@ -73,11 +78,42 @@ def user_2(phone1):
         mail_entry = create_entry('mail_entry',df_user.loc[phone,'USER_MAIL'],("맑은 고딕",12),35,250,240)
         image_find = create_button('image_find','gray','찾아보기',9,580,280)
         image_button = create_button('image_button','orange','사진',9,170,280)
-        image_entry = create_entry('image_entry',df_user.loc[phone,'USER_IMAGE'],("맑은 고딕",12),35,250,280)
-        reg_button = Button(mainwindow,text='탈퇴/복구',bg='gray',width=9,command=state_change)
-        reg_button.place(x=150,y=400)
-        ok_button = create_button('mail_button','gray','확인',9,300,400)
-        cancel_button = create_button('mail_button','gray','취소',9,450,400)
+        image_entry = Text(mainwindow, font=("맑은 고딕",12),width=35,height=4)
+        image_entry.insert(1.0,df_user.loc[phone,'USER_IMAGE'])
+        image_entry.place(x=250,y=280)
+
+        image1=image_entry.get('1.0','end').replace('\n','')
+        photo = Image.open(image1)
+        photo2 = photo.resize((120, 150))
+        photo3 = ImageTk.PhotoImage(photo2,master=mainwindow)
+        image_label.configure(image=photo3, width=120, height=150)
+        image_label.image=photo3
+
+        reg_button = Button(mainwindow,bg='gray',width=9,command=state_change)
+        
+        if df_user.loc[phone,'USER_REG'] == True:
+            reg_button.config(text='탈퇴')
+        elif df_user.loc[phone,'USER_REG'] == False:
+            reg_button.config(text='복구')
+
+        
+        ok_button = Button(mainwindow,bg='gray',text='확인',width=9,command=mainwindow.destroy)
+        
+        
+        reg_button.place(x=200,y=400)
+        ok_button.place(x=400,y=400)
+        
+        name_entry['state'] = 'disabled'
+        birth_entry['state'] = 'disabled'
+        male_rbutton['state'] = 'disabled'
+        female_rbutton['state'] = 'disabled'
+        phone_entry['state'] = 'disabled'
+        phone_entry['state'] = 'disabled'
+        mail_entry['state'] = 'disabled'
+        image_entry['state'] = 'disabled'
+        phone_check.destroy()
+        image_find.destroy()
+        
 
     mainwindow = Tk()
     user_update()
