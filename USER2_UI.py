@@ -28,7 +28,7 @@ def user_2(phone1):
         return entry_name
 
     def user_update():
-        df_user = pd.read_csv('csv/USER1.csv', encoding='utf-8')
+        df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
         
         def find_image_name():
@@ -43,10 +43,8 @@ def user_2(phone1):
             image_entry['state'] = 'disabled'
             image_find['state'] = 'disabled'
         
-        var = IntVar(mainwindow)
-
         def update_csv():
-            df_user = pd.read_csv('csv/USER1.csv', encoding='utf-8')
+            df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
             df_user = df_user.set_index(df_user['USER_PHONE'])
                                                                         # 등록되어있는 회원들의 정보를 불러와서 출력
             a = phone_entry.get()
@@ -58,19 +56,18 @@ def user_2(phone1):
                 return 0
             else:
             
+            
                 USER_CHOICE = phone                               # 사용자가 선택한 회원의 전화번호(기본키)를 기준으로 정보 검색
                 df_user.loc[USER_CHOICE,'USER_PHONE'] = phone_entry.get()
                 df_user.loc[USER_CHOICE,'USER_NAME'] = name_entry.get()
                 df_user.loc[USER_CHOICE,'USER_BIRTH'] = birth_entry.get()
-                if var.get() == 1:
-                    df_user.loc[USER_CHOICE,'USER_SEX'] = '남자'
-                else:
-                    df_user.loc[USER_CHOICE,'USER_SEX'] = '여자'
+                df_user.loc[USER_CHOICE,'USER_SEX'] = ' '#sex_button.get()
                 df_user.loc[USER_CHOICE,'USER_MAIL'] = mail_entry.get()
                 df_user.loc[USER_CHOICE,'USER_IMAGE'] = image_entry.get('1.0','end')
+                df_user.loc[USER_CHOICE,'USER_REG'] = ' '#reg_entry.get()
                 df_user.loc[USER_CHOICE,'USER_RENT_CNT'] = 4
 
-                df_user.to_csv('csv/USER1.csv', index=False, encoding='utf-8')   # 수정된 회원 정보 저장
+                df_user.to_csv('csv/USER1.csv', index=False, encoding='CP949')   # 수정된 회원 정보 저장
                 mainwindow.destroy()
 
         sub_label = Label(mainwindow, text ="회원정보 수정",font=("맑은 고딕",9),bg='gray',height=3)
@@ -84,7 +81,7 @@ def user_2(phone1):
             state_label.config(text='탈퇴 상태')
         mainwindow.configure(background = 'sky blue')
         
-        
+        var = BooleanVar()
 
         # 위젯 배치
         sub_label.pack(fill=X)
@@ -95,8 +92,8 @@ def user_2(phone1):
         birth_button = create_button('birth_button','orange','생년월일',9,170,120)
         birth_entry = create_entry('birth_entry',df_user.loc[phone,'USER_BIRTH'],("맑은 고딕",12),35,250,120)
         sex_button = create_button('sex_button','orange','성별',9,170,160)
-        male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','남',var,1,250,160)
-        female_rbutton = create_rbutton('female_rbutton',("맑은 고딕",10),'sky blue','여',var,2,300,160)
+        male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','남',var,'남자',250,160)
+        female_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','여',var,'여자',300,160)
         
         if df_user.loc[phone,'USER_SEX'] == '남자':
             male_rbutton.select()

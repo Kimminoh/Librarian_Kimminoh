@@ -29,7 +29,7 @@ def create_entry(entry_name,font,width,x,y):                             # 엔�
 def user_reg():
     
     def inuser_csv():
-        df_user = pd.read_csv('csv/USER1.csv', encoding='utf-8')
+        df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
         
         a = phone_entry.get()
@@ -43,14 +43,14 @@ def user_reg():
             new_user = { "USER_PHONE": phone_entry.get(),                     # -(하이픈) 포함
                     "USER_NAME": name_entry.get(),                         # 영문일 시 공백포함
                     "USER_BIRTH": birth_entry.get(),                       # YYYYMMDD 
-                    "USER_SEX": var,                                # TRUE : 남자, FALSE : 여자
+                    "USER_SEX": bool(var),                                # TRUE : 남자, FALSE : 여자
                     "USER_MAIL": mail_entry.get(),
                     "USER_IMAGE": image_entry.get('1.0','end'),                     # 기본값 None(흰 배경)
                     "USER_RENT_CNT": 0 }                                 # +1, -1 하는 방식
             df_user = df_user.append(new_user, ignore_index=True)           # 데이터프레임을 추가하고 행 인덱스를 재배열
             df_user = df_user.set_index(df_user['USER_PHONE'])               # USER_PHONE을 인덱스로 사용
 
-            df_user.to_csv('csv/USER1.csv', index=False, encoding='utf-8')
+            df_user.to_csv('csv/USER1.csv', index=False, encoding='CP949')
             mainwindow.destroy()
     
     photo = PhotoImage()
@@ -59,10 +59,10 @@ def user_reg():
 
     mainwindow.configure(background = 'sky blue')
     
-    var = StringVar()
+    var = BooleanVar()
     
     def phonenum_check():
-        df_user = pd.read_csv("csv/USER1.csv",encoding='utf-8')
+        df_user = pd.read_csv("csv/USER1.csv",encoding = "cp949")
         df_user = df_user.set_index(df_user['USER_PHONE'])
         
         a = phone_entry.get()
@@ -90,8 +90,8 @@ def user_reg():
     birth_button = create_button('birth_button','orange','생년월일',9,170,120)
     birth_entry = create_entry('birth_entry',("맑은 고딕",12),35,250,120)
     sex_button = create_button('sex_button','orange','성별',9,170,160)
-    male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','남',var,'남자',250,160)
-    female_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','여',var,'여자',300,160)
+    male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','남',var,True,250,160)
+    female_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','여',var,False,300,160)
     phone_button = create_button('phone_button','orange','전화번호',9,170,200)
     phone_entry = create_entry('phone_entry',("맑은 고딕",12),35,250,200)
     phone_check = Button(mainwindow,text='중복확인',bg='gray',width=9,command=phonenum_check)
