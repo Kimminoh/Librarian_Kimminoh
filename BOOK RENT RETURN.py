@@ -694,7 +694,7 @@ def BOOK_DELETE():
                    font=('맑은 고딕',10), width=30,height=1)         
 
     # 레이블 2
-    tkinter.messagebox.askquestion("삭제 실패"," 해당 도서를 반납하고 삭제해주세요 !")
+    #tkinter.messagebox.askquestion("삭제 실패"," 해당 도서를 반납하고 삭제해주세요 !")
 
     BOOK_SEARCH_LABEL = Entry(window)
     BOOK_SEARCH_LABEL.insert(END, "도서명 혹은 저자를 입력하세요")

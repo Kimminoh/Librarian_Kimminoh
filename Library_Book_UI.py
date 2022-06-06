@@ -77,20 +77,29 @@ def BOOK_MANAGEMENT_FIRST():
 
     BOOK_SEARCH_LABEL = Entry(window)
     BOOK_SEARCH_LABEL.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
-    '''#  도서명과 저자로 검색하기 / 이거 아직 구현 안 됨
+    #  도서명과 저자로 검색하기 / 이거 아직 구현 안 됨
     def search ():        
         for ISBN in csv_pull.index.tolist():
-            BOOK_SEARCH_LABEL = "파이썬"
-            search1 = csv_pull["BOOK_TITLE"].str.contains(BOOK_SEARCH_LABEL)
-            search2 = csv_pull["BOOK_AUTHOR"].str.contains(BOOK_SEARCH_LABEL)
+            book_name = BOOK_SEARCH_LABEL.get()
+            
+            search1 = csv_pull["BOOK_TITLE"].str.contains(book_name)
+            search2 = csv_pull["BOOK_AUTHOR"].str.contains(book_name)
 
-            search_Book1 = csv_pull.loc[search1 | search2,["BOOK_TITLE"]]
-            search_Book2 = csv_pull.loc[search1 | search2,["BOOK_AUTHOR"]]
-            search_Book3 = csv_pull.loc[search1 | search2,["BOOK_PUBLIC"]]
-            book_add = (ISBN, search_Book1,search_Book2,search_Book3)
-            BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0]) '''
+            csv_2 = csv_pull.loc[search1 | search2,["BOOK_TITLE","BOOK_AUTHOR","BOOK_PUBLIC"]]
+
+            for item in BOOK_SELECT_BOX.get_children():
+                BOOK_SELECT_BOX.delete(item)
+
+            for ISBN in csv_2.index.tolist():
+                book_title = csv_2.loc[ISBN, "BOOK_TITLE"]
+                book_author = csv_2.loc[ISBN, "BOOK_AUTHOR"]
+                book_publish = csv_2.loc[ISBN, "BOOK_PUBLIC"]
+                
+                book_add = (ISBN, book_title, book_author, book_publish)
+                BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
+
     
-    BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black') # command=search
+    BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black', command = search) 
     BOOK_SEARCH_BTN.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
 
     
@@ -114,18 +123,18 @@ def BOOK_MANAGEMENT_FIRST():
     BOOK_SELECT_BOX.heading(3, text='저자')
     BOOK_SELECT_BOX.heading(4, text='출판사')
     # 기본 너비 
-    BOOK_SELECT_BOX.column(1, width='170')
-    BOOK_SELECT_BOX.column(2, width='130')
-    BOOK_SELECT_BOX.column(3, width='120')
-    BOOK_SELECT_BOX.column(4, width='80')
+    BOOK_SELECT_BOX.column(1, width='100')
+    BOOK_SELECT_BOX.column(2, width='150')
+    BOOK_SELECT_BOX.column(3, width='110')
+    BOOK_SELECT_BOX.column(4, width='140')
     #스크롤바 (안생기는데 왜 안생기는지 모르겠음)
     scroll = ttk.Scrollbar(window, orient="vertical", command=BOOK_SELECT_BOX.yview)
     scroll.pack(side='right', fill='y')
     BOOK_SELECT_BOX.configure(yscrollcommand=scroll.set)
 
     # 목록 출력할 데이터 
-    # 데이터 프레임 출력
-    
+
+    # 데이터 프레임 출력 
     for ISBN in csv_pull.index.tolist():
         book_title = csv_pull.loc[ISBN, "BOOK_TITLE"]
         book_author = csv_pull.loc[ISBN, "BOOK_AUTHOR"]
@@ -216,7 +225,7 @@ def BOOK_NEW_REG():
                 csv_pull.loc[a, 'BOOK_LINK']= f
                 csv_pull.loc[a, 'BOOK_IMAGE']= g
                 csv_pull.loc[a, 'BOOK_DESCRIPTION']= h
-                #csv_pull.loc[a, 'BOOK_RENTAL']= "FALSE"
+                csv_pull.loc[a, 'BOOK_RENTAL']= False
                 #csv 저장하기 
                 csv_pull.to_csv("csv/book_1.csv", index = True)
 
@@ -232,7 +241,9 @@ def BOOK_NEW_REG():
         
         a = SEARCH_BOOK_ISBN.get()
         ISBN_OVERLAP = csv_pull.index.tolist()
-        if  a in ISBN_OVERLAP:
+
+        if  int(a) in ISBN_OVERLAP:
+
             ERROR_2()
             
         elif not a.isdigit():
@@ -354,8 +365,6 @@ def BOOK_EDIT(selected):
         tkinter.messagebox.showerror("ERROR","변경사항을 적용 하여야지 등록/수정이 가능합니다 !")
     def ERROR_10():     # 예외처리 10
         tkinter.messagebox.showerror("ERROR","해당 부분은 숫자로만 입력이 가능합니다 !")
-
-    #def APPLY():
         
     csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
     csv_pull = csv_pull.set_index("BOOK_ISBN")
@@ -381,7 +390,6 @@ def BOOK_EDIT(selected):
     SEARCH_BOOK_TITLE = Entry(window)
     SEARCH_BOOK_TITLE.place(x= 250, y= 120,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_TITLE.insert(0,csv_pull.loc[selected]["BOOK_TITLE"])
-    #SEARCH_BOOK_TITLE.insert("","end",text="",value=book_add,iid=book_add[0])
     
 
     BTN_BOOK_AUTHOR = Button(window, text='저자', bg='orange', width='8', height='1')
@@ -660,17 +668,30 @@ def BOOK_DELETE():
     def DLT_ERROR():
         tkinter.messagebox.showerror("삭제 실패"," 해당 도서를 반납하고 삭제해주세요 !")
 
-    def DLT_BOOK():
+
+    def click_item(event):
+        selected=BOOK_SELECT_BOX.focus()
+        print(selected)
+        DLT_BOOK(int(selected))
+    # 도서 삭제 구현 
+    def DLT_BOOK(selected):
         csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
         csv_pull = csv_pull.set_index("BOOK_ISBN")
+        
+        name = csv_pull.loc[selected]["BOOK_TITLE"]
+        rent = csv_pull.loc[selected]["BOOK_RENTAL"]
+        MB = tkinter.messagebox.askquestion("도서 삭제", "{}을 삭제하시겠습니까?".format(name))
+        if MB == "yes":
+            if rent == False :    #도서 정보 가져와야함 / 구현 성공
+                csv_pull = csv_pull.drop(selected)
+                tkinter.messagebox.showinfo("삭제 완료", " 삭제가 완료 되었습니다 !")
+                csv_pull.to_csv("csv/book_1.csv", index = True, encoding='utf-8')
+                
+                
+                
 
-        MB = tkinter.messagebox.askquestion("도서 삭제", "을 삭제하시겠습니까?")
-        #if MB == "yes":
-        #    if BOOK_RENTAL == True :    도서 정보 가져와야함 / 아직 구현 X
-        #        messagebox.showerror("삭제 오류", " 이미 대출 중인 도서입니다.")
-
-         #   else:
-         #       csv_pull.drop
+            else:
+                tkinter.messagebox.showerror("삭제 오류", " 이미 대출 중인 도서입니다.")
 
 
 
@@ -726,8 +747,10 @@ def BOOK_DELETE():
         book_add = (ISBN, book_title, book_author, book_publish)
         BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
 
+
     def click_item(event):
         DLT_BOOK()
+
 
     # 더블 클릭시 이벤트 발생 
     BOOK_SELECT_BOX.bind('<Double-Button-1>', click_item)
