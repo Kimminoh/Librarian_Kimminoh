@@ -27,17 +27,6 @@ def create_entry(entry_name,font,width,x,y):                             # 엔�
 
 def user_reg():
     
-    '''
-    def image_search():
-        filename = askopenfilename(parent = mainwindow, filetypes =(("JPG 파일","*.jpg"),("GIF 파일","*.GIF"),("모든 파일","*.*")))
-        
-        
-        photo1 = PhotoImage(file = filename)
-        image_label.image=photo1
-        image_label.configure(image=photo1)
-        '''
-    
-
     def inuser_csv():
         df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
@@ -47,7 +36,7 @@ def user_reg():
                     "USER_BIRTH": birth_entry.get(),                       # YYYYMMDD 
                     "USER_SEX": bool(var),                                # TRUE : 남자, FALSE : 여자
                     "USER_MAIL": mail_entry.get(),
-                    "USER_IMAGE": image_entry.get(),                     # 기본값 None(흰 배경)
+                    "USER_IMAGE": image_entry.get('1.0','end'),                     # 기본값 None(흰 배경)
                     "USER_REG": phone_entry.get(),                          # TRUE : 등록, FALSE : 탈퇴
                     "USER_RENT_CNT": 0 }                                 # +1, -1 하는 방식
         df_user = df_user.append(new_user, ignore_index=True)           # 데이터프레임을 추가하고 행 인덱스를 재배열
@@ -57,7 +46,7 @@ def user_reg():
     
     photo = PhotoImage()
     sub_label = Label(mainwindow, text ="회원 등록",font=("맑은 고딕",9),bg='gray',height=3)
-    image_label = Label(mainwindow,image=photo,width=120, height=200)
+    image_label = Label(mainwindow,image=photo,width=120, height=150)
 
     mainwindow.configure(background = 'sky blue')
     
@@ -76,10 +65,15 @@ def user_reg():
     def find_image_name():
         file_name=askopenfilename(parent=mainwindow,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
 
-        photo=PhotoImage(file=file_name,master=mainwindow)
-        image_label.configure(image=photo)
-        image_label.image=photo
-        image_entry.insert(0,file_name)
+        photo = Image.open(file_name)
+        photo2 = photo.resize((120, 150))
+        photo3 = ImageTk.PhotoImage(photo2,master=mainwindow)
+        image_label.configure(image=photo3, width=120, height=200)
+        image_label.image=photo3
+        image_entry.insert(1.0,file_name)
+        image_entry['state'] = 'disabled'
+        image_find['state'] = 'disabled'
+        
 
     # 위젯 배치
     sub_label.pack(fill=X)
@@ -101,7 +95,8 @@ def user_reg():
     image_find = Button(mainwindow,text='찾아보기',bg='gray',width=9,command=find_image_name) #,command=image_search
     image_find.place(x=580,y=280)
     image_button = create_button('image_button','orange','사진',9,170,280)
-    image_entry = create_entry('image_entry',("맑은 고딕",12),35,250,280)
+    image_entry = Text(mainwindow, font=("맑은 고딕",12),width=35,height=4)
+    image_entry.place(x=250, y = 280)
     reg_button = Button(mainwindow,text='등록',bg='gray',width=9,command=inuser_csv)
     reg_button.place(x=150,y=400)
     ok_button = create_button('mail_button','gray','확인',9,300,400)
