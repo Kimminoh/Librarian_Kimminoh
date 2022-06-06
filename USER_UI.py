@@ -56,23 +56,35 @@ def user_reg():
         df_user.to_csv('csv/USER1.csv', index=False, encoding='CP949')
     
     photo = PhotoImage()
-    #photo = Image.open(filename)
-   # resize_image = photo.resize((120, 200))
-    #photo1 = ImageTk.PhotoImage(resize_image,master=mainwindow)
     sub_label = Label(mainwindow, text ="회원 등록",font=("맑은 고딕",9),bg='gray',height=3)
     image_label = Label(mainwindow,image=photo,width=120, height=200)
-    #image_label.configure(photo1)
-    #state_label = Label(mainwindow, text ="등록 상태",bg='gray')
+
     mainwindow.configure(background = 'sky blue')
     
     var = BooleanVar()
     
+    def phonenum_check():
+        df_user = pd.read_csv("csv/USER1.csv",encoding = "cp949")
+        df_user = df_user.set_index(df_user['USER_PHONE'])
+        
+        a = phone_entry.get()
+        phone_number = df_user.index.tolist()
+
+        if  str(a) not in phone_number:
+            phone_check['state'] = 'disabled'
+
+    def find_image_name():
+        file_name=askopenfilename(parent=mainwindow,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
+
+        photo=PhotoImage(file=file_name,master=mainwindow)
+        image_label.configure(image=photo)
+        image_label.image=photo
+        image_entry.insert(0,file_name)
+
     # 위젯 배치
     sub_label.pack(fill=X)
     image_label.pack()
     image_label.place(x=30,y=80)
-    #create_label(image_label,30,80)
-    #state_label.place(x=60,y=250)
     name_button = create_button('name_button','orange','이름',9,170,80)
     name_entry = create_entry('name_entry',("맑은 고딕",12),35,250,80)
     birth_button = create_button('birth_button','orange','생년월일',9,170,120)
@@ -82,10 +94,11 @@ def user_reg():
     female_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','여',var,False,300,160)
     phone_button = create_button('phone_button','orange','전화번호',9,170,200)
     phone_entry = create_entry('phone_entry',("맑은 고딕",12),35,250,200)
-    phone_check = create_button('phone_check','gray','중복확인',9,580,200)                          # 중복확인 버튼 미구현
+    phone_check = Button(mainwindow,text='중복확인',bg='gray',width=9,command=phonenum_check)
+    phone_check.place(x=580,y=200)                      # 중복확인 버튼 미구현
     mail_button = create_button('mail_button','orange','이메일 주소',9,170,240)
     mail_entry = create_entry('mail_entry',("맑은 고딕",12),35,250,240)
-    image_find = Button(mainwindow,text='찾아보기',bg='gray',width=9) #,command=image_search
+    image_find = Button(mainwindow,text='찾아보기',bg='gray',width=9,command=find_image_name) #,command=image_search
     image_find.place(x=580,y=280)
     image_button = create_button('image_button','orange','사진',9,170,280)
     image_entry = create_entry('image_entry',("맑은 고딕",12),35,250,280)

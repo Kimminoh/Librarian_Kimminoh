@@ -27,30 +27,15 @@ def user_2(phone1):
     def user_update():
         df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
-        def update_csv():
-            df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
-            df_user = df_user.set_index(df_user['USER_PHONE'])
-                                                                        # 등록되어있는 회원들의 정보를 불러와서 출력
-            USER_CHOICE = phone                               # 사용자가 선택한 회원의 전화번호(기본키)를 기준으로 정보 검색
-            df_user.loc[USER_CHOICE,'USER_PHONE'] = phone_entry.get()
-            df_user.loc[USER_CHOICE,'USER_NAME'] = name_entry.get()
-            df_user.loc[USER_CHOICE,'USER_BIRTH'] = birth_entry.get()
-            df_user.loc[USER_CHOICE,'USER_SEX'] = ' '#sex_button.get()
-            df_user.loc[USER_CHOICE,'USER_MAIL'] = mail_entry.get()
-            df_user.loc[USER_CHOICE,'USER_IMAGE'] = image_entry.get()
-            df_user.loc[USER_CHOICE,'USER_REG'] = ' '#reg_entry.get()
-            df_user.loc[USER_CHOICE,'USER_RENT_CNT'] = 4
 
-            df_user.to_csv('csv/USER1.csv', index=False, encoding='CP949')   # 수정된 회원 정보 저장
-
-            # 탈퇴 시
-            #df_user.loc[USER_CHOICE,'USER_REG'] = False
-            # 복구 시
-            #df_user.loc[USER_CHOICE,'USER_REG'] = True
-
-        sub_label = Label(mainwindow, text ="회원정보 수정",font=("맑은 고딕",9),bg='gray',height=3)
+        sub_label = Label(mainwindow, text ="회원 상세 정보",font=("맑은 고딕",9),bg='gray',height=3)
         image_label = Label(mainwindow, text='사진\n미리보기', bg='orange', width=15, height=10)
-        state_label = Label(mainwindow, text ="등록 중",bg='orange')
+        state_label = Label(mainwindow, text ="등록 상태",bg='orange')
+        if df_user.loc[phone,'USER_REG'] == TRUE:
+            state_label.config(text='등록 상태')
+        elif df_user.loc[phone,'USER_REG'] == FALSE:
+            state_label.config(text='탈퇴 상태')
+        
         mainwindow.configure(background = 'sky blue')
         
         var = BooleanVar()
@@ -73,6 +58,14 @@ def user_2(phone1):
         elif df_user.loc[phone,'USER_SEX'] == '여자':
             male_rbutton.deselect()
             female_rbutton.select()
+
+        def state_change():
+            if df_user.loc[phone,'USER_REG'] == True:
+                df_user.loc[phone,'USER_REG'] = False
+            else:
+                df_user.loc[phone,'USER_REG'] = True
+            df_user.to_csv('csv/USER1.csv', index=False, encoding='CP949')
+
         phone_button = create_button('phone_button','orange','전화번호',9,170,200)
         phone_entry = create_entry('phone_entry',phone,("맑은 고딕",12),35,250,200)
         phone_check = create_button('phone_check','gray','중복확인',9,580,200)                          # 중복확인 버튼 미구현
@@ -81,7 +74,7 @@ def user_2(phone1):
         image_find = create_button('image_find','gray','찾아보기',9,580,280)
         image_button = create_button('image_button','orange','사진',9,170,280)
         image_entry = create_entry('image_entry',df_user.loc[phone,'USER_IMAGE'],("맑은 고딕",12),35,250,280)
-        reg_button = Button(mainwindow,text='수정',bg='gray',width=9,command=update_csv)
+        reg_button = Button(mainwindow,text='탈퇴/복구',bg='gray',width=9,command=state_change)
         reg_button.place(x=150,y=400)
         ok_button = create_button('mail_button','gray','확인',9,300,400)
         cancel_button = create_button('mail_button','gray','취소',9,450,400)
