@@ -2,6 +2,7 @@ import USER2_UI
 import USER4_UI
 import pandas as pd
 import csv
+from tabulate import tabulate
 from tkinter import *
 from tkinter import ttk
 from tkinter.simpledialog import *
@@ -31,11 +32,11 @@ def user_search():
     phone=None
     
     csv_list = []
-    f = open('csv/USER1.csv','r',encoding='utf-8')
+    f = open('csv/USER1.csv','r')
     reader = csv.reader(f)
 
     def user_search ():   
-        df_user = pd.read_csv('csv/USER1.csv', encoding='utf-8')
+        df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
         
         for phone in df_user.index.tolist():
@@ -76,14 +77,12 @@ def user_search():
         getvalue = treeview.item(chioce_info).get('values')
         phone=getvalue[1]
         USER4_UI.user_2(phone)
-        
 
     def button_item2():
         chioce_info = treeview.focus()
         getvalue = treeview.item(chioce_info).get('values')
         phone=getvalue[1]
         USER4_UI.user_2(phone)
-
 
     for row in reader:
         csv_list.append(row)
