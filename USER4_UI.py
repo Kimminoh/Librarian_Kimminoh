@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter.simpledialog import *
 from PIL import Image,ImageTk
 from tkinter.filedialog import *
+import tkinter.messagebox
 
 
 
@@ -34,10 +35,15 @@ def user_2(phone1):
         sub_label = Label(mainwindow, text ="회원 상세 정보",font=("맑은 고딕",9),bg='gray',height=3)
         image_label = Label(mainwindow,width=120, height=150)
         
+        def ERROR_4():   # 예외처리 4
+            tkinter.messagebox.showinfo("정보","탈퇴가 완료되었습니다.")
+        def ERROR_5():   # 예외처리 5
+            tkinter.messagebox.showinfo("정보","복구가 완료되었습니다.")
+
         state_label = Label(mainwindow, text ="등록 상태",bg='orange')
-        if df_user.loc[phone,'USER_REG'] == True:
+        if bool(df_user.loc[phone,'USER_REG']) == True:
             state_label.config(text='등록 상태')
-        elif df_user.loc[phone,'USER_REG'] == False:
+        elif bool(df_user.loc[phone,'USER_REG']) == False:
             state_label.config(text='탈퇴 상태')
         
         mainwindow.configure(background = 'sky blue')
@@ -64,16 +70,17 @@ def user_2(phone1):
             female_rbutton.select()
 
         def state_change():
-            if df_user.loc[phone,'USER_REG'] == True:
+            if bool(df_user.loc[phone,'USER_REG']) == True:
                 df_user.loc[phone,'USER_REG'] = False
+                ERROR_4()
             else:
                 df_user.loc[phone,'USER_REG'] = True
+                ERROR_5()
             df_user.to_csv('csv/USER1.csv', index=False, encoding='utf-8')
             mainwindow.destroy()
 
         phone_button = create_button('phone_button','orange','전화번호',9,170,200)
         phone_entry = create_entry('phone_entry',phone,("맑은 고딕",12),35,250,200)
-        phone_check = create_button('phone_check','gray','중복확인',9,580,200)                          # 중복확인 버튼 미구현
         mail_button = create_button('mail_button','orange','이메일 주소',9,170,240)
         mail_entry = create_entry('mail_entry',df_user.loc[phone,'USER_MAIL'],("맑은 고딕",12),35,250,240)
         image_find = create_button('image_find','gray','찾아보기',9,580,280)
