@@ -680,6 +680,7 @@ def BOOK_LOOKUP():
         rent1 = Tk()
         rent1.title("도서 대출하기")
         rent1.geometry("700x500")
+        
         def click_item(event):
             window = Tk()
         
@@ -754,9 +755,14 @@ def BOOK_LOOKUP():
  
         rent1booklabel = Label(rent1, text = '대출할 도서', bg='orange')
         rent1booklabel.place(relx=0.05,rely=0.2,relwidth=0.15,relheight=0.07)
- 
-        booknamelabel = Label(rent1, text = '불멸의 이순신', bg = 'gray') # 텍스트는 선택한 도서 이름
+
+        # 책에 맞게 제목 빌려오기
+        ABC = csv_pull.loc[int(select_book)]["BOOK_TITLE"]
+        booknamelabel = Label(rent1, text = ABC, bg = 'gray') 
         booknamelabel.place(relx=0.25,rely=0.2,relwidth=0.6,relheight=0.07)
+
+        
+            
  
         searchuserlabel = Label(rent1, text = '회원정보 입력', bg = 'orange')
         searchuserlabel.place(relx = 0.05,rely=0.3,relwidth=0.15,relheight=0.07)
