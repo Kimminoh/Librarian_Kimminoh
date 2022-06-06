@@ -153,10 +153,7 @@ def user_manager():
     user_search_edit_quit_btn=Button(window_user_manager,text="회원검색/수정/탈퇴",command=user_search_edit_quit)
     user_reg_btn.pack()
     user_search_edit_quit_btn.pack()
-
-
-
-
+    
     window_user_manager.mainloop()
 
 
@@ -169,13 +166,7 @@ def user_reg():
 
 def user_search_edit_quit():
     window_user_search_edit_quit=Tk()
-
-
-
-
     window_user_search_edit_quit.mainloop()
-
-
 
 
 # 메인 UI
