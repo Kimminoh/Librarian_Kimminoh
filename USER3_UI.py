@@ -31,18 +31,38 @@ def user_search():
 
     treeview = ttk.Treeview(mainwindow,column=['이름','전화번호','생년월일','성별','도서대여권수'],displaycolumns=['이름','전화번호','생년월일','성별','도서대여권수'])
     
+    
     phone=None
     
     csv_list = []
     f = open('csv/USER1.csv','r')
     reader = csv.reader(f)
-    
-    for row in reader:
-        csv_list.append(row)
-    f.close()
-    
-    del csv_list[0]
 
+    def user_search ():   
+        df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
+        df_user = df_user.set_index(df_user['USER_PHONE'])
+        
+        for phone in df_user.index.tolist():
+            keyword = keyword_entry.get()
+            
+            search1 = df_user["USER_NAME"].str.contains(keyword)
+            search2 = df_user['USER_PHONE'].str.contains(keyword)
+
+            result = df_user.loc[search1 | search2]
+            
+            for item in treeview.get_children():
+                treeview.delete(item)
+
+            for phone in result.index.tolist():
+                user_name = result.loc[phone, "USER_NAME"]
+                user_birth = result.loc[phone, "USER_BIRTH"]
+                user_sex = result.loc[phone, "USER_SEX"]
+                user_rent_cnt = result.loc[phone, "USER_RENT_CNT"]
+                
+                result_info = (user_name, phone, user_birth, user_sex,user_rent_cnt)
+                treeview.insert('','end',values=result_info,iid=phone)
+
+    
     def button_item():
         chioce_info = treeview.focus()
         getvalue = treeview.item(chioce_info).get('values')
@@ -55,14 +75,17 @@ def user_search():
         phone=getvalue[1]
         USER2_UI.user_2(phone)
 
-        
-
-    for a,b,c,d,e,f,g,h in csv_list:
+    for row in reader:
+        csv_list.append(row)
+    f.close()  
+    
+    for a,b,c,d,e,f,g,h in csv_list[1:]:
         treeview.insert('','end',values=[b,a,c,d,h],iid=a)
+    
 
     #csv_list[a]
 
-    search_button = Button(mainwindow,bg='gray',text='검색',width=9)
+    search_button = Button(mainwindow,bg='gray',text='검색',width=9,command=user_search)
     search_button.place(x=560, y = 80)
     update_button = create_button('update_button','gray','수정',9,560,120)
     info_button = Button(mainwindow,bg='gray',text='상세정보',width=9,command=button_item)
