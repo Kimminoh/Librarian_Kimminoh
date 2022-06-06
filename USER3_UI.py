@@ -1,4 +1,5 @@
 import USER2_UI
+import USER4_UI
 import pandas as pd
 import csv
 from tabulate import tabulate
@@ -26,11 +27,7 @@ def user_search():
     user_list = Listbox(mainwindow,width=65,height=10,font=("맑은 고딕",12))
 
     keyword_entry = create_entry('keyword_entry','이름 혹은 전화번호를 입력하세요.',("맑은 고딕",12),40,120,80)
-
-    
-
     treeview = ttk.Treeview(mainwindow,column=['이름','전화번호','생년월일','성별','도서대여권수'],displaycolumns=['이름','전화번호','생년월일','성별','도서대여권수'])
-    
     
     phone=None
     
@@ -74,6 +71,18 @@ def user_search():
         getvalue = treeview.item(chioce_info).get('values')
         phone=getvalue[1]
         USER2_UI.user_2(phone)
+    
+    def click_item2(event):
+        chioce_info = treeview.focus()
+        getvalue = treeview.item(chioce_info).get('values')
+        phone=getvalue[1]
+        USER4_UI.user_2(phone)
+
+    def button_item2():
+        chioce_info = treeview.focus()
+        getvalue = treeview.item(chioce_info).get('values')
+        phone=getvalue[1]
+        USER4_UI.user_2(phone)
 
     for row in reader:
         csv_list.append(row)
@@ -87,10 +96,11 @@ def user_search():
 
     search_button = Button(mainwindow,bg='gray',text='검색',width=9,command=user_search)
     search_button.place(x=560, y = 80)
-    update_button = create_button('update_button','gray','수정',9,560,120)
-    info_button = Button(mainwindow,bg='gray',text='상세정보',width=9,command=button_item)
+    update_button = Button(mainwindow,bg='gray',text='수정',width=9,command=button_item)
+    update_button.place(x=560, y = 120)
+    info_button = Button(mainwindow,bg='gray',text='상세정보',width=9,command=button_item2)
     info_button.place(x=560, y = 160)
-    #info_button = create_button('info_button','gray','상세 정보',9,560,160,command=USER2_UI.user_2)
+    
 
 
     treeview.column("이름",width=70,anchor="center",stretch=True)
@@ -105,7 +115,7 @@ def user_search():
     treeview.heading("도서대여권수",text="도서대여권수",anchor="center")
     treeview["show"] = "headings"
 
-    treeview.bind('<Double-Button-1>',click_item)
+    treeview.bind('<Double-Button-1>',click_item2)
     treeview.place(x=50,y=220)
     sub_label.pack(fill=X)
 
