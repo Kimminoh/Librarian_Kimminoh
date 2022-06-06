@@ -1,3 +1,4 @@
+from this import d
 import pandas as pd
 from tkinter import *
 from tkinter.simpledialog import *
@@ -30,19 +31,27 @@ def user_reg():
     def inuser_csv():
         df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
+        
+        a = phone_entry.get()
+        b = name_entry.get()
+        d = mail_entry.get()
+        e = image_entry.get('1.0','end')
 
-        new_user = { "USER_PHONE": phone_entry.get(),                     # -(하이픈) 포함
+        if a.strip()=="" or b.strip()=="" or d.strip()=="" or e.strip()=="":               
+            return 0
+        else:
+            new_user = { "USER_PHONE": phone_entry.get(),                     # -(하이픈) 포함
                     "USER_NAME": name_entry.get(),                         # 영문일 시 공백포함
                     "USER_BIRTH": birth_entry.get(),                       # YYYYMMDD 
                     "USER_SEX": bool(var),                                # TRUE : 남자, FALSE : 여자
                     "USER_MAIL": mail_entry.get(),
                     "USER_IMAGE": image_entry.get('1.0','end'),                     # 기본값 None(흰 배경)
-                    "USER_REG": phone_entry.get(),                          # TRUE : 등록, FALSE : 탈퇴
                     "USER_RENT_CNT": 0 }                                 # +1, -1 하는 방식
-        df_user = df_user.append(new_user, ignore_index=True)           # 데이터프레임을 추가하고 행 인덱스를 재배열
-        df_user = df_user.set_index(df_user['USER_PHONE'])               # USER_PHONE을 인덱스로 사용
+            df_user = df_user.append(new_user, ignore_index=True)           # 데이터프레임을 추가하고 행 인덱스를 재배열
+            df_user = df_user.set_index(df_user['USER_PHONE'])               # USER_PHONE을 인덱스로 사용
 
-        df_user.to_csv('csv/USER1.csv', index=False, encoding='CP949')
+            df_user.to_csv('csv/USER1.csv', index=False, encoding='CP949')
+            mainwindow.destroy()
     
     photo = PhotoImage()
     sub_label = Label(mainwindow, text ="회원 등록",font=("맑은 고딕",9),bg='gray',height=3)
@@ -71,10 +80,7 @@ def user_reg():
         image_label.configure(image=photo3, width=120, height=200)
         image_label.image=photo3
         image_entry.insert(1.0,file_name)
-        image_entry['state'] = 'disabled'
-        image_find['state'] = 'disabled'
         
-
     # 위젯 배치
     sub_label.pack(fill=X)
     image_label.pack()
@@ -89,7 +95,7 @@ def user_reg():
     phone_button = create_button('phone_button','orange','전화번호',9,170,200)
     phone_entry = create_entry('phone_entry',("맑은 고딕",12),35,250,200)
     phone_check = Button(mainwindow,text='중복확인',bg='gray',width=9,command=phonenum_check)
-    phone_check.place(x=580,y=200)                      # 중복확인 버튼 미구현
+    phone_check.place(x=580,y=200)                      
     mail_button = create_button('mail_button','orange','이메일 주소',9,170,240)
     mail_entry = create_entry('mail_entry',("맑은 고딕",12),35,250,240)
     image_find = Button(mainwindow,text='찾아보기',bg='gray',width=9,command=find_image_name) #,command=image_search
@@ -99,8 +105,11 @@ def user_reg():
     image_entry.place(x=250, y = 280)
     reg_button = Button(mainwindow,text='등록',bg='gray',width=9,command=inuser_csv)
     reg_button.place(x=150,y=400)
-    ok_button = create_button('mail_button','gray','확인',9,300,400)
-    cancel_button = create_button('mail_button','gray','취소',9,450,400)
+    ok_button = Button(mainwindow,bg='gray',text='확인',width=9,command=mainwindow.destroy)
+    cancel_button = Button(mainwindow,bg='gray',text='취소',width=9,command=mainwindow.destroy)
+        
+    cancel_button.place(x=450,y=400)
+    ok_button.place(x=300,y=400)
 
 
 

@@ -30,26 +30,45 @@ def user_2(phone1):
     def user_update():
         df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
+        
+        def find_image_name():
+            file_name=askopenfilename(parent=mainwindow,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
+
+            photo = Image.open(file_name)
+            photo2 = photo.resize((120, 150))
+            photo3 = ImageTk.PhotoImage(photo2,master=mainwindow)
+            image_label.configure(image=photo3, width=120, height=150)
+            image_label.image=photo3
+            image_entry.insert(1.0,file_name)
+            image_entry['state'] = 'disabled'
+            image_find['state'] = 'disabled'
+        
         def update_csv():
             df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
             df_user = df_user.set_index(df_user['USER_PHONE'])
                                                                         # 등록되어있는 회원들의 정보를 불러와서 출력
-            USER_CHOICE = phone                               # 사용자가 선택한 회원의 전화번호(기본키)를 기준으로 정보 검색
-            df_user.loc[USER_CHOICE,'USER_PHONE'] = phone_entry.get()
-            df_user.loc[USER_CHOICE,'USER_NAME'] = name_entry.get()
-            df_user.loc[USER_CHOICE,'USER_BIRTH'] = birth_entry.get()
-            df_user.loc[USER_CHOICE,'USER_SEX'] = ' '#sex_button.get()
-            df_user.loc[USER_CHOICE,'USER_MAIL'] = mail_entry.get()
-            df_user.loc[USER_CHOICE,'USER_IMAGE'] = image_entry.get('1.0','end')
-            df_user.loc[USER_CHOICE,'USER_REG'] = ' '#reg_entry.get()
-            df_user.loc[USER_CHOICE,'USER_RENT_CNT'] = 4
+            a = phone_entry.get()
+            b = name_entry.get()
+            d = mail_entry.get()
+            e = image_entry.get('1.0','end')
 
-            df_user.to_csv('csv/USER1.csv', index=False, encoding='CP949')   # 수정된 회원 정보 저장
+            if a.strip()=="" or b.strip()=="" or d.strip()=="" or e.strip()=="":               
+                return 0
+            else:
+            
+            
+                USER_CHOICE = phone                               # 사용자가 선택한 회원의 전화번호(기본키)를 기준으로 정보 검색
+                df_user.loc[USER_CHOICE,'USER_PHONE'] = phone_entry.get()
+                df_user.loc[USER_CHOICE,'USER_NAME'] = name_entry.get()
+                df_user.loc[USER_CHOICE,'USER_BIRTH'] = birth_entry.get()
+                df_user.loc[USER_CHOICE,'USER_SEX'] = ' '#sex_button.get()
+                df_user.loc[USER_CHOICE,'USER_MAIL'] = mail_entry.get()
+                df_user.loc[USER_CHOICE,'USER_IMAGE'] = image_entry.get('1.0','end')
+                df_user.loc[USER_CHOICE,'USER_REG'] = ' '#reg_entry.get()
+                df_user.loc[USER_CHOICE,'USER_RENT_CNT'] = 4
 
-            # 탈퇴 시
-            #df_user.loc[USER_CHOICE,'USER_REG'] = False
-            # 복구 시
-            #df_user.loc[USER_CHOICE,'USER_REG'] = True
+                df_user.to_csv('csv/USER1.csv', index=False, encoding='CP949')   # 수정된 회원 정보 저장
+                mainwindow.destroy()
 
         sub_label = Label(mainwindow, text ="회원정보 수정",font=("맑은 고딕",9),bg='gray',height=3)
         image_label = Label(mainwindow, bg='orange', width=15, height=10)
@@ -87,7 +106,8 @@ def user_2(phone1):
         phone_check = create_button('phone_check','gray','중복확인',9,580,200)                          # 중복확인 버튼 미구현
         mail_button = create_button('mail_button','orange','이메일 주소',9,170,240)
         mail_entry = create_entry('mail_entry',df_user.loc[phone,'USER_MAIL'],("맑은 고딕",12),35,250,240)
-        image_find = create_button('image_find','gray','찾아보기',9,580,280)
+        image_find = Button(mainwindow,text='찾아보기',bg='gray',width=9,command=find_image_name) #,command=image_search
+        image_find.place(x=580,y=280)
         image_button = create_button('image_button','orange','사진',9,170,280)
         image_entry = Text(mainwindow, font=("맑은 고딕",12),width=35,height=4)
         image_entry.insert(1.0,df_user.loc[phone,'USER_IMAGE'])

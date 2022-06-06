@@ -98,10 +98,9 @@ def user_2(phone1):
 
         
         ok_button = Button(mainwindow,bg='gray',text='확인',width=9,command=mainwindow.destroy)
-        #cancel_button = Button(mainwindow,bg='gray',text='취소',width=9,command=mainwindow.destroy)
+        
         
         reg_button.place(x=200,y=400)
-        #cancel_button.place(x=300,y=400)
         ok_button.place(x=400,y=400)
         
         name_entry['state'] = 'disabled'
