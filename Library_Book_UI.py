@@ -77,20 +77,29 @@ def BOOK_MANAGEMENT_FIRST():
 
     BOOK_SEARCH_LABEL = Entry(window)
     BOOK_SEARCH_LABEL.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
-    '''#  도서명과 저자로 검색하기 / 이거 아직 구현 안 됨
+    #  도서명과 저자로 검색하기 / 이거 아직 구현 안 됨
     def search ():        
         for ISBN in csv_pull.index.tolist():
-            BOOK_SEARCH_LABEL = "파이썬"
-            search1 = csv_pull["BOOK_TITLE"].str.contains(BOOK_SEARCH_LABEL)
-            search2 = csv_pull["BOOK_AUTHOR"].str.contains(BOOK_SEARCH_LABEL)
+            book_name = BOOK_SEARCH_LABEL.get()
+            
+            search1 = csv_pull["BOOK_TITLE"].str.contains(book_name)
+            search2 = csv_pull["BOOK_AUTHOR"].str.contains(book_name)
 
-            search_Book1 = csv_pull.loc[search1 | search2,["BOOK_TITLE"]]
-            search_Book2 = csv_pull.loc[search1 | search2,["BOOK_AUTHOR"]]
-            search_Book3 = csv_pull.loc[search1 | search2,["BOOK_PUBLIC"]]
-            book_add = (ISBN, search_Book1,search_Book2,search_Book3)
-            BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0]) '''
+            csv_2 = csv_pull.loc[search1 | search2,["BOOK_TITLE","BOOK_AUTHOR","BOOK_PUBLIC"]]
+
+            for item in BOOK_SELECT_BOX.get_children():
+                BOOK_SELECT_BOX.delete(item)
+
+            for ISBN in csv_2.index.tolist():
+                book_title = csv_2.loc[ISBN, "BOOK_TITLE"]
+                book_author = csv_2.loc[ISBN, "BOOK_AUTHOR"]
+                book_publish = csv_2.loc[ISBN, "BOOK_PUBLIC"]
+                
+                book_add = (ISBN, book_title, book_author, book_publish)
+                BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
+
     
-    BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black') # command=search
+    BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black', command = search) 
     BOOK_SEARCH_BTN.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
 
     
@@ -114,18 +123,18 @@ def BOOK_MANAGEMENT_FIRST():
     BOOK_SELECT_BOX.heading(3, text='저자')
     BOOK_SELECT_BOX.heading(4, text='출판사')
     # 기본 너비 
-    BOOK_SELECT_BOX.column(1, width='170')
-    BOOK_SELECT_BOX.column(2, width='130')
-    BOOK_SELECT_BOX.column(3, width='120')
-    BOOK_SELECT_BOX.column(4, width='80')
+    BOOK_SELECT_BOX.column(1, width='100')
+    BOOK_SELECT_BOX.column(2, width='150')
+    BOOK_SELECT_BOX.column(3, width='110')
+    BOOK_SELECT_BOX.column(4, width='140')
     #스크롤바 (안생기는데 왜 안생기는지 모르겠음)
     scroll = ttk.Scrollbar(window, orient="vertical", command=BOOK_SELECT_BOX.yview)
     scroll.pack(side='right', fill='y')
     BOOK_SELECT_BOX.configure(yscrollcommand=scroll.set)
 
     # 목록 출력할 데이터 
-    # 데이터 프레임 출력
-    
+
+    # 데이터 프레임 출력 
     for ISBN in csv_pull.index.tolist():
         book_title = csv_pull.loc[ISBN, "BOOK_TITLE"]
         book_author = csv_pull.loc[ISBN, "BOOK_AUTHOR"]
@@ -232,7 +241,7 @@ def BOOK_NEW_REG():
         
         a = SEARCH_BOOK_ISBN.get()
         ISBN_OVERLAP = csv_pull.index.tolist()
-        if  a in ISBN_OVERLAP:
+        if  int(a) in ISBN_OVERLAP:
             ERROR_2()
             
         elif not a.isdigit():
