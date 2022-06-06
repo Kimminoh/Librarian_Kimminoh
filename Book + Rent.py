@@ -5,8 +5,12 @@ from tabulate import tabulate
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter.filedialog import *
+from datetime import datetime, timedelta
 
-
+rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
+rent_df = rent_df.set_index(rent_df['RENT_NUM'])
+num = max(rent_df.index.tolist()) + 1
+#num = 0
 
 # 2번째 화면
 def BOOK_MANAGEMENT():
@@ -745,7 +749,7 @@ def BOOK_LOOKUP():
             rent_df.to_csv("csv/rent.csv", index = False)
             tkinter.messagebox.showinfo("도서 대출", "도서 대출 완료")
 
-        
+                
             
         
          
