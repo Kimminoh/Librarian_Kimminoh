@@ -66,6 +66,7 @@ def user_2(phone1):
         sex_button = create_button('sex_button','orange','성별',9,170,160)
         male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','남',var,'남자',250,160)
         female_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','여',var,'여자',300,160)
+        
         if df_user.loc[phone,'USER_SEX'] == '남자':
             male_rbutton.select()
             female_rbutton.deselect()
