@@ -32,11 +32,11 @@ def user_search():
     phone=None
     
     csv_list = []
-    f = open('csv/USER1.csv','r')
+    f = open('csv/USER1.csv','r', encoding = 'utf-8')
     reader = csv.reader(f)
 
     def user_search ():   
-        df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
+        df_user = pd.read_csv('csv/USER1.csv', encoding='utf-8')
         df_user = df_user.set_index(df_user['USER_PHONE'])
         
         for phone in df_user.index.tolist():

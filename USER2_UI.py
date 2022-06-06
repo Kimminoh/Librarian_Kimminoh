@@ -25,10 +25,10 @@ def user_2(phone1):
         return entry_name
 
     def user_update():
-        df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
+        df_user = pd.read_csv('csv/USER1.csv', encoding='UTF-8')
         df_user = df_user.set_index(df_user['USER_PHONE'])
         def update_csv():
-            df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
+            df_user = pd.read_csv('csv/USER1.csv', encoding='UTF-8')
             df_user = df_user.set_index(df_user['USER_PHONE'])
                                                                         # 등록되어있는 회원들의 정보를 불러와서 출력
             USER_CHOICE = phone                               # 사용자가 선택한 회원의 전화번호(기본키)를 기준으로 정보 검색
@@ -41,7 +41,7 @@ def user_2(phone1):
             df_user.loc[USER_CHOICE,'USER_REG'] = ' '#reg_entry.get()
             df_user.loc[USER_CHOICE,'USER_RENT_CNT'] = 4
 
-            df_user.to_csv('csv/USER1.csv', index=False, encoding='CP949')   # 수정된 회원 정보 저장
+            df_user.to_csv('csv/USER1.csv', index=False, encoding='UTF-8')   # 수정된 회원 정보 저장
 
             # 탈퇴 시
             #df_user.loc[USER_CHOICE,'USER_REG'] = False

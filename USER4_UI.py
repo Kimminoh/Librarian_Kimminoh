@@ -25,7 +25,7 @@ def user_2(phone1):
         return entry_name
 
     def user_update():
-        df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
+        df_user = pd.read_csv('csv/USER1.csv', encoding='UTF-8')
         df_user = df_user.set_index(df_user['USER_PHONE'])
 
         sub_label = Label(mainwindow, text ="회원 상세 정보",font=("맑은 고딕",9),bg='gray',height=3)
@@ -64,7 +64,7 @@ def user_2(phone1):
                 df_user.loc[phone,'USER_REG'] = False
             else:
                 df_user.loc[phone,'USER_REG'] = True
-            df_user.to_csv('csv/USER1.csv', index=False, encoding='CP949')
+            df_user.to_csv('csv/USER1.csv', index=False, encoding='UTF-8')
 
         phone_button = create_button('phone_button','orange','전화번호',9,170,200)
         phone_entry = create_entry('phone_entry',phone,("맑은 고딕",12),35,250,200)

@@ -972,8 +972,31 @@ def BOOK_DELETE():
     label2.pack()
     label3.place(x=177, y=125)
     label2.place(x=5, y=155)
+
+def USER_MANAGEMENT():
+    #공통부분 ↓---------------------------------------------------------------------
+    window = Tk()
+    window.title("도서관리")
+    window.geometry("700x500")
+    label1 = Label(window, text = '도서관리프로그램', bg = 'gray', width = 700, height = 5)
+    window.configure(background = 'sky blue')
+    #공통부분 ↑---------------------------------------------------------------------
+
+    USER_REG = Button(window, text='회원 등록',fg="black", bg="orange", width='20',
+                      height='10')
+                                    
+    USER_INF = Button(window, text='회원\n검색/수정/탈퇴',fg="black", bg="orange", width='20',
+                        height='10')
+    label1.pack()
     
-  
+    USER_REG.pack()
+    USER_REG.place(x=150,y=150)
+
+    USER_INF.pack()
+    USER_INF.place(x=450,y=150)
+
+
+
 # 첫번째 화면(메인화면)--------------------------------------------------------------------------------
 
 window = Tk()
@@ -988,7 +1011,7 @@ BTN_BOOK = Button(window, text='도서관리',fg="black", bg="orange", width='20
                       height='10', command=BOOK_MANAGEMENT)
                                     
 BTN_MEMBER = Button(window, text='회원관리',fg="black", bg="orange", width='20',
-                        height='10')
+                        height='10', command = USER_MANAGEMENT)
 
 label1.pack()
 
