@@ -28,7 +28,7 @@ def user_update():
         df_user = pd.read_csv('csv/USER1.csv', encoding='CP949')
         df_user = df_user.set_index(df_user['USER_PHONE'])
                                                                     # 등록되어있는 회원들의 정보를 불러와서 출력
-        USER_CHOICE = '010-1234-0000'                               # 사용자가 선택한 회원의 전화번호(기본키)를 기준으로 정보 검색
+        USER_CHOICE = '1012348888'                               # 사용자가 선택한 회원의 전화번호(기본키)를 기준으로 정보 검색
         df_user.loc[USER_CHOICE,'USER_PHONE'] = phone_entry.get()
         df_user.loc[USER_CHOICE,'USER_NAME'] = name_entry.get()
         df_user.loc[USER_CHOICE,'USER_BIRTH'] = birth_entry.get()
