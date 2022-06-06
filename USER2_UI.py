@@ -50,7 +50,7 @@ def user_2(phone1):
 
         sub_label = Label(mainwindow, text ="회원정보 수정",font=("맑은 고딕",9),bg='gray',height=3)
         image_label = Label(mainwindow, text='사진\n미리보기', bg='orange', width=15, height=10)
-        state_label = Label(mainwindow, text ="등록 중",bg='gray')
+        state_label = Label(mainwindow, text ="등록 중",bg='orange')
         mainwindow.configure(background = 'sky blue')
         
         var = BooleanVar()
