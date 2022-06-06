@@ -241,7 +241,9 @@ def BOOK_NEW_REG():
         
         a = SEARCH_BOOK_ISBN.get()
         ISBN_OVERLAP = csv_pull.index.tolist()
+
         if  int(a) in ISBN_OVERLAP:
+
             ERROR_2()
             
         elif not a.isdigit():
@@ -363,7 +365,6 @@ def BOOK_EDIT(selected):
         tkinter.messagebox.showerror("ERROR","변경사항을 적용 하여야지 등록/수정이 가능합니다 !")
     def ERROR_10():     # 예외처리 10
         tkinter.messagebox.showerror("ERROR","해당 부분은 숫자로만 입력이 가능합니다 !")
-
         
     csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
     csv_pull = csv_pull.set_index("BOOK_ISBN")
@@ -630,7 +631,16 @@ def BOOK_LOOKUP():
     BLANK('example', 480, 380, 0.08, 0.05)
     BLANK('example', 570, 380, 0.08, 0.05)
 
+
+
+
+
+    
+
     BTN_EDIT("example", '대출하기\n반납하기','gray','10','2',560,430)
+
+
+
     
     
     
@@ -657,6 +667,7 @@ def BOOK_DELETE():
         tkinter.messagebox.showinfo("삭제 완료"," (책 이름)을 삭제되었습니다 !")
     def DLT_ERROR():
         tkinter.messagebox.showerror("삭제 실패"," 해당 도서를 반납하고 삭제해주세요 !")
+
 
     def click_item(event):
         selected=BOOK_SELECT_BOX.focus()
@@ -737,6 +748,9 @@ def BOOK_DELETE():
         BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
 
 
+    def click_item(event):
+        DLT_BOOK()
+
 
     # 더블 클릭시 이벤트 발생 
     BOOK_SELECT_BOX.bind('<Double-Button-1>', click_item)
@@ -768,8 +782,7 @@ window.configure(background = 'sky blue')
 #도서관리 누르면 2번째 창으로 넘어감
 BTN_BOOK = Button(window, text='도서관리',fg="black", bg="orange", width='20',
                       height='10', command=BOOK_MANAGEMENT)
-                      
-# 우선적으로 해당 파일에서 회원관리 클릭시 프로그램 종료!                  
+                                    
 BTN_MEMBER = Button(window, text='회원관리',fg="black", bg="orange", width='20',
                         height='10')
 
