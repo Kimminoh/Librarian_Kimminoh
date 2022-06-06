@@ -5,8 +5,17 @@ from tabulate import tabulate
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter.filedialog import *
+from tkinter.simpledialog import *
 from datetime import datetime, timedelta
+import csv
 
+
+from USER2_UI import USER_2
+from USER4_UI import USER_4
+from USER_UI import USER_1
+from USER3_UI import USER_3
+
+# RENT_NUM 초기화 안되게 고정
 rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
 rent_df = rent_df.set_index(rent_df['RENT_NUM'])
 num = max(rent_df.index.tolist()) + 1
@@ -972,8 +981,41 @@ def BOOK_DELETE():
     label2.pack()
     label3.place(x=177, y=125)
     label2.place(x=5, y=155)
+
+def USER_MANAGEMENT():
+    #공통부분 ↓---------------------------------------------------------------------
+    window = Tk()
+    window.title("도서관리")
+    window.geometry("700x500")
+    label1 = Label(window, text = '도서관리프로그램', bg = 'gray', width = 700, height = 5)
+    window.configure(background = 'sky blue')
+    #공통부분 ↑---------------------------------------------------------------------
+
+    BTN_CANCEL = Button(window, text='뒤로가기', bg='orange'
+    , width='8', height='2',command=window.destroy) 
     
-  
+    USER_REG = Button(window, text='회원 등록',fg="black", bg="orange", width='20',
+                      height='10')
+                                    
+    USER_INF = Button(window, text='회원\n검색/수정/탈퇴',fg="black", bg="orange", width='20',
+                        height='10', command = USER_3)
+    label1.pack()
+    USER_REG.place(x=150,y=150)
+    USER_INF.place(x=450,y=150)
+    BTN_CANCEL.place(x=5,y=25)
+
+    
+
+
+
+
+
+
+
+
+    
+
+
 # 첫번째 화면(메인화면)--------------------------------------------------------------------------------
 
 window = Tk()
@@ -988,7 +1030,7 @@ BTN_BOOK = Button(window, text='도서관리',fg="black", bg="orange", width='20
                       height='10', command=BOOK_MANAGEMENT)
                                     
 BTN_MEMBER = Button(window, text='회원관리',fg="black", bg="orange", width='20',
-                        height='10')
+                        height='10', command = USER_MANAGEMENT)
 
 label1.pack()
 
