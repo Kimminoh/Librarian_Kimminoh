@@ -8,12 +8,15 @@ from tkinter.filedialog import *
 from tkinter.simpledialog import *
 from datetime import datetime, timedelta
 import csv
+import pandas as pd
+from tkinter import *
+from PIL import Image,ImageTk
 
 
-from USER2_UI import USER_2
-from USER4_UI import USER_4
-from USER_UI import USER_1
-from USER3_UI import USER_3
+#from USER2_UI import USER_2
+#from USER4_UI import USER_4
+from USER_UI import USER_3
+from USER3_UI import USER_1
 
 # RENT_NUM 초기화 안되게 고정
 rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
@@ -995,10 +998,10 @@ def USER_MANAGEMENT():
     , width='8', height='2',command=window.destroy) 
     
     USER_REG = Button(window, text='회원 등록',fg="black", bg="orange", width='20',
-                      height='10')
+                      height='10', command = USER_3)
                                     
     USER_INF = Button(window, text='회원\n검색/수정/탈퇴',fg="black", bg="orange", width='20',
-                        height='10', command = USER_3)
+                        height='10', command = USER_1)
     label1.pack()
     USER_REG.place(x=150,y=150)
     USER_INF.place(x=450,y=150)

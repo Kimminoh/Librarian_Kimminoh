@@ -118,7 +118,7 @@ def user_2(phone1):
         phone_entry['state'] = 'disabled'
         mail_entry['state'] = 'disabled'
         image_entry['state'] = 'disabled'
-        phone_check.destroy()
+        #phone_check.destroy()
         image_find.destroy()
         
 
