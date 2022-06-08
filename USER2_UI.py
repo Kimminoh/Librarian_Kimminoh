@@ -27,14 +27,14 @@ def user_2(phone1):
         entry_name.place(x=x, y = y)
         return entry_name
 
-    def ERROR_3():   # 예외처리 3
+    def ok_notice():   # 예외처리 3
         tkinter.messagebox.showinfo("정보","수정이 완료 되었습니다.")
-    def ERROR_4():   # 예외처리 4
-        tkinter.messagebox.showinfo("정보","탈퇴가 완료되었습니다.")
-    def ERROR_5():   # 예외처리 5
-        tkinter.messagebox.showinfo("정보","복구가 완료되었습니다.")
-    def ERROR_6():   # 예외처리 6
-        tkinter.messagebox.showerror("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
+    def check_pass():   # 예외처리 4
+        tkinter.messagebox.showinfo("정보","사용 가능한 전화번호입니다.")
+    def check_nonpass():   # 예외처리 5
+        tkinter.messagebox.showerror("ERROR","이미 등록된 전화번호입니다.")
+    def REG_ERROR():   # 예외처리 6
+        tkinter.messagebox.showerror("ERROR","회원 정보는 모두 입력해야 합니다. 다시 작성해주세요 !")
     
     def user_update():
         df_user = pd.read_csv('csv/USER1.csv', encoding='utf-8')
@@ -58,40 +58,50 @@ def user_2(phone1):
             df_user = pd.read_csv('csv/USER1.csv', encoding='utf-8')
             df_user = df_user.set_index(df_user['USER_PHONE'])
                                                                         # 등록되어있는 회원들의 정보를 불러와서 출력
-            a = phone_entry.get()
-            b = name_entry.get()
-            c= birth_entry.get()
-            d = mail_entry.get()
-            e = image_entry.get('1.0','end')
+            input_phone = phone_entry.get()
+            input_name = name_entry.get()
+            input_birth = birth_entry.get()
+            input_mail = mail_entry.get()
+            input_image = image_entry.get('1.0','end')
 
-            if a.strip()=="" or b.strip()==""or c.strip()=="" or d.strip()=="" or e.strip()=="":               
-                ERROR_6()
+            if input_phone.strip()=="" or input_name.strip()==""or input_birth.strip()=="" or input_mail.strip()=="" or input_image.strip()=="":               
+                REG_ERROR()
                 return 0
             else:
             
                 USER_CHOICE = phone                               # 사용자가 선택한 회원의 전화번호(기본키)를 기준으로 정보 검색
-                df_user.loc[USER_CHOICE,'USER_PHONE'] = phone_entry.get()
-                df_user.loc[USER_CHOICE,'USER_NAME'] = name_entry.get()
-                df_user.loc[USER_CHOICE,'USER_BIRTH'] = birth_entry.get()
+                df_user.loc[USER_CHOICE,'USER_PHONE'] = input_phone
+                df_user.loc[USER_CHOICE,'USER_NAME'] = input_name
+                df_user.loc[USER_CHOICE,'USER_BIRTH'] = input_birth
                 df_user.loc[USER_CHOICE,'USER_SEX'] = var.get()
-                df_user.loc[USER_CHOICE,'USER_MAIL'] = mail_entry.get()
-                df_user.loc[USER_CHOICE,'USER_IMAGE'] = image_entry.get('1.0','end')
+                df_user.loc[USER_CHOICE,'USER_MAIL'] = input_mail
+                df_user.loc[USER_CHOICE,'USER_IMAGE'] = input_image
                 df_user.loc[USER_CHOICE,'USER_RENT_CNT'] = 4
 
                 df_user.to_csv('csv/USER1.csv', index=False, encoding='utf-8')   # 수정된 회원 정보 저장
-                ERROR_3()
+                ok_notice()
                 mainwindow.destroy()
+       
         def phonenum_check():
+                
                 df_user = pd.read_csv("csv/USER1.csv",encoding='utf-8')
                 df_user = df_user.set_index(df_user['USER_PHONE'])
                 
-                a = phone_entry.get()
+                choice_phone = phone_entry.get()
                 phone_number = df_user.index.tolist()
-
-                if  str(a) not in phone_number:
+                if choice_phone == phone:
+                    check_pass()
                     phone_check['state'] = 'disabled'
                     phone_entry['state'] = 'disabled'
                     reg_button['state']='normal'
+                
+                elif  str(choice_phone) not in phone_number:
+                    check_pass()
+                    phone_check['state'] = 'disabled'
+                    phone_entry['state'] = 'disabled'
+                    reg_button['state']='normal'
+                else:
+                    check_nonpass()
 
         sub_label = Label(mainwindow, text ="회원정보 수정",font=("맑은 고딕",9),bg='gray',height=3)
         image_label = Label(mainwindow, bg='orange', width=15, height=10)
