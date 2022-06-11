@@ -488,11 +488,11 @@ def BOOK_EDIT(selected):
                 return 0
 
             # 중복확인 안했을 때 
-            if not OVERLAP_CHECK['state'] == 'disabled' :
+            elif not OVERLAP_CHECK['state'] == 'disabled' :
                 ERROR_3()
 
             # 가격이 정수가 아닐 때
-            if not e.isdigit():
+            elif not e.isdigit():
                 ERROR_4()
                 
             else:
@@ -520,7 +520,7 @@ def BOOK_EDIT(selected):
         a = SEARCH_BOOK_ISBN.get()
         # 인덱스 값 리스트로 추출
         ISBN_OVERLAP = csv_pull.index.tolist()
-        if  a in ISBN_OVERLAP:
+        if  int(a) in ISBN_OVERLAP:
             ERROR_2()
             
         elif not a.isdigit():  # 정수가 아닐 시 에러
