@@ -622,7 +622,7 @@ def BOOK_LOOKUP():
     BOOK_SELECT_BOX.place(relx=0.01,rely=0.28,relwidth=0.8,relheight = 0.4)
     
 #=============================반납, 대출 버튼 이벤트 =======================================
-
+    
     def book_information():
 
         select_book = int(BOOK_SELECT_BOX.focus())
@@ -690,7 +690,7 @@ def BOOK_LOOKUP():
         BTN_CANCEL.place(relx=0.5, rely = 0.8)
 
     def bookrent_selectuser():
-        
+      
       select_book = int(BOOK_SELECT_BOX.focus())
       print(select_book)
       
@@ -863,8 +863,7 @@ def BOOK_LOOKUP():
            else:
                  tkinter.messagebox.showinfo("취소"," 도서 반납을 취소합니다.")
          else :
-          tkinter.messagebox.showerror("오류","대출 중인 도서가 아닙니다")
-         
+          tkinter.messagebox.showerror("오류","대출 중인 도서가 아닙니다")         
 
 
 #=======================================================================================
