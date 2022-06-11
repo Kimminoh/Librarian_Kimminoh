@@ -319,6 +319,14 @@ def BOOK_NEW_REG():
     SEARCH_IMAGE_FIND = Entry(window)
     SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
 
+    # 안내창
+    explain = Label(window, text = '※사진은 필수 정보 입니다. 반드시 입력해 주세요 !!',
+                bg = 'skyblue',width = '45', height = 1)
+    explain.place(relx=0.34, rely=0.78)
+    explain.configure(font=("Courier", 8, "italic"))
+
+
+
     # 사진 찾는 함수 
     def find_image_name():
         file_name=askopenfilename(parent=window,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
@@ -406,37 +414,50 @@ def BOOK_EDIT(selected):
     SEARCH_BOOK_AUTHOR = Entry(window)
     SEARCH_BOOK_AUTHOR.place(x= 250, y= 160,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_AUTHOR.insert(0,csv_pull.loc[selected]["BOOK_AUTHOR"]) # 저자 가저와서 출력
-
+    # 위젯
     BTN_BOOK_PUBLIC = Button(window, text='출판사', bg='orange', width='8', height='1')
     BTN_BOOK_PUBLIC.place(x=170, y = 200)
     SEARCH_BOOK_PUBLIC = Entry(window)
     SEARCH_BOOK_PUBLIC.place(x= 250, y= 200,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_PUBLIC.insert(0,csv_pull.loc[selected]["BOOK_PUBLIC"]) # 출판사 가져와서 출력
-
+    # 위젯
     BTN_BOOK_PRICE = Button(window, text='가격', bg='orange', width='8', height='1')
     BTN_BOOK_PRICE.place(x=170, y = 240)
     SEARCH_BOOK_PRICE = Entry(window)
     SEARCH_BOOK_PRICE.place(x= 250, y= 240,relwidth=0.5,relheight=0.05)
     price = float(csv_pull.loc[selected]["BOOK_PRICE"])
     SEARCH_BOOK_PRICE.insert(0,int(price)) # 가격 가져와서 출력
-
+    # 위젯
     BTN_BOOK_LINK = Button(window, text='URL', bg='orange', width='8', height='1') 
     BTN_BOOK_LINK.place(x=170, y = 280)
     SEARCH_BOOK_LINK = Entry(window)
     SEARCH_BOOK_LINK.place(x= 250, y= 280,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_LINK.insert(0,csv_pull.loc[selected]["BOOK_LINK"]) # 링크 가져와서 출력
-    
+    # 위젯
     BTN_BOOK_DESCRIPTION = Button(window, text='도서 설명', bg='orange', width='8', height='1')
     BTN_BOOK_DESCRIPTION.place(x=170, y = 320)
     SEARCH_BOOK_DESCRIPTION = Entry(window)
     SEARCH_BOOK_DESCRIPTION.place(x= 250, y= 320,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_DESCRIPTION.insert(0,csv_pull.loc[selected]["BOOK_DESCRIPTION"]) # 설명 가져와서 출력
-
-    BTN_IMAGE_FIND = Button(window, text='사진 찾기', bg='orange', width='8', height='1')
+    # 위젯
+    BTN_IMAGE_FIND = Button(window, text='사진', bg='orange', width='8', height='1')
     BTN_IMAGE_FIND.place(x=170, y = 360)
-    SEARCH_IMAGE_FIND = Entry(window)
-    SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
-    #SEARCH_IMAGE_FIND.insert(0,csv_pull.loc[selected]["BOOK_IMAGE"])
+    #SEARCH_IMAGE_FIND = Entry(window)
+    #SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
+
+    SEARCH_IMAGE_FIND = Text(window, font=("맑은 고딕",12),width=40,height=2)
+    SEARCH_IMAGE_FIND.insert('1.0',csv_pull.loc[selected,'BOOK_IMAGE'])
+    SEARCH_IMAGE_FIND.place(x=250,y=360)
+    SEARCH_IMAGE_FIND.get('1.0','end').replace('\n','')
+    
+    # 안내창
+    explain = Label(window, text = '※사진은 필수 정보 입니다. 반드시 입력해 주세요 !!',
+                bg = 'skyblue',width = '45', height = 1)
+    explain.place(relx=0.34, rely=0.82)
+    explain.configure(font=("Courier", 8, "italic"))
+
+
+    
     
     # 사진 찾아오기 
     def find_image_name():
@@ -447,9 +468,10 @@ def BOOK_EDIT(selected):
         photo3=ImageTk.PhotoImage(photo2,master=window)
         IMAGE_label.configure(image=photo3,width=120,height=150)
         IMAGE_label.image=photo3
-        SEARCH_IMAGE_FIND.delete(0,"end")
-        SEARCH_IMAGE_FIND.insert(0,file_name)
+        SEARCH_IMAGE_FIND.delete('1.0',"end")
+        SEARCH_IMAGE_FIND.insert('1.0',file_name)
         SEARCH_IMAGE_FIND['state'] = 'disabled'
+        BTN_FIND['state'] = 'disabled'
         
     # 위젯
     BTN_FIND=Button(window, text="찾아보기",bg='gray',width='8',height='1',command=find_image_name)
@@ -539,10 +561,10 @@ def BOOK_EDIT(selected):
 
     # 적용 버튼 누를 시 수정!
     BTN_APPLY = Button(window, text='적용', bg = 'gray', width='7', height='1',command=APPLY)
-    BTN_APPLY.place(x=300, y = 420)
+    BTN_APPLY.place(x=300, y = 450)
 
     BTN_CANCEL = Button(window, text='취소', bg='gray', width='7', height='1',command=window.destroy )
-    BTN_CANCEL.place(x=400, y = 420)
+    BTN_CANCEL.place(x=400, y = 450)
     
 
 
