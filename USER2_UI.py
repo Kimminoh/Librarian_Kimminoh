@@ -84,7 +84,7 @@ def user_2(phone1):
        
         def phonenum_check():
                 
-                df_user = pd.read_csv("csv/USER1.csv",encoding='utf-8')
+                df_user = pd.read_csv("csv/USER.csv",encoding='utf-8')
                 df_user = df_user.set_index(df_user['USER_PHONE'])
                 
                 choice_phone = phone_entry.get()

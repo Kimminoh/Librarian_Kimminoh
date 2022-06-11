@@ -30,7 +30,7 @@ def USER_3():
         
         def inuser_csv():
             
-            df_user = pd.read_csv('csv/USER1.csv', encoding='utf-8')
+            df_user = pd.read_csv('csv/USER.csv', encoding='utf-8')
             df_user = df_user.set_index(df_user['USER_PHONE'])
             def ERROR_2():   # 예외처리 2
                 tkinter.messagebox.showinfo("정보","등록이 완료 되었습니다.")
@@ -60,7 +60,7 @@ def USER_3():
                 df_user = df_user.append(new_user, ignore_index=True)           # 데이터프레임을 추가하고 행 인덱스를 재배열
                 df_user = df_user.set_index(df_user['USER_PHONE'])               # USER_PHONE을 인덱스로 사용
 
-                df_user.to_csv('csv/USER1.csv', index=False, encoding='utf-8')
+                df_user.to_csv('csv/USER.csv', index=False, encoding='utf-8')
                 ERROR_2()
                 mainwindow.destroy()
         
@@ -73,7 +73,7 @@ def USER_3():
         var = StringVar(mainwindow)
         
         def phonenum_check():
-            df_user = pd.read_csv("csv/USER1.csv",encoding='utf-8')
+            df_user = pd.read_csv("csv/USER.csv",encoding='utf-8')
             df_user = df_user.set_index(df_user['USER_PHONE'])
             
             a = phone_entry.get()
