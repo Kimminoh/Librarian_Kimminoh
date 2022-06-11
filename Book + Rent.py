@@ -518,6 +518,7 @@ def BOOK_EDIT(selected):
                 ERROR_4()
                 
             else:
+                
                 csv_pull = pd.read_csv("csv/BOOK.csv",encoding = "utf-8")
                 csv_pull = csv_pull.set_index("BOOK_ISBN")
                 csv_pull.loc[selected, 'BOOK_TITLE']= b
@@ -542,9 +543,9 @@ def BOOK_EDIT(selected):
         a = SEARCH_BOOK_ISBN.get()
         # 인덱스 값 리스트로 추출
         ISBN_OVERLAP = csv_pull.index.tolist()
-        if  int(a) in ISBN_OVERLAP:
+        if  int(a) in ISBN_OVERLAP and  int(a) != selected :
             ERROR_2()
-            
+                         
         elif not a.isdigit():  # 정수가 아닐 시 에러
             ERROR_5()
                 
@@ -665,7 +666,7 @@ def BOOK_LOOKUP():
     BOOK_SELECT_BOX.place(relx=0.01,rely=0.28,relwidth=0.8,relheight = 0.4)
     
 #=============================반납, 대출 버튼 이벤트 =======================================
-
+# 도서 상세 정보
     def book_information():
 
         select_book = int(BOOK_SELECT_BOX.focus())
@@ -731,12 +732,15 @@ def BOOK_LOOKUP():
         SEARCH_BOOK_DESCRIPTION.insert(0,csv_pull.loc[select_book]["BOOK_DESCRIPTION"])
         BTN_IMAGE_FIND = Button(window, text='사진', bg='orange', width='8', height='1')
         BTN_IMAGE_FIND.place(x=170, y = 360)
-        SEARCH_IMAGE_FIND = Entry(window)
-        SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
-        #SEARCH_IMAGE_FIND.insert(0,csv_pull.loc[selected]["BOOK_IMAGE"])
+
+        SEARCH_IMAGE_FIND = Text(window, font=("맑은 고딕",12),width=40,height=2)
+        SEARCH_IMAGE_FIND.insert('1.0',csv_pull.loc[select_book,'BOOK_IMAGE'])
+        SEARCH_IMAGE_FIND.place(x=250,y=360)
+        SEARCH_IMAGE_FIND.get('1.0','end').replace('\n','')
+ 
 
         BTN_CANCEL = Button(window, text='확인', bg='gray', width='7', height='1',command=window.destroy )
-        BTN_CANCEL.place(relx=0.5, rely = 0.8)
+        BTN_CANCEL.place(relx=0.5, rely = 0.9)
 
     def bookrent_selectuser():
         
