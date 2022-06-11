@@ -37,17 +37,18 @@ def user_2(phone1):
         tkinter.messagebox.showerror("ERROR","회원 정보는 모두 입력해야 합니다. 다시 작성해주세요 !")
     
     def user_update():
-        df_user = pd.read_csv('csv/USER1.csv', encoding='utf-8')
+        df_user = pd.read_csv('csv/USER.csv', encoding='utf-8')
         df_user = df_user.set_index(df_user['USER_PHONE'])
         
         def find_image_name():
             file_name=askopenfilename(parent=mainwindow,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
-
+            
             photo = Image.open(file_name)
             photo2 = photo.resize((120, 150))
             photo3 = ImageTk.PhotoImage(photo2,master=mainwindow)
             image_label.configure(image=photo3, width=120, height=150)
             image_label.image=photo3
+            image_entry.delete(1.0,"end")
             image_entry.insert(1.0,file_name)
             image_entry['state'] = 'disabled'
             image_find['state'] = 'disabled'
@@ -55,7 +56,7 @@ def user_2(phone1):
         var = StringVar(mainwindow)
 
         def update_csv():
-            df_user = pd.read_csv('csv/USER1.csv', encoding='utf-8')
+            df_user = pd.read_csv('csv/USER.csv', encoding='utf-8')
             df_user = df_user.set_index(df_user['USER_PHONE'])
                                                                         # 등록되어있는 회원들의 정보를 불러와서 출력
             input_phone = phone_entry.get()
@@ -78,7 +79,7 @@ def user_2(phone1):
                 df_user.loc[USER_CHOICE,'USER_IMAGE'] = input_image
                 df_user.loc[USER_CHOICE,'USER_RENT_CNT'] = 4
 
-                df_user.to_csv('csv/USER1.csv', index=False, encoding='utf-8')   # 수정된 회원 정보 저장
+                df_user.to_csv('csv/USER.csv', index=False, encoding='utf-8')   # 수정된 회원 정보 저장
                 ok_notice()
                 mainwindow.destroy()
        

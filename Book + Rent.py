@@ -22,7 +22,13 @@ from USER3_UI import USER_1
 # RENT_NUM 초기화 안되게 고정
 rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
 rent_df = rent_df.set_index(rent_df['RENT_NUM'])
-num = max(rent_df.index.tolist()) + 1
+
+try:
+    num = max(rent_df.index.tolist()) + 1
+
+except:
+    num=1
+
 #num = 0
 
 # 2번째 화면
@@ -219,11 +225,11 @@ def BOOK_NEW_REG():
                 return 0
 
             # 중복확인 안했을 때 
-            if not OVERLAP_CHECK['state'] == 'disabled' :
+            elif not OVERLAP_CHECK['state'] == 'disabled' :
                 ERROR_3()
 
             # 가격이 정수가 아닐 때
-            if not e.isdigit():
+            elif not e.isdigit():
                 ERROR_4()
                 
             else: # 값 다 입력했을 때 
@@ -278,7 +284,7 @@ def BOOK_NEW_REG():
                            command = ISBN_OVERLAP)
     OVERLAP_CHECK.place(x=620, y = 80)    
     # 위젯
-    BTN_BOOK_TITLE = Button(window, text='도서명', bg='orange', width='8', height='1')
+    BTN_BOOK_TITLE = Button(window, text='도서명', bg='orange', width='8', height='1') 
     BTN_BOOK_TITLE.place(x=170, y = 120)
     SEARCH_BOOK_TITLE = Entry(window)
     SEARCH_BOOK_TITLE.place(x= 250, y= 120,relwidth=0.5,relheight=0.05)
@@ -322,7 +328,10 @@ def BOOK_NEW_REG():
         photo3=ImageTk.PhotoImage(photo2,master=window)
         IMAGE_label.configure(image=photo3,width=120,height=150)
         IMAGE_label.image=photo3
+
+        SEARCH_IMAGE_FIND.delete(0,"end")
         SEARCH_IMAGE_FIND.insert(0,file_name)
+        SEARCH_IMAGE_FIND['state'] = 'disabled'
         
     # 위젯
     BTN_FIND=Button(window, text="찾아보기",bg='gray',width='8',height='1',command=find_image_name)
@@ -438,7 +447,9 @@ def BOOK_EDIT(selected):
         photo3=ImageTk.PhotoImage(photo2,master=window)
         IMAGE_label.configure(image=photo3,width=120,height=150)
         IMAGE_label.image=photo3
+        SEARCH_IMAGE_FIND.delete(0,"end")
         SEARCH_IMAGE_FIND.insert(0,file_name)
+        SEARCH_IMAGE_FIND['state'] = 'disabled'
         
     # 위젯
     BTN_FIND=Button(window, text="찾아보기",bg='gray',width='8',height='1',command=find_image_name)
@@ -753,7 +764,6 @@ def BOOK_LOOKUP():
         
         
         
-        
         def event_book_rent():
             global num
             book_df = pd.read_csv("csv/BOOK.csv",encoding = "utf-8")
@@ -791,6 +801,7 @@ def BOOK_LOOKUP():
             user_df.to_csv("csv/USER.csv", index = False)
             rent_df.to_csv("csv/rent.csv", index = False)
             tkinter.messagebox.showinfo("도서 대출", "도서 대출 완료")
+            rent1.destroy()
 
                 
             
@@ -808,8 +819,6 @@ def BOOK_LOOKUP():
         booknamelabel = Label(rent1, text = ABC, bg = 'gray') 
         booknamelabel.place(relx=0.25,rely=0.2,relwidth=0.6,relheight=0.07)
 
-        
-            
  
         searchuserlabel = Label(rent1, text = '회원정보 입력', bg = 'orange')
         searchuserlabel.place(relx = 0.05,rely=0.3,relwidth=0.15,relheight=0.07)
