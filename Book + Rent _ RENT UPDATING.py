@@ -691,13 +691,15 @@ def BOOK_LOOKUP():
 
     def bookrent_selectuser():
       
-        select_book = int(BOOK_SELECT_BOX.focus())
-        print(select_book)
+      select_book = int(BOOK_SELECT_BOX.focus())
+      print(select_book)
       
-        rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
-        a = rent_df.loc[:num+1,['BOOK_ISBN']] 
-        print(a)
-      #if select_book not in a:
+      rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
+      
+      a = rent_df['BOOK_ISBN'].tolist() 
+      print(a)
+      
+      if select_book not in a:
         rent1 = Tk()
         rent1.title("도서 대출하기")
         rent1.geometry("700x500")
@@ -759,7 +761,6 @@ def BOOK_LOOKUP():
                      "USER_PHONE": select_user} 
 
             rent_df.loc[len(rent_df)] = new_rent
-            # rent_df = rent_df.append(new_rent, ignore_index=True)
             usercnt = user_df.loc[select_user,'USER_RENT_CNT']
             print(usercnt)
             user_df.loc[select_user,'USER_RENT_CNT'] = usercnt+1
@@ -825,8 +826,8 @@ def BOOK_LOOKUP():
 
         USER_SELECT_BOX.bind('<Double-Button-1>',click_item)
         USER_SELECT_BOX.place(relx=0.05,rely=0.4,relwidth=0.8,relheight = 0.4)
-      #else:
-      #    tkinter.messagebox.showerror("오류","이미 대출중인 도서입니다.")
+      else:
+          tkinter.messagebox.showerror("오류","이미 대출중인 도서입니다.")
     
     def event_book_return():
          book_df = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
@@ -834,36 +835,35 @@ def BOOK_LOOKUP():
          user_df = user_df.set_index(user_df['USER_PHONE'])
          rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
          rent_df = rent_df.set_index(rent_df['BOOK_ISBN'])
-         select_book = int(BOOK_SELECT_BOX.focus())
-         select_user = rent_df.loc[select_book,'USER_PHONE']
+         select_book = int(BOOK_SELECT_BOX.focus())         
          global num
-         #b = rent_df.loc[:num+1,['BOOK_ISBN']]
-         print(select_user)
+         b = rent_df['BOOK_ISBN'].tolist()
          print(select_book)
-         #print(b)
-      #if select_book in b:
-         returnMsgBox = tkinter.messagebox.askquestion(" ",'해당 도서를 반납하시겠습니까?')
-         if returnMsgBox == 'yes':            
-            usercnt = user_df.loc[select_user,'USER_RENT_CNT']
-            print(usercnt)
-            user_df.loc[select_user,'USER_RENT_CNT'] = usercnt-1
+         print(b)
+         if select_book in b:
+           returnMsgBox = tkinter.messagebox.askquestion(" ",'해당 도서를 반납하시겠습니까?')
+           if returnMsgBox == 'yes':
+                select_user = rent_df.loc[select_book,'USER_PHONE']
+                usercnt = user_df.loc[select_user,'USER_RENT_CNT']
+                print(usercnt)
+                user_df.loc[select_user,'USER_RENT_CNT'] = usercnt-1
 
-            idx = rent_df[rent_df['BOOK_ISBN']==select_book].index
-            rent_df.drop(idx,inplace=True) # num # 인덱스로 저장한 idx를 참고하여 drop(), 해당 행 삭제
+                idx = rent_df[rent_df['BOOK_ISBN']==select_book].index
+                rent_df.drop(idx,inplace=True) # num # 인덱스로 저장한 idx를 참고하여 drop(), 해당 행 삭제
 
-            rent_df = rent_df.set_index(rent_df['RENT_NUM'])
-            rent_df.reset_index(drop=True,inplace=True)
+                rent_df = rent_df.set_index(rent_df['RENT_NUM'])
+                rent_df.reset_index(drop=True,inplace=True)
 
-            print(tabulate(user_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
-            print(tabulate(rent_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
-            num -= 1
-            user_df.to_csv("csv/USER1.csv", index = False)
-            rent_df.to_csv("csv/rent.csv", index = False)
-            tkinter.messagebox.showinfo("도서 반납", "도서 반납 완료")
-         else:
-             tkinter.messagebox.showinfo("취소"," 도서 반납을 취소합니다.")
-      #else :
-      #    tkinter.messagebox.showerror("오류","대출 중인 도서가 아닙니다")         
+                print(tabulate(user_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
+                print(tabulate(rent_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
+                num -= 1
+                user_df.to_csv("csv/USER1.csv", index = False)
+                rent_df.to_csv("csv/rent.csv", index = False)
+                tkinter.messagebox.showinfo("도서 반납", "도서 반납 완료")
+           else:
+                 tkinter.messagebox.showinfo("취소"," 도서 반납을 취소합니다.")
+         else :
+          tkinter.messagebox.showerror("오류","대출 중인 도서가 아닙니다")         
 
 
 #=======================================================================================

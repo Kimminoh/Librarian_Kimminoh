@@ -674,9 +674,11 @@ def BOOK_LOOKUP():
         BTN_CANCEL.place(relx=0.5, rely = 0.8)
 
     def bookrent_selectuser():
-        
-        select_book = BOOK_SELECT_BOX.focus()
-        num=0
+       
+      select_book = BOOK_SELECT_BOX.focus()
+      num=0
+      rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
+      if select_book not in rent_df[['BOOK_ISBN']]:
         rent1 = Tk()
         rent1.title("도서 대출하기")
         rent1.geometry("700x500")
@@ -801,17 +803,17 @@ def BOOK_LOOKUP():
 
         USER_SELECT_BOX.bind('<Double-Button-1>',click_item)
         USER_SELECT_BOX.place(relx=0.05,rely=0.4,relwidth=0.8,relheight = 0.4)
-    
+      else:
+          tkinter.messagebox.showerror("오류","이미 대출중인 도서입니다.")
     def event_book_return():
-         book_df = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
-         user_df = pd.read_csv("csv/USER1.csv",encoding = "utf-8")
-         rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
-         rent_df = rent_df.set_index(rent_df['BOOK_ISBN'])
-
+      book_df = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+      user_df = pd.read_csv("csv/USER1.csv",encoding = "utf-8")
+      rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
+      rent_df = rent_df.set_index(rent_df['BOOK_ISBN'])
+      select_book = BOOK_SELECT_BOX.focus()
       
-         
-         select_book = BOOK_SELECT_BOX.focus()
-         
+      if select_book in rent_df[['BOOK_ISBN']]:
+      
          returnMsgBox = tkinter.messagebox.askquestion(" ",'해당 도서를 반납하시겠습니까?')
          if returnMsgBox == 'yes':
            select_book = BOOK_SELECT_BOX.focus()
@@ -825,7 +827,7 @@ def BOOK_LOOKUP():
            print(tabulate(rent_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
            tkinter.messagebox.showinfo("도서 반납", "도서 반납 완료")
          else:  tkinter.messagebox.showinfo("취소"," 도서 반납을 취소합니다.")        
-         
+      else : tkinter.messagebox.showerror("오류","대출 중인 도서가 아닙니다")         
 
 
 #=======================================================================================
