@@ -815,7 +815,7 @@ def BOOK_LOOKUP():
                      "USER_PHONE": select_user} 
             
             
-            book_df[select_book,"BOOK_RENTAL"]="True"
+            book_df.loc[select_book,'BOOK_RENTAL']="True"
 
             rent_df.loc[len(rent_df)] = new_rent
             usercnt = user_df.loc[select_user,'USER_RENT_CNT']
@@ -907,7 +907,7 @@ def BOOK_LOOKUP():
                 user_df.loc[select_user,'USER_RENT_CNT'] = usercnt-1
 
 
-                book_df[select_book,"BOOK_RENTAL"]="False"
+                book_df.loc[select_book,'BOOK_RENTAL']="False"
 
                 idx = rent_df[rent_df['BOOK_ISBN']==select_book].index
                 rent_df.drop(idx,inplace=True) # num # 인덱스로 저장한 idx를 참고하여 drop(), 해당 행 삭제

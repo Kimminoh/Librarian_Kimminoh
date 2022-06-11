@@ -73,6 +73,11 @@ def USER_3():
         var = StringVar(mainwindow)
         
         def phonenum_check():
+            def check_pass():   # 예외처리 4
+                tkinter.messagebox.showinfo("정보","사용 가능한 전화번호입니다.")
+            def check_nonpass():   # 예외처리 5
+                tkinter.messagebox.showerror("ERROR","이미 등록된 전화번호입니다.")           
+
             df_user = pd.read_csv("csv/user.csv",encoding='utf-8')
             df_user = df_user.set_index(df_user['USER_PHONE'])
             
@@ -80,9 +85,15 @@ def USER_3():
             phone_number = df_user.index.tolist()
 
             if  str(a) not in phone_number:
+                check_pass()
                 phone_check['state'] = 'disabled'
                 phone_entry['state'] = 'disabled'
                 reg_button['state']='normal'
+            else:
+                check_nonpass()
+
+                
+
 
         def find_image_name():
             file_name=askopenfilename(parent=mainwindow,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
@@ -92,6 +103,7 @@ def USER_3():
             photo3 = ImageTk.PhotoImage(photo2,master=mainwindow)
             image_label.configure(image=photo3, width=120, height=150)
             image_label.image=photo3
+            image_entry.delete(1.0,"end")
             image_entry.insert(1.0,file_name)
             
         # 위젯 배치
