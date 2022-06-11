@@ -1,12 +1,9 @@
-BOOK_ISBN,BOOK_TITLE,BOOK_AUTHOR,BOOK_PUBLIC,BOOK_PRICE,BOOK_LINK,BOOK_IMAGE,BOOK_DESCRIPTION,BOOK_RENTAL
-9788970504773,파이썬과 데이터 과학,"천인국, 박동규, 강영민",생능출판,26000.0,https://book.naver.com/bookdb/book_detail.nhn?bid=17718057,sample_image/9788970504773.png,따라하며 배우는,False
-9788970509563,명품 자바 에센셜,황기태,생능출판,28000.0,https://book.naver.com/bookdb/book_detail.nhn?bid=13845094,sample_image/9788970509563.png,자바 프로그래밍에 빠져들게 하는 재미있고 쉬운 해설서,False
-9791162242032,팀 개발을 위한 Git GitHub 시작하기,"정호영, 진유림",한빛미디어,1800.0,https://book.naver.com/bookdb/book_detail.naver?bid=15986509,sample_image/9791162242032.png,"소스코드 버전 관리를 위한 깃 깃허브, 오픈소스 참여",False
-9791156005049,소프트웨어 공학의 소개,한혁수,홍릉(홍릉과학출판사),25000.0,https://book.naver.com/bookdb/book_detail.naver?bid=11761284,sample_image/9791156005049.png,이 책은 소프트웨어 공학에 대해 다룬 이론서입니다. 소프트웨어 공학의 기초적이고 전반적인 내용을 학습할 수 있도록 구성했습니다.,False
-9788970187778,최신 컴퓨터 개론과 정보기술의 이해,왕종수,기한재,23000.0,https://book.naver.com/bookdb/book_detail.naver?bid=11771028,sample_image/9788970187778.png,이 책은 컴퓨터 개론과 정보기술에 대해 다룬 이론서입니다. 컴퓨터 개론과 정보기술의 기초적이고 전반적인 내용을 학습할 수 있도록 구성했습니다.,False
-9791156645313,C 언어 일취월장,신윤환,한빛아카데미,28000.0,https://book.naver.com/bookdb/book_detail.naver?bid=18030668,sample_image/9791156645313.png,C 언어 기초부터 심화까지 폭넓고 깊이 있는 학습,False
-9791165210397,모두의 딥러닝,조태호,길벗,24000.0,https://book.naver.com/bookdb/book_detail.naver?bid=16215446,sample_image/9791165210397.png,"2년 연속 베스트셀러, 내용과 소스 코드 전면 업그레이드 딥러닝 기초부터 최신 트렌드까지 한 권으로 공부하자",False
-9788970509419,두근두근 자료구조,"최영규, 천인국, 공용해",생능출판,28000.0,https://book.naver.com/bookdb/book_detail.naver?bid=13285942,sample_image/9788970509419.png,컴퓨터로 어떤 문제를 해결하기 위해 필요한 자료들을 효율적으로 관리하고 구조화시키기 위한 학문 '자료구조'.,False
-9791156644316,데이터베이스 개론,김연희,한빛아카데미,27000.0,https://book.naver.com/bookdb/book_detail.naver?bid=14427495,sample_image/9791156644316.png,기초 개념부터 빅데이터까지 큰 흐름이 보이는 데이터베이스 교과서,False
-12222,test2,test2,test2,12233.0,test2,C:/Users/김민오/Documents/Librarian_Kimminoh/sample_image/9791165210397.png,test2,False
-1111233,test2,test2,test2,11111.0,test2,C:/Users/김민오/Documents/Librarian_Kimminoh/sample_image/9788970187778.png,test2,False
+BOOK_ISBN,BOOK_TITLE,BOOK_AUTHOR,BOOK_PUBLIC,BOOK_PRICE,BOOK_LINK,BOOK_IMAGE,BOOK_DESCRIPTION,BOOK_RENTAL,"(9791165210397, 'BOOK_RENTAL')","(1111233, 'BOOK_RENTAL')","(9791165210397, 'BOOK_RENTAL')"
+9788970504773,파이썬과 데이터 과학,"천인국, 박동규, 강영민",생능출판,26000.0,https://book.naver.com/bookdb/book_detail.nhn?bid=17718057,sample_image/9788970504773.png,따라하며 배우는,False,True,False,False
+9788970509563,명품 자바 에센셜,황기태,생능출판,28000.0,https://book.naver.com/bookdb/book_detail.nhn?bid=13845094,sample_image/9788970509563.png,자바 프로그래밍에 빠져들게 하는 재미있고 쉬운 해설서,False,True,False,False
+9791162242032,팀 개발을 위한 Git GitHub 시작하기,"정호영, 진유림",한빛미디어,1800.0,https://book.naver.com/bookdb/book_detail.naver?bid=15986509,sample_image/9791162242032.png,"소스코드 버전 관리를 위한 깃 깃허브, 오픈소스 참여",False,True,False,False
+9791156005049,소프트웨어 공학의 소개,한혁수,홍릉(홍릉과학출판사),25000.0,https://book.naver.com/bookdb/book_detail.naver?bid=11761284,sample_image/9791156005049.png,이 책은 소프트웨어 공학에 대해 다룬 이론서입니다. 소프트웨어 공학의 기초적이고 전반적인 내용을 학습할 수 있도록 구성했습니다.,False,True,False,False
+9788970187778,최신 컴퓨터 개론과 정보기술의 이해,왕종수,기한재,23000.0,https://book.naver.com/bookdb/book_detail.naver?bid=11771028,sample_image/9788970187778.png,이 책은 컴퓨터 개론과 정보기술에 대해 다룬 이론서입니다. 컴퓨터 개론과 정보기술의 기초적이고 전반적인 내용을 학습할 수 있도록 구성했습니다.,False,True,False,False
+9791156645313,C 언어 일취월장,신윤환,한빛아카데미,28000.0,https://book.naver.com/bookdb/book_detail.naver?bid=18030668,sample_image/9791156645313.png,C 언어 기초부터 심화까지 폭넓고 깊이 있는 학습,False,True,False,False
+9791165210397,모두의 딥러닝,조태호,길벗,24000.0,https://book.naver.com/bookdb/book_detail.naver?bid=16215446,sample_image/9791165210397.png,"2년 연속 베스트셀러, 내용과 소스 코드 전면 업그레이드 딥러닝 기초부터 최신 트렌드까지 한 권으로 공부하자",False,True,False,False
+1111233,test2,test2,test2,11111.0,test2,C:/Users/김민오/Documents/Librarian_Kimminoh/sample_image/9788970187778.png,test2,False,True,False,False

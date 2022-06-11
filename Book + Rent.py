@@ -236,7 +236,7 @@ def BOOK_NEW_REG():
                 csv_pull.loc[a, 'BOOK_LINK']= f
                 csv_pull.loc[a, 'BOOK_IMAGE']= g
                 csv_pull.loc[a, 'BOOK_DESCRIPTION']= h
-                csv_pull.loc[a, 'BOOK_RENTAL']= False
+                csv_pull.loc[a, 'BOOK_RENTAL']= "False"
                 #csv 저장하기 
                 csv_pull.to_csv("csv/book_1.csv", index = True)
                 # 확인용 tabulate
@@ -775,6 +775,9 @@ def BOOK_LOOKUP():
                      "RENT_RYN": False,
                      "BOOK_ISBN": select_book,
                      "USER_PHONE": select_user} 
+            
+            
+            book_df[select_book,"BOOK_RENTAL"]="True"
 
             rent_df.loc[len(rent_df)] = new_rent
             usercnt = user_df.loc[select_user,'USER_RENT_CNT']
@@ -783,6 +786,8 @@ def BOOK_LOOKUP():
             print(tabulate(user_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
             print(tabulate(rent_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
             num += 1
+            
+            book_df.to_csv("csv/book_1.csv",index=False)
             user_df.to_csv("csv/USER1.csv", index = False)
             rent_df.to_csv("csv/rent.csv", index = False)
             tkinter.messagebox.showinfo("도서 대출", "도서 대출 완료")
@@ -864,6 +869,9 @@ def BOOK_LOOKUP():
                 print(usercnt)
                 user_df.loc[select_user,'USER_RENT_CNT'] = usercnt-1
 
+
+                book_df[select_book,"BOOK_RENTAL"]="False"
+
                 idx = rent_df[rent_df['BOOK_ISBN']==select_book].index
                 rent_df.drop(idx,inplace=True) # num # 인덱스로 저장한 idx를 참고하여 drop(), 해당 행 삭제
 
@@ -873,6 +881,7 @@ def BOOK_LOOKUP():
                 print(tabulate(user_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
                 print(tabulate(rent_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
                 num -= 1
+                book_df.to_csv("csv/book_1.csv",index=False)
                 user_df.to_csv("csv/USER1.csv", index = False)
                 rent_df.to_csv("csv/rent.csv", index = False)
                 tkinter.messagebox.showinfo("도서 반납", "도서 반납 완료")
@@ -951,7 +960,7 @@ def BOOK_DELETE():
         rent = csv_pull.loc[selected]["BOOK_RENTAL"]
         MB = tkinter.messagebox.askquestion("도서 삭제", "{}을 삭제하시겠습니까?".format(name))
         if MB == "yes":
-            if rent == False :    #도서 정보 가져와야함 / 구현 성공
+            if rent == "False" :    #도서 정보 가져와야함 / 구현 성공
                 csv_pull = csv_pull.drop(selected)
                 tkinter.messagebox.showinfo("삭제 완료", " 삭제가 완료 되었습니다 !")
                 csv_pull.to_csv("csv/book_1.csv", index = True, encoding='utf-8')
