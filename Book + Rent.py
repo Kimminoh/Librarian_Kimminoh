@@ -11,6 +11,7 @@ import csv
 import pandas as pd
 from tkinter import *
 from PIL import Image,ImageTk
+import math
 
 
 #from USER2_UI import USER_2
@@ -262,7 +263,7 @@ def BOOK_NEW_REG():
             SEARCH_BOOK_ISBN['state'] = 'disabled'
     # 사진 가져오기
     photo=PhotoImage(master=window)
-    IMAGE_label = Label(window,image=photo,text="사진\n미리보기",bg="white",width='80',height='100')
+    IMAGE_label = Label(window,image=photo,text="사진\n미리보기",bg="white",width='120',height='150')
     IMAGE_label.place(x=30,y=80)
 
 
@@ -316,9 +317,11 @@ def BOOK_NEW_REG():
     def find_image_name():
         file_name=askopenfilename(parent=window,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
 
-        photo=PhotoImage(file=file_name,master=window)
-        IMAGE_label.configure(image=photo)
-        IMAGE_label.image=photo
+        photo1=Image.open(file_name)
+        photo2=photo1.resize((120,150))
+        photo3=ImageTk.PhotoImage(photo2,master=window)
+        IMAGE_label.configure(image=photo3,width=120,height=150)
+        IMAGE_label.image=photo3
         SEARCH_IMAGE_FIND.insert(0,file_name)
         
     # 위젯
@@ -366,11 +369,16 @@ def BOOK_EDIT(selected):
     csv_pull = csv_pull.set_index("BOOK_ISBN")
 
     # csv파일에서 정보 가져오기
-    photo=PhotoImage(file=csv_pull.loc[selected]["BOOK_IMAGE"],master=window)
-    IMAGE_label = Label(window,image=photo,text="사진\n미리보기",bg="orange",width='80',height='100')
-    IMAGE_label.configure(image=photo)
-    IMAGE_label.image=photo
+
+    #사진 가져오기 + 크기 정렬
+    IMAGE_label=Label(window,bg="white",width=120,height=150)
+    photo = Image.open(csv_pull.loc[selected]["BOOK_IMAGE"])
+    photo2 = photo.resize((120, 200))
+    photo3 = ImageTk.PhotoImage(photo2,master=window)
+    IMAGE_label.configure(image=photo3, width=120, height=150)
+    IMAGE_label.image=photo3
     IMAGE_label.place(x=30,y=80)
+        
     # 위젯
     BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
     BTN_BOOK_ISBN.place(x=170, y = 80)
@@ -400,7 +408,8 @@ def BOOK_EDIT(selected):
     BTN_BOOK_PRICE.place(x=170, y = 240)
     SEARCH_BOOK_PRICE = Entry(window)
     SEARCH_BOOK_PRICE.place(x= 250, y= 240,relwidth=0.5,relheight=0.05)
-    SEARCH_BOOK_PRICE.insert(0,csv_pull.loc[selected]["BOOK_PRICE"]) # 가격 가져와서 출력
+    price = float(csv_pull.loc[selected]["BOOK_PRICE"])
+    SEARCH_BOOK_PRICE.insert(0,int(price)) # 가격 가져와서 출력
 
     BTN_BOOK_LINK = Button(window, text='URL', bg='orange', width='8', height='1') 
     BTN_BOOK_LINK.place(x=170, y = 280)
@@ -424,12 +433,13 @@ def BOOK_EDIT(selected):
     def find_image_name():
         file_name=askopenfilename(parent=window,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
 
-        photo=PhotoImage(file=file_name,master=window)
-        IMAGE_label.configure(image=photo)
-        IMAGE_label.image=photo
-
+        photo=Image.open(file_name)
+        photo2=photo.resize((120,150))
+        photo3=ImageTk.PhotoImage(photo2,master=window)
+        IMAGE_label.configure(image=photo3,width=120,height=150)
+        IMAGE_label.image=photo3
         SEARCH_IMAGE_FIND.insert(0,file_name)
-
+        
     # 위젯
     BTN_FIND=Button(window, text="찾아보기",bg='gray',width='8',height='1',command=find_image_name)
     BTN_FIND.place(x=620,y=360)
@@ -636,11 +646,16 @@ def BOOK_LOOKUP():
         window.configure(background = 'sky blue')
         label1.pack()
 
-        photo=PhotoImage(file=csv_pull.loc[select_book]["BOOK_IMAGE"],master=window)
-        IMAGE_label = Label(window,image=photo,text="사진\n미리보기",bg="orange",width='80',height='100')
-        IMAGE_label.configure(image=photo)
-        IMAGE_label.image=photo
+        IMAGE_label=Label(window,bg="white",width=120,height=150)
+        photo = Image.open(csv_pull.loc[select_book]["BOOK_IMAGE"])
+        photo2 = photo.resize((120, 200))
+        photo3 = ImageTk.PhotoImage(photo2,master=window)
+        IMAGE_label.configure(image=photo3, width=120, height=150)
+        IMAGE_label.image=photo3
         IMAGE_label.place(x=30,y=80)
+
+
+        
         BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
         BTN_BOOK_ISBN.place(x=170, y = 80)
         SEARCH_BOOK_ISBN = Entry(window)
@@ -668,7 +683,8 @@ def BOOK_LOOKUP():
         BTN_BOOK_PRICE.place(x=170, y = 240)
         SEARCH_BOOK_PRICE = Entry(window)
         SEARCH_BOOK_PRICE.place(x= 250, y= 240,relwidth=0.5,relheight=0.05)
-        SEARCH_BOOK_PRICE.insert(0,csv_pull.loc[select_book]["BOOK_PRICE"])
+        price=float(csv_pull.loc[select_book]["BOOK_PRICE"])
+        SEARCH_BOOK_PRICE.insert(0,int(price))
         BTN_BOOK_LINK = Button(window, text='URL', bg='orange', width='8', height='1') 
         BTN_BOOK_LINK.place(x=170, y = 280)
         SEARCH_BOOK_LINK = Entry(window)
