@@ -1,11 +1,13 @@
 import pandas as pd
 import USER3_UI
+import USER_UI
 import csv
 from tkinter import *
 from tkinter.simpledialog import *
 from PIL import Image,ImageTk
 from tkinter.filedialog import *
 import tkinter.messagebox
+import tkinter.ttk as ttk
 
 
 
@@ -64,11 +66,15 @@ def user_2(phone1):
                                                                         # 등록되어있는 회원들의 정보를 불러와서 출력
             input_phone = phone_entry.get()
             input_name = name_entry.get()
-            input_birth = birth_entry.get()
+            y = yearcombo.get()
+            m = monthcombo.get()
+            d = daycombo.get() 
+            input_birth = y + m + d
             input_mail = mail_entry.get()
             input_image = image_entry.get('1.0','end')
 
-            if input_phone.strip()=="" or input_name.strip()==""or input_birth.strip()=="" or input_mail.strip()=="" or input_image.strip()=="":               
+            if input_phone.strip()=="" or input_name.strip()==""or input_birth.strip()=="" or input_mail.strip()=="" or input_image.strip()==""\
+                or y.strip()==""or m.strip()==""or d.strip()=="":
                 REG_ERROR()
                 return 0
             else:
@@ -83,9 +89,10 @@ def user_2(phone1):
 
                 df_user.to_csv('csv/user.csv', index=False, encoding='utf-8')   # 수정된 회원 정보 저장
                 ok_notice()
+                mainwindow.destroy()
                 USER3_UI.exit_search()
                 USER3_UI.USER_1()         
-                mainwindow.destroy()
+                
        
         def phonenum_check():
                 
@@ -119,6 +126,40 @@ def user_2(phone1):
             state_label.config(text='탈퇴 상태')
         mainwindow.configure(background = 'sky blue')
         
+        year = []
+        month = []
+        day = []
+
+        for i in range(1900,2023):
+            year.append(str(i))
+        for j in range(1,13):
+            if (j < 10):
+                j = '0' + str(j)
+            month.append(j)
+        for k in range(1,32):
+            if (k < 10):
+                k = '0' + str(k)
+            day.append(k)
+
+        df_user = pd.read_csv('csv/user.csv', encoding='utf-8')
+        df_user = df_user.set_index(df_user['USER_PHONE'])
+        USER_CHOICE = phone
+        birth = str(df_user.loc[USER_CHOICE,'USER_BIRTH'])
+
+        
+        yearcombo = ttk.Combobox(mainwindow,width=6,height=5,values=year,state="readonly")
+        monthcombo = ttk.Combobox(mainwindow,width=4,height=5,values=month,state="readonly")
+        daycombo = ttk.Combobox(mainwindow,width=4,height=5,values=day,state="readonly")
+        yearcombo.set(birth[0:4])
+        monthcombo.set(birth[4:6])
+        daycombo.set(birth[6:8])
+        yearcombo.pack()
+        monthcombo.pack()
+        daycombo.pack()
+        yearcombo.place(x=250,y=120)
+        monthcombo.place(x=350,y=120)
+        daycombo.place(x=450,y=120)
+
         
 
         # 위젯 배치
@@ -128,7 +169,6 @@ def user_2(phone1):
         name_button = create_button('name_button','orange','이름',9,170,80)
         name_entry = create_entry('name_entry',df_user.loc[phone,'USER_NAME'],("맑은 고딕",12),35,250,80)
         birth_button = create_button('birth_button','orange','생년월일',9,170,120)
-        birth_entry = create_entry('birth_entry',df_user.loc[phone,'USER_BIRTH'],("맑은 고딕",12),35,250,120)
         sex_button = create_button('sex_button','orange','성별',9,170,160)
         male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','남',var,'남자',250,160)
         female_rbutton = create_rbutton('female_rbutton',("맑은 고딕",10),'sky blue','여',var,'여자',300,160)

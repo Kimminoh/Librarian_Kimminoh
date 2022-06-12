@@ -1,9 +1,11 @@
 import pandas as pd
 from tkinter import *
+import tkinter.ttk as ttk
 from tkinter.simpledialog import *
 from tkinter.filedialog import *
 from PIL import Image,ImageTk
 import tkinter.messagebox
+
 
 def USER_3():
     def create_rbutton(rbutton_name,font,color,text,var,value,x,y):         # 라디오 버튼 배치 함수
@@ -38,24 +40,27 @@ def USER_3():
                 tkinter.messagebox.showerror("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
 
 
-            a = phone_entry.get()
-            b = name_entry.get()
-            c= birth_entry.get()
-            d = mail_entry.get()
-            e = image_entry.get('1.0','end')
-            
+            input_phone = phone_entry.get()
+            input_name = name_entry.get()
+            yy = yearcombo.get()
+            mm = monthcombo.get()
+            dd = daycombo.get() 
+            input_birth = yy + mm + dd
+            input_mail = mail_entry.get()
+            input_image = image_entry.get('1.0','end')
 
-            if a.strip()=="" or b.strip()==""or c.strip()=="" or d.strip()=="" or e.strip()=="":               
+            if input_phone.strip()=="" or input_name.strip()==""or input_birth.strip()=="" or input_mail.strip()=="" or input_image.strip()==""\
+                or yy.strip()==""or mm.strip()==""or dd.strip()=="":
                 ERROR_6()
                 return 0
             else:
-                new_user = { "USER_PHONE": phone_entry.get(),                     # -(하이픈) 포함
-                        "USER_NAME": name_entry.get(),                         # 영문일 시 공백포함
-                        "USER_BIRTH": birth_entry.get(),                       # YYYYMMDD 
+                new_user = { "USER_PHONE": input_phone,                     # -(하이픈) 포함
+                        "USER_NAME": input_name,                         # 영문일 시 공백포함
+                        "USER_BIRTH": input_birth,                                      # YYYYMMDD 
                         "USER_SEX": var.get(),                                # TRUE : 남자, FALSE : 여자
-                        "USER_MAIL": mail_entry.get(),
+                        "USER_MAIL": input_mail,
                         "USER_REG" : True,
-                        "USER_IMAGE": image_entry.get('1.0','end'),                     # 기본값 None(흰 배경)
+                        "USER_IMAGE": image_entry.get('1.0','end'),          # 기본값 None(흰 배경)
                         "USER_RENT_CNT": 0 }                                 # +1, -1 하는 방식
                 df_user = df_user.append(new_user, ignore_index=True)           # 데이터프레임을 추가하고 행 인덱스를 재배열
                 df_user = df_user.set_index(df_user['USER_PHONE'])               # USER_PHONE을 인덱스로 사용
@@ -88,12 +93,9 @@ def USER_3():
                 check_pass()
                 phone_check['state'] = 'disabled'
                 phone_entry['state'] = 'disabled'
-                reg_button['state']='normal'
+                reg_button['state'] = 'normal'
             else:
                 check_nonpass()
-
-                
-
 
         def find_image_name():
             file_name=askopenfilename(parent=mainwindow,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
@@ -105,7 +107,37 @@ def USER_3():
             image_label.image=photo3
             image_entry.delete(1.0,"end")
             image_entry.insert(1.0,file_name)
-            
+        
+        year = []
+        month = []
+        day = []
+
+        for i in range(1900,2023):
+            year.append(str(i))
+        for j in range(1,13):
+            if (j < 10):
+                j = '0' + str(j)
+            month.append(j)
+        for k in range(1,32):
+            if (k < 10):
+                k = '0' + str(k)
+            day.append(k)
+
+        yearcombo = ttk.Combobox(mainwindow,width=6,height=5,values=year,state="readonly")
+        monthcombo = ttk.Combobox(mainwindow,width=4,height=5,values=month,state="readonly")
+        daycombo = ttk.Combobox(mainwindow,width=4,height=5,values=day,state="readonly")
+        yearcombo.set("")
+        monthcombo.set("")
+        daycombo.set("")
+        yearcombo.pack()
+        monthcombo.pack()
+        daycombo.pack()
+        yearcombo.place(x=250,y=120)
+        monthcombo.place(x=350,y=120)
+        daycombo.place(x=450,y=120)
+
+
+
         # 위젯 배치
         sub_label.pack(fill=X)
         image_label.pack()
@@ -113,7 +145,7 @@ def USER_3():
         name_button = create_button('name_button','orange','이름',9,170,80)
         name_entry = create_entry('name_entry',("맑은 고딕",12),35,250,80)
         birth_button = create_button('birth_button','orange','생년월일',9,170,120)
-        birth_entry = create_entry('birth_entry',("맑은 고딕",12),35,250,120)
+        #birth_entry = create_entry('birth_entry',("맑은 고딕",12),35,250,120)
         sex_button = create_button('sex_button','orange','성별',9,170,160)
         male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','남',var,'남자',250,160)
         female_rbutton = create_rbutton('female_rbutton',("맑은 고딕",10),'sky blue','여',var,'여자',300,160)
@@ -132,7 +164,6 @@ def USER_3():
         reg_button.place(x=200,y=400)
         reg_button['state']='disabled'
         cancel_button = Button(mainwindow,bg='gray',text='취소',width=9,command=mainwindow.destroy)
-            
         cancel_button.place(x=400,y=400)
         
 
