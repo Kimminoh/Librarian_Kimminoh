@@ -77,7 +77,6 @@ def user_2(phone1):
                 df_user.loc[USER_CHOICE,'USER_SEX'] = var.get()
                 df_user.loc[USER_CHOICE,'USER_MAIL'] = input_mail
                 df_user.loc[USER_CHOICE,'USER_IMAGE'] = input_image
-                df_user.loc[USER_CHOICE,'USER_RENT_CNT'] = 4
 
                 df_user.to_csv('csv/user.csv', index=False, encoding='utf-8')   # 수정된 회원 정보 저장
                 ok_notice()
