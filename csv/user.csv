@@ -1,5 +1,5 @@
-USER_PHONE,USER_NAME,USER_BIRTH,USER_SEX,USER_MAIL,USER_IMAGE,USER_REG,USER_RENT_CNT
+﻿USER_PHONE,USER_NAME,USER_BIRTH,USER_SEX,USER_MAIL,USER_IMAGE,USER_REG,USER_RENT_CNT
 010-1111-1111,김민오,20001117,남자,kimminoh1204@naver.com,sample_image/010-1234-5678.png,True,1
 010-1111-1112,남강민,20001118,남자,namgangmin@naver.com,sample_image/people_default_image.png,True,0
 010-1111-1113,김민철,20001119,여자,mincheol@naver.com,sample_image/Default_Image.png,True,0
-010-1111-1114,윤도운,20001120,남자,YunDoun@naver.com,sample_image/Default_Image.png,True,0
+010-1111-1115,윤도운,20001120,남자,YunDoun@naver.com,"sample_image/Default_Image.png",True,1
