@@ -122,8 +122,12 @@ def USER_1():
         sub_label.pack(fill=X)
 
     mainwindow = Tk()
+    global a
+    a = mainwindow
     mainwindow.title("회원 검색/수정/탈퇴")
     mainwindow.geometry("700x500")
     user_search()
     mainwindow.resizable(width=FALSE, height=FALSE)
     mainwindow.mainloop()
+def exit_search():
+    a.destroy()
