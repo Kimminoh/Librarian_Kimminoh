@@ -71,8 +71,11 @@ def user_2(phone1):
 
         def state_change():
             if bool(df_user.loc[phone,'USER_REG']) == True:
+               if df_user.loc[phone,'USER_RENT_CNT'] == 0: 
                 df_user.loc[phone,'USER_REG'] = False
                 ERROR_4()
+               else :
+                   tkinter.messagebox.showerror("오류","도서를 대여중인 회원은 탈퇴가 불가능합니다,")
             else:
                 df_user.loc[phone,'USER_REG'] = True
                 ERROR_5()
