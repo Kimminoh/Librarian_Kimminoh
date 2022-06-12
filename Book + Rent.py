@@ -11,6 +11,7 @@ import csv
 import pandas as pd
 from tkinter import *
 from PIL import Image,ImageTk
+import math
 
 
 #from USER2_UI import USER_2
@@ -21,7 +22,13 @@ from USER3_UI import USER_1
 # RENT_NUM 초기화 안되게 고정
 rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
 rent_df = rent_df.set_index(rent_df['RENT_NUM'])
-num = max(rent_df.index.tolist()) + 1
+
+try:
+    num = max(rent_df.index.tolist()) + 1
+
+except:
+    num=1
+
 #num = 0
 
 # 2번째 화면
@@ -125,7 +132,7 @@ def BOOK_MANAGEMENT_FIRST():
 
     
     # 등록되어 있는 도서 리스트
-    csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+    csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
     csv_pull = csv_pull.set_index("BOOK_ISBN")
 
     # Treeview를 사용해서 도서 목록 나열
@@ -218,15 +225,15 @@ def BOOK_NEW_REG():
                 return 0
 
             # 중복확인 안했을 때 
-            if not OVERLAP_CHECK['state'] == 'disabled' :
+            elif not OVERLAP_CHECK['state'] == 'disabled' :
                 ERROR_3()
 
             # 가격이 정수가 아닐 때
-            if not e.isdigit():
+            elif not e.isdigit():
                 ERROR_4()
                 
             else: # 값 다 입력했을 때 
-                csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+                csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
                 csv_pull = csv_pull.set_index("BOOK_ISBN")
                 csv_pull.loc[a, 'BOOK_TITLE']= b
                 csv_pull.loc[a, 'BOOK_AUTHOR']= c  
@@ -235,16 +242,16 @@ def BOOK_NEW_REG():
                 csv_pull.loc[a, 'BOOK_LINK']= f
                 csv_pull.loc[a, 'BOOK_IMAGE']= g
                 csv_pull.loc[a, 'BOOK_DESCRIPTION']= h
-                csv_pull.loc[a, 'BOOK_RENTAL']= False
+                csv_pull.loc[a, 'BOOK_RENTAL']= "False"
                 #csv 저장하기 
-                csv_pull.to_csv("csv/book_1.csv", index = True)
+                csv_pull.to_csv("csv/book.csv", index = True)
                 # 확인용 tabulate
                 print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
                 window.destroy()
 
     # 중복확인 함수       
     def ISBN_OVERLAP():
-        csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+        csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
         csv_pull = csv_pull.set_index("BOOK_ISBN")
         
         a = SEARCH_BOOK_ISBN.get()  # ISBN의 정보 가져오기
@@ -260,9 +267,10 @@ def BOOK_NEW_REG():
             # 중복 확인 완료시 버튼 비활성화 
             OVERLAP_CHECK['state'] = 'disabled'
             SEARCH_BOOK_ISBN['state'] = 'disabled'
+            BTN_IMAGE_FIND['state'] = 'disabled'
     # 사진 가져오기
     photo=PhotoImage(master=window)
-    IMAGE_label = Label(window,image=photo,text="사진\n미리보기",bg="white",width='80',height='100')
+    IMAGE_label = Label(window,image=photo,text="사진\n미리보기",bg="white",width='120',height='150')
     IMAGE_label.place(x=30,y=80)
 
 
@@ -277,7 +285,7 @@ def BOOK_NEW_REG():
                            command = ISBN_OVERLAP)
     OVERLAP_CHECK.place(x=620, y = 80)    
     # 위젯
-    BTN_BOOK_TITLE = Button(window, text='도서명', bg='orange', width='8', height='1')
+    BTN_BOOK_TITLE = Button(window, text='도서명', bg='orange', width='8', height='1') 
     BTN_BOOK_TITLE.place(x=170, y = 120)
     SEARCH_BOOK_TITLE = Entry(window)
     SEARCH_BOOK_TITLE.place(x= 250, y= 120,relwidth=0.5,relheight=0.05)
@@ -312,14 +320,28 @@ def BOOK_NEW_REG():
     SEARCH_IMAGE_FIND = Entry(window)
     SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
 
+    # 안내창
+    explain = Label(window, text = '※사진은 필수 정보 입니다. 반드시 입력해 주세요 !!',
+                bg = 'skyblue',width = '45', height = 1)
+    explain.place(relx=0.34, rely=0.78)
+    explain.configure(font=("Courier", 8, "italic"))
+
+    
+
+
     # 사진 찾는 함수 
     def find_image_name():
         file_name=askopenfilename(parent=window,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
 
-        photo=PhotoImage(file=file_name,master=window)
-        IMAGE_label.configure(image=photo)
-        IMAGE_label.image=photo
+        photo1=Image.open(file_name)
+        photo2=photo1.resize((120,150))
+        photo3=ImageTk.PhotoImage(photo2,master=window)
+        IMAGE_label.configure(image=photo3,width=120,height=150)
+        IMAGE_label.image=photo3
+
+        SEARCH_IMAGE_FIND.delete(0,"end")
         SEARCH_IMAGE_FIND.insert(0,file_name)
+        SEARCH_IMAGE_FIND['state'] = 'disabled'
         
     # 위젯
     BTN_FIND=Button(window, text="찾아보기",bg='gray',width='8',height='1',command=find_image_name)
@@ -362,15 +384,20 @@ def BOOK_EDIT(selected):
         tkinter.messagebox.showerror("ERROR","해당 부분은 숫자로만 입력이 가능합니다 !")
         
     # csv파일 불러오기    
-    csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+    csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
     csv_pull = csv_pull.set_index("BOOK_ISBN")
 
     # csv파일에서 정보 가져오기
-    photo=PhotoImage(file=csv_pull.loc[selected]["BOOK_IMAGE"],master=window)
-    IMAGE_label = Label(window,image=photo,text="사진\n미리보기",bg="orange",width='80',height='100')
-    IMAGE_label.configure(image=photo)
-    IMAGE_label.image=photo
+
+    #사진 가져오기 + 크기 정렬
+    IMAGE_label=Label(window,bg="white",width=120,height=150)
+    photo = Image.open(csv_pull.loc[selected]["BOOK_IMAGE"])
+    photo2 = photo.resize((120, 200))
+    photo3 = ImageTk.PhotoImage(photo2,master=window)
+    IMAGE_label.configure(image=photo3, width=120, height=150)
+    IMAGE_label.image=photo3
     IMAGE_label.place(x=30,y=80)
+        
     # 위젯
     BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
     BTN_BOOK_ISBN.place(x=170, y = 80)
@@ -389,47 +416,65 @@ def BOOK_EDIT(selected):
     SEARCH_BOOK_AUTHOR = Entry(window)
     SEARCH_BOOK_AUTHOR.place(x= 250, y= 160,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_AUTHOR.insert(0,csv_pull.loc[selected]["BOOK_AUTHOR"]) # 저자 가저와서 출력
-
+    # 위젯
     BTN_BOOK_PUBLIC = Button(window, text='출판사', bg='orange', width='8', height='1')
     BTN_BOOK_PUBLIC.place(x=170, y = 200)
     SEARCH_BOOK_PUBLIC = Entry(window)
     SEARCH_BOOK_PUBLIC.place(x= 250, y= 200,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_PUBLIC.insert(0,csv_pull.loc[selected]["BOOK_PUBLIC"]) # 출판사 가져와서 출력
-
+    # 위젯
     BTN_BOOK_PRICE = Button(window, text='가격', bg='orange', width='8', height='1')
     BTN_BOOK_PRICE.place(x=170, y = 240)
     SEARCH_BOOK_PRICE = Entry(window)
     SEARCH_BOOK_PRICE.place(x= 250, y= 240,relwidth=0.5,relheight=0.05)
-    SEARCH_BOOK_PRICE.insert(0,csv_pull.loc[selected]["BOOK_PRICE"]) # 가격 가져와서 출력
-
+    price = float(csv_pull.loc[selected]["BOOK_PRICE"])
+    SEARCH_BOOK_PRICE.insert(0,int(price)) # 가격 가져와서 출력
+    # 위젯
     BTN_BOOK_LINK = Button(window, text='URL', bg='orange', width='8', height='1') 
     BTN_BOOK_LINK.place(x=170, y = 280)
     SEARCH_BOOK_LINK = Entry(window)
     SEARCH_BOOK_LINK.place(x= 250, y= 280,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_LINK.insert(0,csv_pull.loc[selected]["BOOK_LINK"]) # 링크 가져와서 출력
-    
+    # 위젯
     BTN_BOOK_DESCRIPTION = Button(window, text='도서 설명', bg='orange', width='8', height='1')
     BTN_BOOK_DESCRIPTION.place(x=170, y = 320)
     SEARCH_BOOK_DESCRIPTION = Entry(window)
     SEARCH_BOOK_DESCRIPTION.place(x= 250, y= 320,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_DESCRIPTION.insert(0,csv_pull.loc[selected]["BOOK_DESCRIPTION"]) # 설명 가져와서 출력
-
-    BTN_IMAGE_FIND = Button(window, text='사진 찾기', bg='orange', width='8', height='1')
+    # 위젯
+    BTN_IMAGE_FIND = Button(window, text='사진', bg='orange', width='8', height='1')
     BTN_IMAGE_FIND.place(x=170, y = 360)
-    SEARCH_IMAGE_FIND = Entry(window)
-    SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
-    #SEARCH_IMAGE_FIND.insert(0,csv_pull.loc[selected]["BOOK_IMAGE"])
+    #SEARCH_IMAGE_FIND = Entry(window)
+    #SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
+
+    SEARCH_IMAGE_FIND = Text(window, font=("맑은 고딕",12),width=40,height=2)
+    SEARCH_IMAGE_FIND.insert('1.0',csv_pull.loc[selected,'BOOK_IMAGE'])
+    SEARCH_IMAGE_FIND.place(x=250,y=360)
+    SEARCH_IMAGE_FIND.get('1.0','end').replace('\n','')
+    
+    # 안내창
+    explain = Label(window, text = '※사진은 필수 정보 입니다. 반드시 입력해 주세요 !!',
+                bg = 'skyblue',width = '45', height = 1)
+    explain.place(relx=0.34, rely=0.82)
+    explain.configure(font=("Courier", 8, "italic"))
+
+
+    
     
     # 사진 찾아오기 
     def find_image_name():
         file_name=askopenfilename(parent=window,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
 
-        photo=PhotoImage(file=file_name,master=window)
-        IMAGE_label.configure(image=photo)
-        IMAGE_label.image=photo
-
-        SEARCH_IMAGE_FIND.insert(0,file_name)
-
+        photo=Image.open(file_name)
+        photo2=photo.resize((120,150))
+        photo3=ImageTk.PhotoImage(photo2,master=window)
+        IMAGE_label.configure(image=photo3,width=120,height=150)
+        IMAGE_label.image=photo3
+        SEARCH_IMAGE_FIND.delete('1.0',"end")
+        SEARCH_IMAGE_FIND.insert('1.0',file_name)
+        SEARCH_IMAGE_FIND['state'] = 'disabled'
+        BTN_FIND['state'] = 'disabled'
+        
     # 위젯
     BTN_FIND=Button(window, text="찾아보기",bg='gray',width='8',height='1',command=find_image_name)
     BTN_FIND.place(x=620,y=360)
@@ -457,7 +502,7 @@ def BOOK_EDIT(selected):
             d = SEARCH_BOOK_PUBLIC.get()
             e = SEARCH_BOOK_PRICE.get()
             f = SEARCH_BOOK_LINK.get()
-            g = SEARCH_IMAGE_FIND.get()
+            g = SEARCH_IMAGE_FIND.get('1.0','end').replace('\n','')
             h = SEARCH_BOOK_DESCRIPTION.get()
 
             #하나라도 입력하지 않았을 때
@@ -467,15 +512,16 @@ def BOOK_EDIT(selected):
                 return 0
 
             # 중복확인 안했을 때 
-            if not OVERLAP_CHECK['state'] == 'disabled' :
+            elif not OVERLAP_CHECK['state'] == 'disabled' :
                 ERROR_3()
 
             # 가격이 정수가 아닐 때
-            if not e.isdigit():
+            elif not e.isdigit():
                 ERROR_4()
                 
             else:
-                csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+                
+                csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
                 csv_pull = csv_pull.set_index("BOOK_ISBN")
                 csv_pull.loc[selected, 'BOOK_TITLE']= b
                 csv_pull.loc[selected, 'BOOK_AUTHOR']= c  
@@ -486,22 +532,22 @@ def BOOK_EDIT(selected):
                 csv_pull.loc[selected, 'BOOK_DESCRIPTION']= h
                 # 수정할 때는 대여 여부 확인 해야함 
                 #csv 저장하기 
-                csv_pull.to_csv("csv/book_1.csv", index = True)
+                csv_pull.to_csv("csv/book.csv", index = True)
 
                 print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
                 window.destroy()
 
     # 중복확인 함수
     def ISBN_OVERLAP():
-        csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+        csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
         csv_pull = csv_pull.set_index("BOOK_ISBN")
         
         a = SEARCH_BOOK_ISBN.get()
         # 인덱스 값 리스트로 추출
         ISBN_OVERLAP = csv_pull.index.tolist()
-        if  a in ISBN_OVERLAP:
+        if  int(a) in ISBN_OVERLAP and  int(a) != selected :
             ERROR_2()
-            
+                         
         elif not a.isdigit():  # 정수가 아닐 시 에러
             ERROR_5()
                 
@@ -518,12 +564,12 @@ def BOOK_EDIT(selected):
 
     # 적용 버튼 누를 시 수정!
     BTN_APPLY = Button(window, text='적용', bg = 'gray', width='7', height='1',command=APPLY)
-    BTN_APPLY.place(x=300, y = 420)
+    BTN_APPLY.place(x=300, y = 450)
 
     BTN_CANCEL = Button(window, text='취소', bg='gray', width='7', height='1',command=window.destroy )
-    BTN_CANCEL.place(x=400, y = 420)
+    BTN_CANCEL.place(x=400, y = 450)
     
-
+    print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
 
 # ㉯의 화면----------------------------------------------------
 def BOOK_LOOKUP():
@@ -551,10 +597,10 @@ def BOOK_LOOKUP():
     BLANK_SEARCH.place(relx=0.11,rely=0.2,relwidth=0.7,relheight=0.05)
 
     # csv 파일 가져오기
-    csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+    csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
     csv_pull = csv_pull.set_index("BOOK_ISBN")
 
-    csv_pull1 = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+    csv_pull1 = pd.read_csv("csv/book.csv",encoding = "utf-8")
     csv_pull1 = csv_pull1.set_index("BOOK_ISBN")
     # 도서를 조회하기 위해 검색 시 도서명과 저자로 검색 가능
     def search1 ():        
@@ -622,7 +668,7 @@ def BOOK_LOOKUP():
     BOOK_SELECT_BOX.place(relx=0.01,rely=0.28,relwidth=0.8,relheight = 0.4)
     
 #=============================반납, 대출 버튼 이벤트 =======================================
-
+# 도서 상세 정보
     def book_information():
 
         select_book = int(BOOK_SELECT_BOX.focus())
@@ -636,11 +682,16 @@ def BOOK_LOOKUP():
         window.configure(background = 'sky blue')
         label1.pack()
 
-        photo=PhotoImage(file=csv_pull.loc[select_book]["BOOK_IMAGE"],master=window)
-        IMAGE_label = Label(window,image=photo,text="사진\n미리보기",bg="orange",width='80',height='100')
-        IMAGE_label.configure(image=photo)
-        IMAGE_label.image=photo
+        IMAGE_label=Label(window,bg="white",width=120,height=150)
+        photo = Image.open(csv_pull.loc[select_book]["BOOK_IMAGE"])
+        photo2 = photo.resize((120, 200))
+        photo3 = ImageTk.PhotoImage(photo2,master=window)
+        IMAGE_label.configure(image=photo3, width=120, height=150)
+        IMAGE_label.image=photo3
         IMAGE_label.place(x=30,y=80)
+
+
+        
         BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
         BTN_BOOK_ISBN.place(x=170, y = 80)
         SEARCH_BOOK_ISBN = Entry(window)
@@ -668,7 +719,8 @@ def BOOK_LOOKUP():
         BTN_BOOK_PRICE.place(x=170, y = 240)
         SEARCH_BOOK_PRICE = Entry(window)
         SEARCH_BOOK_PRICE.place(x= 250, y= 240,relwidth=0.5,relheight=0.05)
-        SEARCH_BOOK_PRICE.insert(0,csv_pull.loc[select_book]["BOOK_PRICE"])
+        price=float(csv_pull.loc[select_book]["BOOK_PRICE"])
+        SEARCH_BOOK_PRICE.insert(0,int(price))
         BTN_BOOK_LINK = Button(window, text='URL', bg='orange', width='8', height='1') 
         BTN_BOOK_LINK.place(x=170, y = 280)
         SEARCH_BOOK_LINK = Entry(window)
@@ -682,12 +734,15 @@ def BOOK_LOOKUP():
         SEARCH_BOOK_DESCRIPTION.insert(0,csv_pull.loc[select_book]["BOOK_DESCRIPTION"])
         BTN_IMAGE_FIND = Button(window, text='사진', bg='orange', width='8', height='1')
         BTN_IMAGE_FIND.place(x=170, y = 360)
-        SEARCH_IMAGE_FIND = Entry(window)
-        SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
-        #SEARCH_IMAGE_FIND.insert(0,csv_pull.loc[selected]["BOOK_IMAGE"])
+
+        SEARCH_IMAGE_FIND = Text(window, font=("맑은 고딕",12),width=40,height=2)
+        SEARCH_IMAGE_FIND.insert('1.0',csv_pull.loc[select_book,'BOOK_IMAGE'])
+        SEARCH_IMAGE_FIND.place(x=250,y=360)
+        SEARCH_IMAGE_FIND.get('1.0','end').replace('\n','')
+ 
 
         BTN_CANCEL = Button(window, text='확인', bg='gray', width='7', height='1',command=window.destroy )
-        BTN_CANCEL.place(relx=0.5, rely = 0.8)
+        BTN_CANCEL.place(relx=0.5, rely = 0.9)
 
     def bookrent_selectuser():
         
@@ -707,7 +762,7 @@ def BOOK_LOOKUP():
         def click_item(event):
             window = Tk()
         
-        df_user = pd.read_csv('csv/USER1.csv', encoding="utf-8")
+        df_user = pd.read_csv('csv/user.csv', encoding="utf-8")
         df_user = df_user.set_index(df_user['USER_PHONE'])
         USER_SELECT_BOX = ttk.Treeview(rent1, columns=(1,2,3,4),show="headings")
 
@@ -737,13 +792,12 @@ def BOOK_LOOKUP():
         
         
         
-        
         def event_book_rent():
             global num
-            book_df = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+            book_df = pd.read_csv("csv/book.csv",encoding = "utf-8")
             book_df = book_df.set_index(book_df['BOOK_ISBN'])
 
-            user_df = pd.read_csv("csv/USER1.csv",encoding = "utf-8")
+            user_df = pd.read_csv("csv/user.csv",encoding = "utf-8")
             user_df = user_df.set_index(user_df['USER_PHONE'])
 
             rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
@@ -759,6 +813,9 @@ def BOOK_LOOKUP():
                      "RENT_RYN": False,
                      "BOOK_ISBN": select_book,
                      "USER_PHONE": select_user} 
+            
+            
+            book_df.loc[select_book,'BOOK_RENTAL']="True"
 
             rent_df.loc[len(rent_df)] = new_rent
             usercnt = user_df.loc[select_user,'USER_RENT_CNT']
@@ -767,9 +824,12 @@ def BOOK_LOOKUP():
             print(tabulate(user_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
             print(tabulate(rent_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
             num += 1
-            user_df.to_csv("csv/USER1.csv", index = False)
+            
+            book_df.to_csv("csv/book.csv",index=False)
+            user_df.to_csv("csv/user.csv", index = False)
             rent_df.to_csv("csv/rent.csv", index = False)
             tkinter.messagebox.showinfo("도서 대출", "도서 대출 완료")
+            rent1.destroy()
 
                 
             
@@ -787,8 +847,6 @@ def BOOK_LOOKUP():
         booknamelabel = Label(rent1, text = ABC, bg = 'gray') 
         booknamelabel.place(relx=0.25,rely=0.2,relwidth=0.6,relheight=0.07)
 
-        
-            
  
         searchuserlabel = Label(rent1, text = '회원정보 입력', bg = 'orange')
         searchuserlabel.place(relx = 0.05,rely=0.3,relwidth=0.15,relheight=0.07)
@@ -830,8 +888,8 @@ def BOOK_LOOKUP():
           tkinter.messagebox.showerror("오류","이미 대출중인 도서입니다.")
     
     def event_book_return():
-         book_df = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
-         user_df = pd.read_csv("csv/USER1.csv",encoding = "utf-8")
+         book_df = pd.read_csv("csv/book.csv",encoding = "utf-8")
+         user_df = pd.read_csv("csv/user.csv",encoding = "utf-8")
          user_df = user_df.set_index(user_df['USER_PHONE'])
          rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
          rent_df = rent_df.set_index(rent_df['BOOK_ISBN'])
@@ -848,6 +906,9 @@ def BOOK_LOOKUP():
                 print(usercnt)
                 user_df.loc[select_user,'USER_RENT_CNT'] = usercnt-1
 
+
+                book_df.loc[select_book,'BOOK_RENTAL']="False"
+
                 idx = rent_df[rent_df['BOOK_ISBN']==select_book].index
                 rent_df.drop(idx,inplace=True) # num # 인덱스로 저장한 idx를 참고하여 drop(), 해당 행 삭제
 
@@ -857,7 +918,8 @@ def BOOK_LOOKUP():
                 print(tabulate(user_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
                 print(tabulate(rent_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
                 num -= 1
-                user_df.to_csv("csv/USER1.csv", index = False)
+                book_df.to_csv("csv/book.csv",index=False)
+                user_df.to_csv("csv/user.csv", index = False)
                 rent_df.to_csv("csv/rent.csv", index = False)
                 tkinter.messagebox.showinfo("도서 반납", "도서 반납 완료")
            else:
@@ -928,17 +990,27 @@ def BOOK_DELETE():
         
     # 도서 삭제 구현 
     def DLT_BOOK(selected):
-        csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+        # book.csv 가져오기 ( 인덱스로 접근해서 삭제 / 포맷팅 ) 
+        csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
+        # rent.csv 가져오기 ( 대여여부 확인 / 행삭제 접근)
+        csv_pull_1 = pd.read_csv("csv/rent.csv",encoding = "utf-8")
+        # book.csv 인덱스 설정
         csv_pull = csv_pull.set_index("BOOK_ISBN")
-        
+        # 포맷팅
         name = csv_pull.loc[selected]["BOOK_TITLE"]
-        rent = csv_pull.loc[selected]["BOOK_RENTAL"]
+        
+        
+
+        CHECK_ISBN = csv_pull_1['BOOK_ISBN'].tolist() 
+        print(CHECK_ISBN)
+
         MB = tkinter.messagebox.askquestion("도서 삭제", "{}을 삭제하시겠습니까?".format(name))
+        
         if MB == "yes":
-            if rent == False :    #도서 정보 가져와야함 / 구현 성공
+            if selected not in CHECK_ISBN:    #도서 정보 가져와야함 / 구현 성공
                 csv_pull = csv_pull.drop(selected)
                 tkinter.messagebox.showinfo("삭제 완료", " 삭제가 완료 되었습니다 !")
-                csv_pull.to_csv("csv/book_1.csv", index = True, encoding='utf-8')
+                csv_pull.to_csv("csv/book.csv", index = True, encoding='utf-8')
                 
             else:
                 tkinter.messagebox.showerror("삭제 오류", " 이미 대출 중인 도서입니다.")
@@ -980,7 +1052,7 @@ def BOOK_DELETE():
     BOOK_SELECT_BTN.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
     BOOK_SELECT_BTN.bind('<Button-1>',click_item)
     # csv 파일 가져오기
-    csv_pull = pd.read_csv("csv/book_1.csv",encoding = "utf-8")
+    csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
     csv_pull = csv_pull.set_index("BOOK_ISBN")
 
     # 도서 목록 창 (Treeview)
@@ -1083,5 +1155,3 @@ BTN_MEMBER.place(x=450,y=150)
 
 window.mainloop()
     
-# 20193066 윤도운
-# 22/06/06 16:53 최종 
