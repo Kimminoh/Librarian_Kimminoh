@@ -144,10 +144,8 @@ def user_2(phone1):
         df_user = pd.read_csv('csv/user.csv', encoding='utf-8')
         df_user = df_user.set_index(df_user['USER_PHONE'])
         USER_CHOICE = phone
-        birth = df_user.loc[USER_CHOICE,'USER_BIRTH']
-        birth[0:4]
-        birth[4:6]
-        birth[6:8]
+        birth = str(df_user.loc[USER_CHOICE,'USER_BIRTH'])
+
         
         yearcombo = ttk.Combobox(mainwindow,width=6,height=5,values=year,state="readonly")
         monthcombo = ttk.Combobox(mainwindow,width=4,height=5,values=month,state="readonly")
