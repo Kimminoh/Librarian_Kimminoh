@@ -40,22 +40,25 @@ def USER_3():
                 tkinter.messagebox.showerror("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
 
 
-            a = phone_entry.get()
-            b = name_entry.get()
-            c= yearcombo.get() + monthcombo.get() + daycombo.get()
-            d = mail_entry.get()
-            e = image_entry.get('1.0','end')
-            
+            input_phone = phone_entry.get()
+            input_name = name_entry.get()
+            yy = yearcombo.get()
+            mm = monthcombo.get()
+            dd = daycombo.get() 
+            input_birth = yy + mm + dd
+            input_mail = mail_entry.get()
+            input_image = image_entry.get('1.0','end')
 
-            if a.strip()=="" or b.strip()==""or c.strip()=="" or d.strip()=="" or e.strip()=="":               
+            if input_phone.strip()=="" or input_name.strip()==""or input_birth.strip()=="" or input_mail.strip()=="" or input_image.strip()==""\
+                or yy.strip()==""or mm.strip()==""or dd.strip()=="":
                 ERROR_6()
                 return 0
             else:
-                new_user = { "USER_PHONE": phone_entry.get(),                     # -(하이픈) 포함
-                        "USER_NAME": name_entry.get(),                         # 영문일 시 공백포함
-                        "USER_BIRTH": c,                                      # YYYYMMDD 
+                new_user = { "USER_PHONE": input_phone,                     # -(하이픈) 포함
+                        "USER_NAME": input_name,                         # 영문일 시 공백포함
+                        "USER_BIRTH": input_birth,                                      # YYYYMMDD 
                         "USER_SEX": var.get(),                                # TRUE : 남자, FALSE : 여자
-                        "USER_MAIL": mail_entry.get(),
+                        "USER_MAIL": input_mail,
                         "USER_REG" : True,
                         "USER_IMAGE": image_entry.get('1.0','end'),          # 기본값 None(흰 배경)
                         "USER_RENT_CNT": 0 }                                 # +1, -1 하는 방식
@@ -123,9 +126,9 @@ def USER_3():
         yearcombo = ttk.Combobox(mainwindow,width=6,height=5,values=year,state="readonly")
         monthcombo = ttk.Combobox(mainwindow,width=4,height=5,values=month,state="readonly")
         daycombo = ttk.Combobox(mainwindow,width=4,height=5,values=day,state="readonly")
-        yearcombo.set("년")
-        monthcombo.set("월")
-        daycombo.set("일")
+        yearcombo.set("")
+        monthcombo.set("")
+        daycombo.set("")
         yearcombo.pack()
         monthcombo.pack()
         daycombo.pack()
