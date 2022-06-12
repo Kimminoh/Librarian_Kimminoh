@@ -6,7 +6,6 @@ import csv
 from tkinter import *
 from tkinter import ttk
 from tkinter.simpledialog import *
-
 def USER_1():
     def create_button(button_name,color,text,width,x,y):                   # 버튼 배치 함수
         button_name = Button(mainwindow,bg=color,text=text,width=width)
@@ -60,14 +59,7 @@ def USER_1():
                     result_info = (user_name, phone, user_birth, user_sex,user_rent_cnt)
                     treeview.insert('','end',values=result_info,iid=phone)
 
-        for row in reader:
-            csv_list.append(row)
-        f.close()  
         
-        for a,b,c,d,e,f,g,h in csv_list[1:]:
-            treeview.insert('','end',values=[b,a,c,d,h],iid=a)
-
-
         def button_item():
             chioce_info = treeview.focus()
             getvalue = treeview.item(chioce_info).get('values')
@@ -91,7 +83,16 @@ def USER_1():
             chioce_info = treeview.focus()
             getvalue = treeview.item(chioce_info).get('values')
             phone=getvalue[1]
-            USER4_UI.user_2(phone)        
+            USER4_UI.user_2(phone)
+
+
+        for row in reader:
+            csv_list.append(row)
+        f.close()  
+        
+        for a,b,c,d,e,f,g,h in csv_list[1:]:
+            treeview.insert('','end',values=[b,a,c,d,h],iid=a)
+        
 
         #csv_list[a]
 
@@ -119,15 +120,10 @@ def USER_1():
         treeview.bind('<Double-Button-1>',click_item2)
         treeview.place(x=50,y=220)
         sub_label.pack(fill=X)
-        
-    
+
     mainwindow = Tk()
-    global a
-    a = mainwindow
     mainwindow.title("회원 검색/수정/탈퇴")
     mainwindow.geometry("700x500")
     user_search()
     mainwindow.resizable(width=FALSE, height=FALSE)
     mainwindow.mainloop()
-def exit_search():
-    a.destroy()

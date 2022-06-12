@@ -1,6 +1,4 @@
 import pandas as pd
-import USER3_UI
-import csv
 from tkinter import *
 from tkinter.simpledialog import *
 from PIL import Image,ImageTk
@@ -82,8 +80,6 @@ def user_2(phone1):
 
                 df_user.to_csv('csv/USER1.csv', index=False, encoding='utf-8')   # 수정된 회원 정보 저장
                 ok_notice()
-                USER3_UI.exit_search()
-                USER3_UI.USER_1()                
                 mainwindow.destroy()
        
         def phonenum_check():
