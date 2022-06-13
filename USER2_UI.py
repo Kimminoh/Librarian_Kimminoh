@@ -64,17 +64,19 @@ def user_2(phone1):
             df_user = pd.read_csv('csv/user.csv', encoding='utf-8')
             df_user = df_user.set_index(df_user['USER_PHONE'])
                                                                         # 등록되어있는 회원들의 정보를 불러와서 출력
-            input_phone = phone_entry.get()
+            phone_number = phone_entry1.get() + '-' + phone_entry2.get() + '-' + phone_entry3.get()
+            input_phone = phone_number
             input_name = name_entry.get()
-            y = yearcombo.get()
-            m = monthcombo.get()
-            d = daycombo.get() 
-            input_birth = y + m + d
+            yy = yearcombo.get()
+            mm = monthcombo.get()
+            dd = daycombo.get() 
+            input_birth = yy + mm + dd
             input_mail = mail_entry.get()
             input_image = image_entry.get('1.0','end')
 
-            if input_phone.strip()=="" or input_name.strip()==""or input_birth.strip()=="" or input_mail.strip()=="" or input_image.strip()==""\
-                or y.strip()==""or m.strip()==""or d.strip()=="":
+            if phone_entry1.get().strip()=="" or input_name.strip()==""or input_birth.strip()=="" or input_mail.strip()=="" or input_image.strip()==""\
+                or yy.strip()==""or mm.strip()==""or dd.strip()==""or var.get().strip()==""\
+                or phone_entry1.get().strip()=="" or phone_entry2.get().strip()=="" or phone_entry3.get().strip()=="":
                 REG_ERROR()
                 return 0
             else:
@@ -99,18 +101,23 @@ def user_2(phone1):
                 df_user = pd.read_csv("csv/user.csv",encoding='utf-8')
                 df_user = df_user.set_index(df_user['USER_PHONE'])
                 
-                choice_phone = phone_entry.get()
+                choice_phone = phone_entry1.get() + '-' + phone_entry2.get() + '-' + phone_entry3.get()
                 phone_number = df_user.index.tolist()
+                
                 if choice_phone == phone:
                     check_pass()
                     phone_check['state'] = 'disabled'
-                    phone_entry['state'] = 'disabled'
+                    phone_entry1['state'] = 'disabled'
+                    phone_entry2['state'] = 'disabled'
+                    phone_entry3['state'] = 'disabled'
                     reg_button['state']='normal'
                 
                 elif  str(choice_phone) not in phone_number:
                     check_pass()
                     phone_check['state'] = 'disabled'
-                    phone_entry['state'] = 'disabled'
+                    phone_entry1['state'] = 'disabled'
+                    phone_entry2['state'] = 'disabled'
+                    phone_entry3['state'] = 'disabled'
                     reg_button['state']='normal'
                 else:
                     check_nonpass()
@@ -145,7 +152,6 @@ def user_2(phone1):
         df_user = df_user.set_index(df_user['USER_PHONE'])
         USER_CHOICE = phone
         birth = str(df_user.loc[USER_CHOICE,'USER_BIRTH'])
-
         
         yearcombo = ttk.Combobox(mainwindow,width=6,height=5,values=year,state="readonly")
         monthcombo = ttk.Combobox(mainwindow,width=4,height=5,values=month,state="readonly")
@@ -179,10 +185,19 @@ def user_2(phone1):
         elif df_user.loc[phone,'USER_SEX'] == '여자':
             male_rbutton.deselect()
             female_rbutton.select()
+
         phone_button = create_button('phone_button','orange','전화번호',9,170,200)
-        phone_entry = create_entry('phone_entry',phone,("맑은 고딕",12),35,250,200)
+        phone_entry1 = create_entry('phone_entry1',phone[0:3],("맑은 고딕",12),10,250,200)
+        phone_entry2 = create_entry('phone_entry2',phone[4:8],("맑은 고딕",12),10,360,200)
+        phone_entry3 = create_entry('phone_entry3',phone[9:13],("맑은 고딕",12),10,470,200)
         phone_check = Button(mainwindow,text='중복확인',bg='gray',width=9,command=phonenum_check)
         phone_check.place(x=580,y=200)                      
+        if df_user.loc[USER_CHOICE,"USER_RENT_CNT"] != 0:
+            phone_entry1['state'] = 'disabled'
+            phone_entry2['state'] = 'disabled'
+            phone_entry3['state'] = 'disabled'
+            phone_check['state'] = 'disabled'           
+
         mail_button = create_button('mail_button','orange','이메일 주소',9,170,240)
         mail_entry = create_entry('mail_entry',df_user.loc[phone,'USER_MAIL'],("맑은 고딕",12),35,250,240)
         image_find = Button(mainwindow,text='찾아보기',bg='gray',width=9,command=find_image_name) #,command=image_search
@@ -201,7 +216,6 @@ def user_2(phone1):
         reg_button.place(x=200,y=400)
         reg_button['state']='disabled'
         cancel_button = Button(mainwindow,bg='gray',text='취소',width=9,command=mainwindow.destroy)
-        
         cancel_button.place(x=400,y=400)
         
 
