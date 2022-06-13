@@ -13,8 +13,8 @@ def USER_3():
         rbutton_name.place(x=x, y = y)
         return rbutton_name
 
-    def create_button(button_name,color,text,width,x,y):                   # 버튼 배치 함수
-        button_name = Button(mainwindow,bg=color,text=text,width=width)
+    def create_button(button_name,color,text,width,x,y,relief):                   # 버튼 배치 함수
+        button_name = Button(mainwindow,bg=color,text=text,width=width,relief=relief)
         button_name.place(x=x, y = y)
         return button_name
 
@@ -39,8 +39,8 @@ def USER_3():
             def ERROR_6():   # 예외처리 6
                 tkinter.messagebox.showerror("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
 
-
-            input_phone = phone_entry.get()
+            phone_number = phone_entry1.get() + '-' + phone_entry2.get() + '-' + phone_entry3.get()
+            input_phone = phone_number
             input_name = name_entry.get()
             yy = yearcombo.get()
             mm = monthcombo.get()
@@ -49,8 +49,9 @@ def USER_3():
             input_mail = mail_entry.get()
             input_image = image_entry.get('1.0','end')
 
-            if input_phone.strip()=="" or input_name.strip()==""or input_birth.strip()=="" or input_mail.strip()=="" or input_image.strip()==""\
-                or yy.strip()==""or mm.strip()==""or dd.strip()=="":
+            if phone_entry1.get().strip()=="" or input_name.strip()==""or input_birth.strip()=="" or input_mail.strip()=="" or input_image.strip()==""\
+                or yy.strip()==""or mm.strip()==""or dd.strip()==""or var.get().strip()==""\
+                or phone_entry1.get().strip()=="" or phone_entry2.get().strip()=="" or phone_entry3.get().strip()=="":
                 ERROR_6()
                 return 0
             else:
@@ -85,14 +86,16 @@ def USER_3():
 
             df_user = pd.read_csv("csv/user.csv",encoding='utf-8')
             df_user = df_user.set_index(df_user['USER_PHONE'])
-            
-            a = phone_entry.get()
+            phone_number = phone_entry1.get() + '-' + phone_entry2.get() + '-' + phone_entry3.get()
+            a = phone_number
             phone_number = df_user.index.tolist()
 
             if  str(a) not in phone_number:
                 check_pass()
                 phone_check['state'] = 'disabled'
-                phone_entry['state'] = 'disabled'
+                phone_entry1['state'] = 'disabled'
+                phone_entry2['state'] = 'disabled'
+                phone_entry3['state'] = 'disabled'
                 reg_button['state'] = 'normal'
             else:
                 check_nonpass()
@@ -136,28 +139,27 @@ def USER_3():
         monthcombo.place(x=350,y=120)
         daycombo.place(x=450,y=120)
 
-
-
         # 위젯 배치
         sub_label.pack(fill=X)
         image_label.pack()
         image_label.place(x=30,y=80)
-        name_button = create_button('name_button','orange','이름',9,170,80)
+        name_button = create_button('name_button','orange','이름',9,170,80,"flat")
         name_entry = create_entry('name_entry',("맑은 고딕",12),35,250,80)
-        birth_button = create_button('birth_button','orange','생년월일',9,170,120)
-        #birth_entry = create_entry('birth_entry',("맑은 고딕",12),35,250,120)
-        sex_button = create_button('sex_button','orange','성별',9,170,160)
+        birth_button = create_button('birth_button','orange','생년월일',9,170,120,"flat")
+        sex_button = create_button('sex_button','orange','성별',9,170,160,"flat")
         male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','남',var,'남자',250,160)
         female_rbutton = create_rbutton('female_rbutton',("맑은 고딕",10),'sky blue','여',var,'여자',300,160)
-        phone_button = create_button('phone_button','orange','전화번호',9,170,200)
-        phone_entry = create_entry('phone_entry',("맑은 고딕",12),35,250,200)
+        phone_button = create_button('phone_button','orange','전화번호',9,170,200,"flat")
+        phone_entry1 = create_entry('phone_entry1',("맑은 고딕",12),10,250,200)
+        phone_entry2 = create_entry('phone_entry2',("맑은 고딕",12),10,360,200)
+        phone_entry3 = create_entry('phone_entry3',("맑은 고딕",12),10,470,200)
         phone_check = Button(mainwindow,text='중복확인',bg='gray',width=9,command=phonenum_check)
         phone_check.place(x=580,y=200)                      
-        mail_button = create_button('mail_button','orange','이메일 주소',9,170,240)
+        mail_button = create_button('mail_button','orange','이메일 주소',9,170,240,"flat")
         mail_entry = create_entry('mail_entry',("맑은 고딕",12),35,250,240)
-        image_find = Button(mainwindow,text='찾아보기',bg='gray',width=9,command=find_image_name) #,command=image_search
+        image_find = Button(mainwindow,text='찾아보기',bg='gray',width=9,command=find_image_name)
         image_find.place(x=580,y=280)
-        image_button = create_button('image_button','orange','사진',9,170,280)
+        image_button = create_button('image_button','orange','사진',9,170,280,"flat")
         image_entry = Text(mainwindow, font=("맑은 고딕",12),width=35,height=4)
         image_entry.place(x=250, y = 280)
         reg_button = Button(mainwindow,text='등록',bg='gray',width=9,command=inuser_csv)
@@ -166,9 +168,6 @@ def USER_3():
         cancel_button = Button(mainwindow,bg='gray',text='취소',width=9,command=mainwindow.destroy)
         cancel_button.place(x=400,y=400)
         
-
-
-
     mainwindow = Tk()
     user_reg()
     mainwindow.title("회원 등록")
