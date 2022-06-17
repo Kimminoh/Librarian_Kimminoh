@@ -130,16 +130,19 @@ def BOOK_MANAGEMENT_FIRST():
     BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black', command = search) 
     BOOK_SEARCH_BTN.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
 
+
     
     # 등록되어 있는 도서 리스트
     csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
     csv_pull = csv_pull.set_index("BOOK_ISBN")
 
     # Treeview를 사용해서 도서 목록 나열
+    
     BOOK_SELECT_BOX = ttk.Treeview(window, columns=(1,2,3,4), height = 13,show="headings")
     BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black')
     BOOK_SELECT_BTN.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
     BOOK_SELECT_BTN.bind('<Button-1>',click_item)
+    
 
     # Treeview의 필드명
     BOOK_SELECT_BOX.heading(1, text='ISBN')
@@ -170,6 +173,36 @@ def BOOK_MANAGEMENT_FIRST():
     label3.place(x=177, y=125)
     BTN_CANCEL.place(x=5,y=25)
     BTN_NEW_REG.place(x=5,y=90)
+
+
+    #2022/06/18 새로고침 기능 구현 추가
+    def refresh():
+        # treeview 지우기
+        for item in BOOK_SELECT_BOX.get_children():
+            BOOK_SELECT_BOX.delete(item)
+        # csv 파일 불러오기 
+        csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
+        csv_pull = csv_pull.set_index("BOOK_ISBN")
+
+        for ISBN in csv_pull.index.tolist():
+            book_title = csv_pull.loc[ISBN, "BOOK_TITLE"]
+            book_author = csv_pull.loc[ISBN, "BOOK_AUTHOR"]
+            book_publish = csv_pull.loc[ISBN, "BOOK_PUBLIC"]
+            
+            book_add = (ISBN, book_title, book_author, book_publish)
+            BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
+
+    #새로고침 버튼 추가
+    REFRESH_BTN = Button(window, text = '새로고침', fg='black' ,bg='white', command = refresh) 
+    REFRESH_BTN.place(relx=0.86,rely=0.5,relwidth=0.1,relheight = 0.07)
+        
+
+
+
+
+
+
+    
     
 
 # ㉮-1 신규 도서 추가     
@@ -245,6 +278,7 @@ def BOOK_NEW_REG():
                 csv_pull.loc[a, 'BOOK_RENTAL']= "False"
                 #csv 저장하기 
                 csv_pull.to_csv("csv/book.csv", index = True)
+                tkinter.messagebox.showinfo("SUCCES","도서 등록이 완료 되었습니다 !!")
                 # 확인용 tabulate
                 print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
                 window.destroy()
@@ -661,14 +695,12 @@ def BOOK_LOOKUP():
         selected=BOOK_SELECT_BOX.focus()
         book_information()
 
-        
-
-
 
     # 더블 클릭시 이벤트 발생 
     BOOK_SELECT_BOX.bind('<Double-Button-1>', click_item)
 
     BOOK_SELECT_BOX.place(relx=0.01,rely=0.28,relwidth=0.8,relheight = 0.4)
+
     
 #=============================반납, 대출 버튼 이벤트 =======================================
 # 도서 상세 정보
@@ -755,16 +787,27 @@ def BOOK_LOOKUP():
             RENTAL_CHECK = csv_pull.loc[int(select_book)]["BOOK_RENTAL"]
             
             if RENTAL_CHECK == True:
-                IFM_PULL = ('대여여부 : ○\n대여일 : {}\n반납예정일 : {}'.format(DATE_PULL,RDATE_PULL))
+                IFM_PULL = ('대여일 :\n{}\n\n반납예정일 :\n{}'.format(DATE_PULL,RDATE_PULL))
+                IFM_PULL2 = ('대출 불가 Ⅹ')
+                font_color = 'red'
             else:
-                IFM_PULL = ('대여여부 : X')
+                IFM_PULL = ('대출 가능 ●')
+                IFM_PULL2 = ('대출 가능 ●')
+                font_color = 'blue'
         else :
-            IFM_PULL = ('대여여부 : X')
-            
-        
-        RENT_IFM = Label(window, text = IFM_PULL, bg = 'skyblue',width = '20', justify=LEFT,height = 4)
-        RENT_IFM.place(relx=0.02, rely=0.52)
-        RENT_IFM.configure(font=("Courier", 8, "italic"))
+            IFM_PULL = ('')
+            IFM_PULL2 = ('대출 가능 ●')
+            font_color = 'blue'
+
+        # 대출, 여부 확인    
+        RENT_NOTICE = Label(window, text = IFM_PULL2, bg = 'white',width = '12',
+                            justify=LEFT,height = 2,borderwidth = 6,relief="ridge")
+        RENT_NOTICE.place(relx=0.03, rely=0.5)
+        RENT_NOTICE.configure(font=("강조", 15), fg=font_color)
+        # 대여일, 반납일 확
+        RENT_IFM = Label(window, text = IFM_PULL, bg = 'skyblue',width = '20', justify=LEFT,height = 6)
+        RENT_IFM.place(relx=0.02, rely=0.63)
+        RENT_IFM.configure(font=("Impact", 10))
         
 
         BTN_CANCEL = Button(window, text='확인', bg='gray', width='7', height='1',command=window.destroy )
@@ -976,11 +1019,6 @@ def BOOK_LOOKUP():
     return_button=Button(window,text='반납하기',bg='gray',command=event_book_return)
     return_button.place(relx=0.82,rely=0.68,relwidth=0.1,relheight=0.1)
 
-
-
-
-
-    
     
     
 
