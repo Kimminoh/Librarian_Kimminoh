@@ -58,11 +58,6 @@ def USER_3():
                 or phone_entry1.get().strip()=="" or phone_entry2.get().strip()=="" or phone_entry3.get().strip()=="":
                 ERROR_6()
             
-            if phone_entry1.get().strip()=="" or input_name.strip()==""or input_birth.strip()=="" or input_mail.strip()=="" or input_image.strip()==""\
-                or yy.strip()==""or mm.strip()==""or dd.strip()==""or var.get().strip()==""\
-                or phone_entry1.get().strip()=="" or phone_entry2.get().strip()=="" or phone_entry3.get().strip()=="":
-                ERROR_6()
-            
             elif input_name.isdigit():
                 ERROR_3()
 
