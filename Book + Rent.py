@@ -916,6 +916,7 @@ def BOOK_LOOKUP():
             user_df.to_csv("csv/user.csv", index = False)
             rent_df.to_csv("csv/rent.csv", index = False)
             tkinter.messagebox.showinfo("도서 대출", "도서 대출 완료")
+            rent1.destroy()
             
 
                 
