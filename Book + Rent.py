@@ -105,27 +105,33 @@ def BOOK_MANAGEMENT_FIRST():
     BOOK_SEARCH_LABEL = Entry(window)
     BOOK_SEARCH_LABEL.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
 #==========도서명과 저자로 검색하기 / 구현 완료 ====================================================
-    def search ():        
-        for ISBN in csv_pull.index.tolist():
+    def search():
+        csv_pull1=pd.read_csv("csv/book.csv", encoding="utf-8")
+        csv_pull1 = csv_pull1.set_index("BOOK_ISBN")
+                
+        for ISBN in csv_pull1.index.tolist():
             book_name = BOOK_SEARCH_LABEL.get()
             
-            search1 = csv_pull["BOOK_TITLE"].str.contains(book_name) # 제목 필터링
-            search2 = csv_pull["BOOK_AUTHOR"].str.contains(book_name) #저자 필터링
+            search1 = csv_pull1["BOOK_TITLE"].str.contains(book_name) # 제목 필터링
+            search2 = csv_pull1["BOOK_AUTHOR"].str.contains(book_name) #저자 필터링
             # 제목 + 저자로 필터링
-            csv_2 = csv_pull.loc[search1 | search2,["BOOK_TITLE","BOOK_AUTHOR","BOOK_PUBLIC"]]
+            csv_2_1 = csv_pull1.loc[search1 | search2,["BOOK_TITLE","BOOK_AUTHOR","BOOK_PUBLIC"]]
 
             # Treeview 기존 목록 삭제
             for item in BOOK_SELECT_BOX.get_children(): 
                 BOOK_SELECT_BOX.delete(item)
                 
             # 제목과 저자로 필터링한 목록 출력
-            for ISBN in csv_2.index.tolist():
-                book_title = csv_2.loc[ISBN, "BOOK_TITLE"]
-                book_author = csv_2.loc[ISBN, "BOOK_AUTHOR"]
-                book_publish = csv_2.loc[ISBN, "BOOK_PUBLIC"]
+            for ISBN in csv_2_1.index.tolist():
+                book_title = csv_2_1.loc[ISBN, "BOOK_TITLE"]
+                book_author = csv_2_1.loc[ISBN, "BOOK_AUTHOR"]
+                book_publish = csv_2_1.loc[ISBN, "BOOK_PUBLIC"]
                 
                 book_add = (ISBN, book_title, book_author, book_publish)
                 BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
+
+
+
 #====================================================================================================
     # 검색 버튼 
     BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black', command = search) 
@@ -601,11 +607,13 @@ def BOOK_EDIT(selected):
     # 적용 버튼 누를 시 수정!
     BTN_APPLY = Button(window, text='적용', bg = 'gray', width='7', height='1',command=APPLY)
     BTN_APPLY.place(x=300, y = 450)
-
+   
     BTN_CANCEL = Button(window, text='취소', bg='gray', width='7', height='1',command=window.destroy )
     BTN_CANCEL.place(x=400, y = 450)
     
     print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
+
+
 
 # ㉯의 화면----------------------------------------------------
 def BOOK_LOOKUP():
@@ -641,7 +649,8 @@ def BOOK_LOOKUP():
     csv_pull1 = pd.read_csv("csv/book.csv",encoding = "utf-8")
     csv_pull1 = csv_pull1.set_index("BOOK_ISBN")
     # 도서를 조회하기 위해 검색 시 도서명과 저자로 검색 가능
-    def search1 ():        
+    def search1 ():
+                
         for ISBN in csv_pull1.index.tolist():
             book_name = BLANK_SEARCH.get()
             
@@ -786,9 +795,11 @@ def BOOK_LOOKUP():
             DATE_PULL = RENT_ISBN_PULL.loc[int(select_book)]["RENT_DATE"]
             RDATE_PULL = RENT_ISBN_PULL.loc[int(select_book)]["RENT_RDATE"]
             RENTAL_CHECK = csv_pull.loc[int(select_book)]["BOOK_RENTAL"]
+            RENTAL_USER = RENT_ISBN_PULL.loc[int(select_book)]["USER_PHONE"]
+            
             
             if RENTAL_CHECK == True:
-                IFM_PULL = ('대여일 :\n{}\n\n반납예정일 :\n{}'.format(DATE_PULL,RDATE_PULL))
+                IFM_PULL = ('대여일 :\n{}\n\n반납예정일 :\n{}\n\n대여자 전화번호 :\n{}'.format(DATE_PULL,RDATE_PULL,RENTAL_USER))
                 IFM_PULL2 = ('대출 불가 Ⅹ')
                 font_color = 'red'
             else:
@@ -800,14 +811,16 @@ def BOOK_LOOKUP():
             IFM_PULL2 = ('대출 가능 ●')
             font_color = 'blue'
 
+        
+
         # 대출, 여부 확인    
         RENT_NOTICE = Label(window, text = IFM_PULL2, bg = 'white',width = '12',
                             justify=LEFT,height = 2,borderwidth = 6,relief="ridge")
         RENT_NOTICE.place(relx=0.03, rely=0.5)
         RENT_NOTICE.configure(font=("강조", 15), fg=font_color)
         # 대여일, 반납일 확
-        RENT_IFM = Label(window, text = IFM_PULL, bg = 'skyblue',width = '20', justify=LEFT,height = 6)
-        RENT_IFM.place(relx=0.02, rely=0.63)
+        RENT_IFM = Label(window, text = IFM_PULL, bg = 'skyblue',width = '20', justify=LEFT,height = 8)
+        RENT_IFM.place(relx=0.02, rely=0.65)
         RENT_IFM.configure(font=("Impact", 10))
         
 
@@ -1098,20 +1111,23 @@ def BOOK_DELETE():
 # 도서명과 저자로 검색하기 ======================================================================
     def search ():        
         for ISBN in csv_pull.index.tolist():
+            csv_pull_delete = pd.read_csv("csv/book.csv",encoding = "utf-8")
+            csv_pull_delete = csv_pull_delete.set_index("BOOK_ISBN")
+
             book_name = BOOK_SEARCH_LABEL.get()
             
-            search1 = csv_pull["BOOK_TITLE"].str.contains(book_name)
-            search2 = csv_pull["BOOK_AUTHOR"].str.contains(book_name)
+            search1 = csv_pull_delete["BOOK_TITLE"].str.contains(book_name)
+            search2 = csv_pull_delete["BOOK_AUTHOR"].str.contains(book_name)
 
-            csv_2 = csv_pull.loc[search1 | search2,["BOOK_TITLE","BOOK_AUTHOR","BOOK_PUBLIC"]]
+            csv_2_delete = csv_pull_delete.loc[search1 | search2,["BOOK_TITLE","BOOK_AUTHOR","BOOK_PUBLIC"]]
 
             for item in BOOK_SELECT_BOX.get_children():
                 BOOK_SELECT_BOX.delete(item)
 
-            for ISBN in csv_2.index.tolist():
-                book_title = csv_2.loc[ISBN, "BOOK_TITLE"]
-                book_author = csv_2.loc[ISBN, "BOOK_AUTHOR"]
-                book_publish = csv_2.loc[ISBN, "BOOK_PUBLIC"]
+            for ISBN in csv_2_delete.index.tolist():
+                book_title = csv_2_delete.loc[ISBN, "BOOK_TITLE"]
+                book_author = csv_2_delete.loc[ISBN, "BOOK_AUTHOR"]
+                book_publish = csv_2_delete.loc[ISBN, "BOOK_PUBLIC"]
                 
                 book_add = (ISBN, book_title, book_author, book_publish)
                 BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
@@ -1171,7 +1187,7 @@ def BOOK_DELETE():
     label3.place(x=177, y=125)
     label2.place(x=5, y=155)
 
-    def refresh():
+    def refresh_delete():
     # treeview 지우기
         for item in BOOK_SELECT_BOX.get_children():
             BOOK_SELECT_BOX.delete(item)
@@ -1188,7 +1204,7 @@ def BOOK_DELETE():
             BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
 
 #새로고침 버튼 추가
-    REFRESH_BTN = Button(window, text = '새로고침', fg='black' ,bg='white', command = refresh) 
+    REFRESH_BTN = Button(window, text = '새로고침', fg='black' ,bg='white', command = refresh_delete) 
     REFRESH_BTN.place(relx=0.86,rely=0.5,relwidth=0.1,relheight = 0.07)
         
 

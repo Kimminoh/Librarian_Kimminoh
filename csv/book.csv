@@ -1,3 +1,2 @@
 BOOK_ISBN,BOOK_TITLE,BOOK_AUTHOR,BOOK_PUBLIC,BOOK_PRICE,BOOK_LINK,BOOK_IMAGE,BOOK_DESCRIPTION,BOOK_RENTAL
-9788970504773,파이썬과 데이터 과학,"천인국, 박동규, 강영민",생능출판,26000.0,https://book.naver.com/bookdb/book_detail.nhn?bid=17718057,sample_image/9788970504773.png,따라하며 배우는,False
 9791162242032,팀 개발을 위한 Git GitHub 시작하기,"정호영, 진유림, 윤도운",한빛미디어,18000.0,https://book.naver.com/bookdb/book_detail.naver?bid=15986509,sample_image/sample_book.png,"소스코드 버전 관리를 위한 깃 깃허브, 오픈소스 참여",True
