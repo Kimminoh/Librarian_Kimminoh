@@ -7,13 +7,6 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.simpledialog import *
 def USER_1():
-    def create_button(button_name,color,text,width,x,y):                   # 버튼 배치 함수
-        button_name = Button(mainwindow,bg=color,text=text,width=width)
-        button_name.place(x=x, y = y)
-        return button_name
-
-    def create_label(label_name,x,y):                                       # 라벨 배치 함수
-        label_name.place(x=x, y = y)
 
     def create_entry(entry_name,text,font,width,x,y):                             # 엔트리 배치 함수
         entry_name = Entry(mainwindow,font=font,width=width)
@@ -94,7 +87,7 @@ def USER_1():
             treeview.insert('','end',values=[b,a,c,d,h],iid=a)
         
 
-        #csv_list[a]
+        
 
         search_button = Button(mainwindow,bg='gray',text='검색',width=9,command=user_search)
         search_button.place(x=560, y = 80)
