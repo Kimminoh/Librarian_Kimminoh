@@ -917,7 +917,7 @@ def BOOK_LOOKUP():
             rent_df.to_csv("csv/rent.csv", index = False)
             tkinter.messagebox.showinfo("도서 대출", "도서 대출 완료")
             rent1.destroy()
-            
+            window.destroy()
 
                 
             
@@ -1011,6 +1011,7 @@ def BOOK_LOOKUP():
                  tkinter.messagebox.showinfo("취소"," 도서 반납을 취소합니다.")
          else :
           tkinter.messagebox.showerror("오류","대출 중인 도서가 아닙니다")
+         window.destroy()
          
 
 
@@ -1035,8 +1036,7 @@ def BOOK_LOOKUP():
     return_button=Button(window,text='반납하기',bg='gray',command=event_book_return)
     return_button.place(relx=0.82,rely=0.68,relwidth=0.1,relheight=0.1)
 
-    
-    
+
 
 
 # ㉰의 화면----------------------------------------------------
@@ -1170,6 +1170,27 @@ def BOOK_DELETE():
     label2.pack()
     label3.place(x=177, y=125)
     label2.place(x=5, y=155)
+
+    def refresh():
+    # treeview 지우기
+        for item in BOOK_SELECT_BOX.get_children():
+            BOOK_SELECT_BOX.delete(item)
+    # csv 파일 불러오기 
+        csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
+        csv_pull = csv_pull.set_index("BOOK_ISBN")
+
+        for ISBN in csv_pull.index.tolist():
+            book_title = csv_pull.loc[ISBN, "BOOK_TITLE"]
+            book_author = csv_pull.loc[ISBN, "BOOK_AUTHOR"]
+            book_publish = csv_pull.loc[ISBN, "BOOK_PUBLIC"]
+            
+            book_add = (ISBN, book_title, book_author, book_publish)
+            BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
+
+#새로고침 버튼 추가
+    REFRESH_BTN = Button(window, text = '새로고침', fg='black' ,bg='white', command = refresh) 
+    REFRESH_BTN.place(relx=0.86,rely=0.5,relwidth=0.1,relheight = 0.07)
+        
 
 def USER_MANAGEMENT():
     #공통부분 ↓---------------------------------------------------------------------
