@@ -36,6 +36,10 @@ def USER_3():
             df_user = df_user.set_index(df_user['USER_PHONE'])
             def ERROR_2():   # 예외처리 2
                 tkinter.messagebox.showinfo("정보","등록이 완료 되었습니다.")
+            def ERROR_3():   # 예외처리 2
+                tkinter.messagebox.showerror("ERROR","이름에 숫자가 포함되어있습니다.")
+            def ERROR_4():   # 예외처리 2
+                tkinter.messagebox.showerror("ERROR","생년월일을 잘못 입력하셨습니다.")
             def ERROR_6():   # 예외처리 6
                 tkinter.messagebox.showerror("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
 
@@ -53,7 +57,21 @@ def USER_3():
                 or yy.strip()==""or mm.strip()==""or dd.strip()==""or var.get().strip()==""\
                 or phone_entry1.get().strip()=="" or phone_entry2.get().strip()=="" or phone_entry3.get().strip()=="":
                 ERROR_6()
-                return 0
+            
+            if phone_entry1.get().strip()=="" or input_name.strip()==""or input_birth.strip()=="" or input_mail.strip()=="" or input_image.strip()==""\
+                or yy.strip()==""or mm.strip()==""or dd.strip()==""or var.get().strip()==""\
+                or phone_entry1.get().strip()=="" or phone_entry2.get().strip()=="" or phone_entry3.get().strip()=="":
+                ERROR_6()
+            
+            elif input_name.isdigit():
+                ERROR_3()
+
+            elif (mm == '04'and dd == '31' or mm == '06'and dd == '31' or mm == '09'and dd == '31' or mm == '11'and dd == '31'):
+                
+                ERROR_4()
+            elif(mm == '02' and dd == '30' or mm == '02' and dd == '31'):
+                
+                ERROR_4()    
             else:
                 new_user = { "USER_PHONE": input_phone,                     # -(하이픈) 포함
                         "USER_NAME": input_name,                         # 영문일 시 공백포함
