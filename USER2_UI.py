@@ -98,29 +98,46 @@ def user_2(phone1):
        
         def phonenum_check():
                 
-                df_user = pd.read_csv("csv/user.csv",encoding='utf-8')
-                df_user = df_user.set_index(df_user['USER_PHONE'])
-                
-                choice_phone = phone_entry1.get() + '-' + phone_entry2.get() + '-' + phone_entry3.get()
-                phone_number = df_user.index.tolist()
-                
-                if choice_phone == phone:
-                    check_pass()
-                    phone_check['state'] = 'disabled'
-                    phone_entry1['state'] = 'disabled'
-                    phone_entry2['state'] = 'disabled'
-                    phone_entry3['state'] = 'disabled'
-                    reg_button['state']='normal'
-                
-                elif  str(choice_phone) not in phone_number:
-                    check_pass()
-                    phone_check['state'] = 'disabled'
-                    phone_entry1['state'] = 'disabled'
-                    phone_entry2['state'] = 'disabled'
-                    phone_entry3['state'] = 'disabled'
-                    reg_button['state']='normal'
-                else:
-                    check_nonpass()
+            def check_pass():   # 예외처리 4
+                tkinter.messagebox.showinfo("정보","사용 가능한 전화번호입니다.")
+            def check_nonpass():   # 예외처리 5
+                tkinter.messagebox.showerror("ERROR","이미 등록된 전화번호입니다.")           
+            def check_error1():   # 예외처리 5
+                tkinter.messagebox.showerror("ERROR","전화번호를 잘못입력하셨습니다.")           
+
+    
+
+            df_user = pd.read_csv("csv/user.csv",encoding='utf-8')
+            df_user = df_user.set_index(df_user['USER_PHONE'])
+            n1 = phone_entry1.get()
+            n2 = phone_entry2.get()
+            n3 = phone_entry3.get()
+            phone_number = phone_entry1.get() + '-' + phone_entry2.get() + '-' + phone_entry3.get()
+            a = phone_number
+            phone_number = df_user.index.tolist()
+            
+            if (len(n1) ==3 and len(n2) ==4 and len(n3) ==4):
+                try:
+                    int(n1)
+                    int(n2)
+                    int(n3)
+                except:
+                    check_error1()
+                else:            
+                    if ((0 <= int(n1) <=999) and (0 <= int(n2) <=9999) and (0 <= int(n3) <=9999)):
+                        if  str(a) not in phone_number:
+                            check_pass()
+                            phone_check['state'] = 'disabled'
+                            phone_entry1['state'] = 'disabled'
+                            phone_entry2['state'] = 'disabled'
+                            phone_entry3['state'] = 'disabled'
+                            reg_button['state'] = 'normal'
+                        else:
+                            check_nonpass()
+                    else:
+                        check_error1()
+            else:
+                check_error1()
 
         sub_label = Label(mainwindow, text ="회원정보 수정",font=("맑은 고딕",9),bg='gray',height=3)
         image_label = Label(mainwindow, bg='orange', width=15, height=10)
