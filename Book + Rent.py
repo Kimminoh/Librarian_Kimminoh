@@ -39,21 +39,22 @@ def BOOK_MANAGEMENT():
     window.title("도서관리")
     window.geometry("700x500")
     label1 = Label(window, text = '도서관리프로그램', bg = 'gray', width = 700, height = 5)
-    window.configure(background = 'sky blue')
+    window.resizable(width=FALSE, height=FALSE)
+
 
     #공통부분 ↑---------------------------------------------------------------------
     # ㉮
-    BTN_REG_EDIT = Button(window, text='도서\n등록/수정', bg='orange', width='18',
+    BTN_REG_EDIT = Button(window, text='도서\n등록/수정', bg='gray', width='18',
                           height='8', command = BOOK_MANAGEMENT_FIRST)
     # ㉯
-    BTN_SEARCH_RENT = Button(window, text='도서\n조회/대출', bg='orange', width='18',
+    BTN_SEARCH_RENT = Button(window, text='도서\n조회/대출', bg='gray', width='18',
                           height='8', command = BOOK_LOOKUP)
     # ㉰
-    BTN_DELETE = Button(window, text='도서삭제', bg='orange', width='18',
+    BTN_DELETE = Button(window, text='도서삭제', bg='gray', width='18',
                           height='8', command = BOOK_DELETE)    
 
     # 뒤로가기 버튼 생성  
-    BTN_CANCEL = Button(window, text='뒤로가기', bg='orange'
+    BTN_CANCEL = Button(window, text='뒤로가기', bg='gray'
     , width='8', height='2',command=window.destroy)    
 
     # 위젯들 위치 설정
@@ -75,8 +76,9 @@ def BOOK_MANAGEMENT_FIRST():
     window = Tk()
     window.title("도서 등록/수정")
     window.geometry("700x500")
+    window.resizable(width=FALSE, height=FALSE)
     label1 = Label(window, text = '도서 등록/수정', bg = 'gray',width = 700, height = 5)
-    window.configure(background = 'sky blue')
+
     #공통부분 ↑-----------------------------------------------------------------------  
 
     # Treeview 목록 더블클릭 시 이벤트 발생
@@ -86,10 +88,10 @@ def BOOK_MANAGEMENT_FIRST():
         BOOK_EDIT(int(selected))  # 수정하기 창 실행
         
     # 도서 신규등록 버튼
-    BTN_NEW_REG = Button(window, text='도서 신규 등록', bg='orange', width='15', height='2',
+    BTN_NEW_REG = Button(window, text='도서 신규 등록', bg='gray', width='15', height='2',
                          command = BOOK_NEW_REG)
     # 뒤로가기 버튼
-    BTN_CANCEL = Button(window, text='뒤로가기', bg='orange',
+    BTN_CANCEL = Button(window, text='뒤로가기', bg='gray',
      width='8', height='2',command=window.destroy)
     
 
@@ -219,7 +221,7 @@ def BOOK_NEW_REG():
     window.title("도서 신규등록")
     window.geometry("700x500")
     label1 = Label(window, text = '도서 신규 등록', bg = 'gray', width = 700, height = 3)
-    window.configure(background = 'sky blue')    
+    window.resizable(width=FALSE, height=FALSE)
     #공통부분 ↑-----------------------------------------------------------------------  
     label1.pack() # 창 제목 레이블
 
@@ -316,54 +318,54 @@ def BOOK_NEW_REG():
 
 
     # 위젯 
-    BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
+    BTN_BOOK_ISBN = Button(window, text='ISBN', bg='gray', width='8', height='1')
     BTN_BOOK_ISBN.place(x=170, y = 80)
     SEARCH_BOOK_ISBN = Entry(window)
     SEARCH_BOOK_ISBN.place(x= 250, y= 80,relwidth=0.5,relheight=0.05)
 
     # 중복확인시 이벤트 추가함
-    OVERLAP_CHECK = Button(window, text='중복확인', bg='orange', width='7', height='1',
+    OVERLAP_CHECK = Button(window, text='중복확인', bg='gray', width='7', height='1',
                            command = ISBN_OVERLAP)
     OVERLAP_CHECK.place(x=620, y = 80)    
     # 위젯
-    BTN_BOOK_TITLE = Button(window, text='도서명', bg='orange', width='8', height='1') 
+    BTN_BOOK_TITLE = Button(window, text='도서명', bg='gray', width='8', height='1') 
     BTN_BOOK_TITLE.place(x=170, y = 120)
     SEARCH_BOOK_TITLE = Entry(window)
     SEARCH_BOOK_TITLE.place(x= 250, y= 120,relwidth=0.5,relheight=0.05)
     # 위젯
-    BTN_BOOK_AUTHOR = Button(window, text='저자', bg='orange', width='8', height='1')
+    BTN_BOOK_AUTHOR = Button(window, text='저자', bg='gray', width='8', height='1')
     BTN_BOOK_AUTHOR.place(x=170, y = 160)
     SEARCH_BOOK_AUTHOR = Entry(window)
     SEARCH_BOOK_AUTHOR.place(x= 250, y= 160,relwidth=0.5,relheight=0.05)
     # 위젯
-    BTN_BOOK_PUBLIC = Button(window, text='출판사', bg='orange', width='8', height='1')
+    BTN_BOOK_PUBLIC = Button(window, text='출판사', bg='gray', width='8', height='1')
     BTN_BOOK_PUBLIC.place(x=170, y = 200)
     SEARCH_BOOK_PUBLIC = Entry(window)
     SEARCH_BOOK_PUBLIC.place(x= 250, y= 200,relwidth=0.5,relheight=0.05)
     # 위젯
-    BTN_BOOK_PRICE = Button(window, text='가격', bg='orange', width='8', height='1')
+    BTN_BOOK_PRICE = Button(window, text='가격', bg='gray', width='8', height='1')
     BTN_BOOK_PRICE.place(x=170, y = 240)
     SEARCH_BOOK_PRICE = Entry(window)
     SEARCH_BOOK_PRICE.place(x= 250, y= 240,relwidth=0.5,relheight=0.05)
     # 위젯
-    BTN_BOOK_LINK = Button(window, text='URL', bg='orange', width='8', height='1') 
+    BTN_BOOK_LINK = Button(window, text='URL', bg='gray', width='8', height='1') 
     BTN_BOOK_LINK.place(x=170, y = 280)
     SEARCH_BOOK_LINK = Entry(window)
     SEARCH_BOOK_LINK.place(x= 250, y= 280,relwidth=0.5,relheight=0.05)
     # 위젯    
-    BTN_BOOK_DESCRIPTION = Button(window, text='도서 설명', bg='orange', width='8', height='1')
+    BTN_BOOK_DESCRIPTION = Button(window, text='도서 설명', bg='gray', width='8', height='1')
     BTN_BOOK_DESCRIPTION.place(x=170, y = 320)
     SEARCH_BOOK_DESCRIPTION = Entry(window)
     SEARCH_BOOK_DESCRIPTION.place(x= 250, y= 320,relwidth=0.5,relheight=0.05)
     # 위젯
-    BTN_IMAGE_FIND = Button(window, text='사진 찾기', bg='orange', width='8', height='1')
+    BTN_IMAGE_FIND = Button(window, text='사진 찾기', bg='gray', width='8', height='1')
     BTN_IMAGE_FIND.place(x=170, y = 360)
     SEARCH_IMAGE_FIND = Entry(window)
     SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
 
     # 안내창
     explain = Label(window, text = '※사진은 필수 정보 입니다. 반드시 입력해 주세요 !!',
-                bg = 'skyblue',width = '45', height = 1)
+                width = '45', height = 1)
     explain.place(relx=0.34, rely=0.78)
     explain.configure(font=("Courier", 8, "italic"))
 
@@ -403,7 +405,6 @@ def BOOK_EDIT(selected):
     window.title("도서 수정하기")
     window.geometry("700x500")
     label1 = Label(window, text = '도서 수정하기', bg = 'gray', width = 700, height = 3)
-    window.configure(background = 'sky blue')    
     #공통부분 ↑-----------------------------------------------------------------------
     label1.pack() # 창 제목 레이블
     # 함수안의 함수 => 버튼 형식 생성
@@ -441,50 +442,50 @@ def BOOK_EDIT(selected):
     IMAGE_label.place(x=30,y=80)
         
     # 위젯
-    BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
+    BTN_BOOK_ISBN = Button(window, text='ISBN', bg='gray', width='8', height='1')
     BTN_BOOK_ISBN.place(x=170, y = 80)
     SEARCH_BOOK_ISBN = Entry(window)
     SEARCH_BOOK_ISBN.place(x= 250, y= 80,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_ISBN.insert(0,selected)       # ISBN 값 출력              
     # 위젯
-    BTN_BOOK_TITLE = Button(window, text='도서명', bg='orange', width='8', height='1')
+    BTN_BOOK_TITLE = Button(window, text='도서명', bg='gray', width='8', height='1')
     BTN_BOOK_TITLE.place(x=170, y = 120)
     SEARCH_BOOK_TITLE = Entry(window)
     SEARCH_BOOK_TITLE.place(x= 250, y= 120,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_TITLE.insert(0,csv_pull.loc[selected]["BOOK_TITLE"])    # 도서명 가져와서 출력
     # 위젯
-    BTN_BOOK_AUTHOR = Button(window, text='저자', bg='orange', width='8', height='1')
+    BTN_BOOK_AUTHOR = Button(window, text='저자', bg='gray', width='8', height='1')
     BTN_BOOK_AUTHOR.place(x=170, y = 160)
     SEARCH_BOOK_AUTHOR = Entry(window)
     SEARCH_BOOK_AUTHOR.place(x= 250, y= 160,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_AUTHOR.insert(0,csv_pull.loc[selected]["BOOK_AUTHOR"]) # 저자 가저와서 출력
     # 위젯
-    BTN_BOOK_PUBLIC = Button(window, text='출판사', bg='orange', width='8', height='1')
+    BTN_BOOK_PUBLIC = Button(window, text='출판사', bg='gray', width='8', height='1')
     BTN_BOOK_PUBLIC.place(x=170, y = 200)
     SEARCH_BOOK_PUBLIC = Entry(window)
     SEARCH_BOOK_PUBLIC.place(x= 250, y= 200,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_PUBLIC.insert(0,csv_pull.loc[selected]["BOOK_PUBLIC"]) # 출판사 가져와서 출력
     # 위젯
-    BTN_BOOK_PRICE = Button(window, text='가격', bg='orange', width='8', height='1')
+    BTN_BOOK_PRICE = Button(window, text='가격', bg='gray', width='8', height='1')
     BTN_BOOK_PRICE.place(x=170, y = 240)
     SEARCH_BOOK_PRICE = Entry(window)
     SEARCH_BOOK_PRICE.place(x= 250, y= 240,relwidth=0.5,relheight=0.05)
     price = float(csv_pull.loc[selected]["BOOK_PRICE"])
     SEARCH_BOOK_PRICE.insert(0,int(price)) # 가격 가져와서 출력
     # 위젯
-    BTN_BOOK_LINK = Button(window, text='URL', bg='orange', width='8', height='1') 
+    BTN_BOOK_LINK = Button(window, text='URL', bg='gray', width='8', height='1') 
     BTN_BOOK_LINK.place(x=170, y = 280)
     SEARCH_BOOK_LINK = Entry(window)
     SEARCH_BOOK_LINK.place(x= 250, y= 280,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_LINK.insert(0,csv_pull.loc[selected]["BOOK_LINK"]) # 링크 가져와서 출력
     # 위젯
-    BTN_BOOK_DESCRIPTION = Button(window, text='도서 설명', bg='orange', width='8', height='1')
+    BTN_BOOK_DESCRIPTION = Button(window, text='도서 설명', bg='gray', width='8', height='1')
     BTN_BOOK_DESCRIPTION.place(x=170, y = 320)
     SEARCH_BOOK_DESCRIPTION = Entry(window)
     SEARCH_BOOK_DESCRIPTION.place(x= 250, y= 320,relwidth=0.5,relheight=0.05)
     SEARCH_BOOK_DESCRIPTION.insert(0,csv_pull.loc[selected]["BOOK_DESCRIPTION"]) # 설명 가져와서 출력
     # 위젯
-    BTN_IMAGE_FIND = Button(window, text='사진', bg='orange', width='8', height='1')
+    BTN_IMAGE_FIND = Button(window, text='사진', bg='gray', width='8', height='1')
     BTN_IMAGE_FIND.place(x=170, y = 360)
     #SEARCH_IMAGE_FIND = Entry(window)
     #SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
@@ -496,7 +497,7 @@ def BOOK_EDIT(selected):
     
     # 안내창
     explain = Label(window, text = '※사진은 필수 정보 입니다. 반드시 입력해 주세요 !!',
-                bg = 'skyblue',width = '45', height = 1)
+                width = '45', height = 1)
     explain.place(relx=0.34, rely=0.82)
     explain.configure(font=("Courier", 8, "italic"))
 
@@ -600,7 +601,7 @@ def BOOK_EDIT(selected):
             SEARCH_BOOK_ISBN['state'] = 'disabled'
 
     # 중복확인시 이벤트 발생 추가
-    OVERLAP_CHECK = Button(window, text='중복확인', bg='orange', width='7', height='1',
+    OVERLAP_CHECK = Button(window, text='중복확인', bg='gray', width='7', height='1',
                            command = ISBN_OVERLAP)
     OVERLAP_CHECK.place(x=620, y = 80)
 
@@ -621,7 +622,7 @@ def BOOK_LOOKUP():
     window.title('도서 조회/대출')
     window.geometry("700x500")
     label1 = Label(window, text = '도서 조회/대출', bg ='gray', width = 700, height = 5)
-    window.configure(background = 'sky blue')
+
 
     label1.pack()
     # 위젯 간편화 함수
@@ -633,7 +634,7 @@ def BOOK_LOOKUP():
         a = Entry(window)
         a.place(x= b, y= c,relwidth=d,relheight=e)
     # 위젯
-    BTN_CANCEL = Button(window, text='뒤로가기', bg='orange',
+    BTN_CANCEL = Button(window, text='뒤로가기', bg='gray',
      width='8', height='2',command=window.destroy)
     BTN_CANCEL.place(x=5,y=25)
 
@@ -672,7 +673,7 @@ def BOOK_LOOKUP():
                 book_add = (ISBN, book_title, book_author, book_publish)
                 BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
                 
-    BTN_SEARCH = Button(window, text='도서 검색', bg='orange',command=search1)         
+    BTN_SEARCH = Button(window, text='도서 검색', bg='gray',command=search1)         
     BTN_SEARCH.place(relx=0.001,rely=0.2,relwidth = 0.1,relheight=0.05)
 
 # Treeview---------------------------------------------------------------------
@@ -724,7 +725,7 @@ def BOOK_LOOKUP():
         window.title("도서 상세정보")
         window.geometry("700x500")
         label1 = Label(window, text = '도서 상세정보', bg = 'gray', width = 700, height = 3)
-        window.configure(background = 'sky blue')
+    
         label1.pack()
 
         IMAGE_label=Label(window,bg="white",width=120,height=150)
@@ -737,47 +738,47 @@ def BOOK_LOOKUP():
 
 
         
-        BTN_BOOK_ISBN = Button(window, text='ISBN', bg='orange', width='8', height='1')
+        BTN_BOOK_ISBN = Button(window, text='ISBN', bg='gray', width='8', height='1')
         BTN_BOOK_ISBN.place(x=180, y = 80)
         SEARCH_BOOK_ISBN = Entry(window)
         SEARCH_BOOK_ISBN.place(x= 260, y= 80,relwidth=0.5,relheight=0.05)
         SEARCH_BOOK_ISBN.insert(0,select_book)
 
-        BTN_BOOK_TITLE = Button(window, text='도서명', bg='orange', width='8', height='1')
+        BTN_BOOK_TITLE = Button(window, text='도서명', bg='gray', width='8', height='1')
         BTN_BOOK_TITLE.place(x=180, y = 120)
         SEARCH_BOOK_TITLE = Entry(window)
         SEARCH_BOOK_TITLE.place(x= 260, y= 120,relwidth=0.5,relheight=0.05)
         SEARCH_BOOK_TITLE.insert(0,csv_pull.loc[select_book]["BOOK_TITLE"])
         
         
-        BTN_BOOK_AUTHOR = Button(window, text='저자', bg='orange', width='8', height='1')
+        BTN_BOOK_AUTHOR = Button(window, text='저자', bg='gray', width='8', height='1')
         BTN_BOOK_AUTHOR.place(x=180, y = 160)
         SEARCH_BOOK_AUTHOR = Entry(window)
         SEARCH_BOOK_AUTHOR.place(x= 260, y= 160,relwidth=0.5,relheight=0.05)
         SEARCH_BOOK_AUTHOR.insert(0,csv_pull.loc[select_book]["BOOK_AUTHOR"])
-        BTN_BOOK_PUBLIC = Button(window, text='출판사', bg='orange', width='8', height='1')
+        BTN_BOOK_PUBLIC = Button(window, text='출판사', bg='gray', width='8', height='1')
         BTN_BOOK_PUBLIC.place(x=180, y = 200)
         SEARCH_BOOK_PUBLIC = Entry(window)
         SEARCH_BOOK_PUBLIC.place(x= 260, y= 200,relwidth=0.5,relheight=0.05)
         SEARCH_BOOK_PUBLIC.insert(0,csv_pull.loc[select_book]["BOOK_PUBLIC"])
-        BTN_BOOK_PRICE = Button(window, text='가격', bg='orange', width='8', height='1')
+        BTN_BOOK_PRICE = Button(window, text='가격', bg='gray', width='8', height='1')
         BTN_BOOK_PRICE.place(x=180, y = 240)
         SEARCH_BOOK_PRICE = Entry(window)
         SEARCH_BOOK_PRICE.place(x= 260, y= 240,relwidth=0.5,relheight=0.05)
         price=float(csv_pull.loc[select_book]["BOOK_PRICE"])
         SEARCH_BOOK_PRICE.insert(0,int(price))
-        BTN_BOOK_LINK = Button(window, text='URL', bg='orange', width='8', height='1') 
+        BTN_BOOK_LINK = Button(window, text='URL', bg='gray', width='8', height='1') 
         BTN_BOOK_LINK.place(x=180, y = 280)
         SEARCH_BOOK_LINK = Entry(window)
         SEARCH_BOOK_LINK.place(x= 260, y= 280,relwidth=0.5,relheight=0.05)
         SEARCH_BOOK_LINK.insert(0,csv_pull.loc[select_book]["BOOK_LINK"])
         
-        BTN_BOOK_DESCRIPTION = Button(window, text='도서 설명', bg='orange', width='8', height='1')
+        BTN_BOOK_DESCRIPTION = Button(window, text='도서 설명', bg='gray', width='8', height='1')
         BTN_BOOK_DESCRIPTION.place(x=180, y = 320)
         SEARCH_BOOK_DESCRIPTION = Entry(window)
         SEARCH_BOOK_DESCRIPTION.place(x= 260, y= 320,relwidth=0.5,relheight=0.05)
         SEARCH_BOOK_DESCRIPTION.insert(0,csv_pull.loc[select_book]["BOOK_DESCRIPTION"])
-        BTN_IMAGE_FIND = Button(window, text='사진', bg='orange', width='8', height='1')
+        BTN_IMAGE_FIND = Button(window, text='사진', bg='gray', width='8', height='1')
         BTN_IMAGE_FIND.place(x=180, y = 360)
 
         SEARCH_IMAGE_FIND = Text(window, font=("맑은 고딕",12),width=40,height=2)
@@ -819,7 +820,7 @@ def BOOK_LOOKUP():
         RENT_NOTICE.place(relx=0.03, rely=0.5)
         RENT_NOTICE.configure(font=("강조", 15), fg=font_color)
         # 대여일, 반납일 확
-        RENT_IFM = Label(window, text = IFM_PULL, bg = 'skyblue',width = '20', justify=LEFT,height = 8)
+        RENT_IFM = Label(window, text = IFM_PULL,width = '20', justify=LEFT,height = 8)
         RENT_IFM.place(relx=0.02, rely=0.65)
         RENT_IFM.configure(font=("Impact", 10))
         
@@ -937,10 +938,9 @@ def BOOK_LOOKUP():
         
          
         rent1label = Label(rent1, text = '도서 대출하기', bg = 'gray', width = 700, height = 4)
-        rent1.configure(background = 'sky blue')
         rent1label.pack()
  
-        rent1booklabel = Label(rent1, text = '대출할 도서', bg='orange')
+        rent1booklabel = Label(rent1, text = '대출할 도서', bg='gray')
         rent1booklabel.place(relx=0.05,rely=0.2,relwidth=0.15,relheight=0.07)
 
         # 책에 맞게 제목 빌려오기
@@ -949,7 +949,7 @@ def BOOK_LOOKUP():
         booknamelabel.place(relx=0.25,rely=0.2,relwidth=0.6,relheight=0.07)
 
  
-        searchuserlabel = Label(rent1, text = '회원정보 입력', bg = 'orange')
+        searchuserlabel = Label(rent1, text = '회원정보 입력', bg = 'gray')
         searchuserlabel.place(relx = 0.05,rely=0.3,relwidth=0.15,relheight=0.07)
 
         
@@ -1059,12 +1059,13 @@ def BOOK_DELETE():
     window.title("도서 삭제")
     window.geometry("700x500")
     label1 = Label(window, text = '도서 삭제', bg = 'gray',width = 700, height = 5)
-    window.configure(background = 'sky blue')
+    window.resizable(width=FALSE, height=FALSE)
+
     #공통부분 ↑-----------------------------------------------------------------------
     label2 = Label(window, text='삭제할 도서 검색하기 :',fg='black' ,
                    font=('맑은 고딕',10), width=20,height=1)
 
-    BTN_CANCEL = Button(window, text='뒤로가기', bg='orange'
+    BTN_CANCEL = Button(window, text='뒤로가기', bg='gray'
     , width='8', height='2',command=window.destroy)
 
     # 상황별 메세지 창 
@@ -1214,16 +1215,17 @@ def USER_MANAGEMENT():
     window.title("도서관리")
     window.geometry("700x500")
     label1 = Label(window, text = '도서관리프로그램', bg = 'gray', width = 700, height = 5)
-    window.configure(background = 'sky blue')
+    window.resizable(width=FALSE, height=FALSE)
+
     #공통부분 ↑---------------------------------------------------------------------
 
-    BTN_CANCEL = Button(window, text='뒤로가기', bg='orange'
+    BTN_CANCEL = Button(window, text='뒤로가기', bg='gray'
     , width='8', height='2',command=window.destroy) 
     
-    USER_REG = Button(window, text='회원 등록',fg="black", bg="orange", width='20',
+    USER_REG = Button(window, text='회원 등록',fg="black", bg="gray", width='20',
                       height='10', command = USER_3)
                                     
-    USER_INF = Button(window, text='회원\n검색/수정/탈퇴',fg="black", bg="orange", width='20',
+    USER_INF = Button(window, text='회원\n검색/수정/탈퇴',fg="black", bg="gray", width='20',
                         height='10', command = USER_1)
     label1.pack()
     USER_REG.place(x=150,y=150)
@@ -1247,15 +1249,15 @@ def USER_MANAGEMENT():
 window = Tk()
 window.title("도서관리 프로그램")
 window.geometry("700x500")
+window.resizable(width=FALSE, height=FALSE)
 
 label1 = Label(window, text = '도서관리프로그램', bg = 'gray', width = 700, height = 5)
-window.configure(background = 'sky blue')
 
 #도서관리 누르면 2번째 창으로 넘어감
-BTN_BOOK = Button(window, text='도서관리',fg="black", bg="orange", width='20',
+BTN_BOOK = Button(window, text='도서관리',fg="black", bg="gray", width='20',
                       height='10', command=BOOK_MANAGEMENT)
                                     
-BTN_MEMBER = Button(window, text='회원관리',fg="black", bg="orange", width='20',
+BTN_MEMBER = Button(window, text='회원관리',fg="black", bg="gray", width='20',
                         height='10', command = USER_MANAGEMENT)
 
 label1.pack()

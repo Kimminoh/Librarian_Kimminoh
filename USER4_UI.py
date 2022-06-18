@@ -9,8 +9,8 @@ import tkinter.messagebox
 
 def user_2(phone1):
     phone = phone1
-    def create_rbutton(rbutton_name,font,color,text,var,value,x,y):         # 라디오 버튼 배치 함수
-        rbutton_name = Radiobutton(mainwindow,font=font,bg=color,text=text,variable=var,value=value)
+    def create_rbutton(rbutton_name,font,text,var,value,x,y):         # 라디오 버튼 배치 함수
+        rbutton_name = Radiobutton(mainwindow,font=font,text=text,variable=var,value=value)
         rbutton_name.place(x=x, y = y)
         return rbutton_name
 
@@ -39,13 +39,12 @@ def user_2(phone1):
         def ERROR_5():   # 예외처리 5
             tkinter.messagebox.showinfo("정보","복구가 완료되었습니다.")
 
-        state_label = Label(mainwindow, text ="등록 상태",bg='orange')
+        state_label = Label(mainwindow, text ="등록 상태",bg='gray')
         if bool(df_user.loc[phone,'USER_REG']) == True:
             state_label.config(text='등록 상태')
         elif bool(df_user.loc[phone,'USER_REG']) == False:
             state_label.config(text='탈퇴 상태')
         
-        mainwindow.configure(background = 'sky blue')
         
         var = BooleanVar()
 
@@ -53,13 +52,13 @@ def user_2(phone1):
         sub_label.pack(fill=X)
         create_label(image_label,30,80)
         state_label.place(x=60,y=250)
-        name_button = create_button('name_button','orange','이름',9,170,80)
+        name_button = create_button('name_button','gray','이름',9,170,80)
         name_entry = create_entry('name_entry',df_user.loc[phone,'USER_NAME'],("맑은 고딕",12),35,250,80)
-        birth_button = create_button('birth_button','orange','생년월일',9,170,120)
+        birth_button = create_button('birth_button','gray','생년월일',9,170,120)
         birth_entry = create_entry('birth_entry',df_user.loc[phone,'USER_BIRTH'],("맑은 고딕",12),35,250,120)
-        sex_button = create_button('sex_button','orange','성별',9,170,160)
-        male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','남',var,'남자',250,160)
-        female_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'sky blue','여',var,'여자',300,160)
+        sex_button = create_button('sex_button','gray','성별',9,170,160)
+        male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'남',var,'남자',250,160)
+        female_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'여',var,'여자',300,160)
         
         if df_user.loc[phone,'USER_SEX'] == '남자':
             male_rbutton.select()
@@ -81,12 +80,12 @@ def user_2(phone1):
             df_user.to_csv('csv/user.csv', index=False, encoding='utf-8')
             mainwindow.destroy()
 
-        phone_button = create_button('phone_button','orange','전화번호',9,170,200)
+        phone_button = create_button('phone_button','gray','전화번호',9,170,200)
         phone_entry = create_entry('phone_entry',phone,("맑은 고딕",12),35,250,200)
-        mail_button = create_button('mail_button','orange','이메일 주소',9,170,240)
+        mail_button = create_button('mail_button','gray','이메일 주소',9,170,240)
         mail_entry = create_entry('mail_entry',df_user.loc[phone,'USER_MAIL'],("맑은 고딕",12),35,250,240)
         image_find = create_button('image_find','gray','찾아보기',9,580,280)
-        image_button = create_button('image_button','orange','사진',9,170,280)
+        image_button = create_button('image_button','gray','사진',9,170,280)
         image_entry = Text(mainwindow, font=("맑은 고딕",12),width=35,height=4)
         image_entry.insert(1.0,df_user.loc[phone,'USER_IMAGE'])
         image_entry.place(x=250,y=280)
