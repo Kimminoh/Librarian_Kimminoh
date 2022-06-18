@@ -8,8 +8,38 @@ import tkinter.messagebox
 import tkinter.ttk as ttk
 
 
+def ok_notice():   # 예외처리 3
+    tkinter.messagebox.showinfo("정보","수정이 완료 되었습니다.")
+def check_pass():   # 예외처리 4
+    tkinter.messagebox.showinfo("정보","사용 가능한 전화번호입니다.")
+def check_nonpass():   # 예외처리 5
+    tkinter.messagebox.showerror("ERROR","이미 등록된 전화번호입니다.")
+def REG_ERROR():   # 예외처리 6
+    tkinter.messagebox.showerror("ERROR","회원 정보는 모두 입력해야 합니다. 다시 작성해주세요 !")
+def ERROR_3():   # 예외처리 2
+    tkinter.messagebox.showerror("ERROR","이름에 숫자가 포함되어있습니다.")
+def ERROR_4():   # 예외처리 2
+    tkinter.messagebox.showerror("ERROR","생년월일을 잘못 입력하셨습니다.")
+def ERROR_6():   # 예외처리 6
+    tkinter.messagebox.showerror("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
+def ERROR_7():   # 예외처리 6
+    tkinter.messagebox.showerror("ERROR","책을 대여중인 회원은 전화번호 수정이 불가합니다.")
+def ERROR_8():   # 예외처리 6
+    tkinter.messagebox.showerror("ERROR","탈퇴한 회원은 회원정보 수정이 불가능합니다.")
+
+
 
 def user_2(phone1):
+
+    df_user = pd.read_csv('csv/user.csv', encoding='utf-8')
+    df_user = df_user.set_index(df_user['USER_PHONE'])
+    USER_CHOICE2 = phone1
+    
+    if df_user.loc[USER_CHOICE2,"USER_REG"] == False:
+        ERROR_8()
+        return 0
+    
+
     phone = phone1
     def create_rbutton(rbutton_name,font,color,text,var,value,x,y):         # 라디오 버튼 배치 함수
         rbutton_name = Radiobutton(mainwindow,font=font,bg=color,text=text,variable=var,value=value)
@@ -30,20 +60,6 @@ def user_2(phone1):
         entry_name.place(x=x, y = y)
         return entry_name
 
-    def ok_notice():   # 예외처리 3
-        tkinter.messagebox.showinfo("정보","수정이 완료 되었습니다.")
-    def check_pass():   # 예외처리 4
-        tkinter.messagebox.showinfo("정보","사용 가능한 전화번호입니다.")
-    def check_nonpass():   # 예외처리 5
-        tkinter.messagebox.showerror("ERROR","이미 등록된 전화번호입니다.")
-    def REG_ERROR():   # 예외처리 6
-        tkinter.messagebox.showerror("ERROR","회원 정보는 모두 입력해야 합니다. 다시 작성해주세요 !")
-    def ERROR_3():   # 예외처리 2
-        tkinter.messagebox.showerror("ERROR","이름에 숫자가 포함되어있습니다.")
-    def ERROR_4():   # 예외처리 2
-        tkinter.messagebox.showerror("ERROR","생년월일을 잘못 입력하셨습니다.")
-    def ERROR_6():   # 예외처리 6
-        tkinter.messagebox.showerror("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
     
     def user_update():
         df_user = pd.read_csv('csv/user.csv', encoding='utf-8')
@@ -107,7 +123,7 @@ def user_2(phone1):
                 USER3_UI.exit_search()
                 USER3_UI.USER_1()         
                 
-       
+    
         def phonenum_check():
                 
             def check_pass():   # 예외처리 4
@@ -247,13 +263,14 @@ def user_2(phone1):
             phone_entry1['state'] = 'disabled'
             phone_entry2['state'] = 'disabled'
             phone_entry3['state'] = 'disabled'
-            phone_check['state'] = 'disabled' 
-            reg_button['state'] = 'normal' 
+            phone_check['state'] = 'disabled'
+            reg_button['state'] = 'normal'
+            ERROR_7()
         
-
+            
     mainwindow = Tk()
-    user_update()
     mainwindow.title("회원 수정")
     mainwindow.geometry("700x500")
     mainwindow.resizable(width=FALSE, height=FALSE)
+    user_update()
     mainwindow.mainloop()
