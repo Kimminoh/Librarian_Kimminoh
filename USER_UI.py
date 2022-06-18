@@ -13,8 +13,8 @@ def USER_3():
         rbutton_name.place(x=x, y = y)
         return rbutton_name
 
-    def create_button(button_name,color,text,width,x,y,relief):                   # 버튼 배치 함수
-        button_name = Button(mainwindow,bg=color,text=text,width=width,relief=relief)
+    def create_button(button_name,color,text,width,x,y):                   # 버튼 배치 함수
+        button_name = Button(mainwindow,bg=color,text=text,width=width)
         button_name.place(x=x, y = y)
         return button_name
 
@@ -85,7 +85,7 @@ def USER_3():
         
         photo = PhotoImage(master=mainwindow)
         sub_label = Label(mainwindow, text ="회원 등록",font=("맑은 고딕",9),bg='gray',height=3)
-        image_label = Label(mainwindow,image=photo,width=120, height=150)
+        image_label = Label(mainwindow,bg="white",image=photo,width=120, height=150)
 
 
         
@@ -178,23 +178,23 @@ def USER_3():
         sub_label.pack(fill=X)
         image_label.pack()
         image_label.place(x=30,y=80)
-        name_button = create_button('name_button','gray','이름',9,170,80,"flat")
+        name_button = create_button('name_button','gray','이름',9,170,80)
         name_entry = create_entry('name_entry',("맑은 고딕",12),35,250,80)
-        birth_button = create_button('birth_button','gray','생년월일',9,170,120,"flat")
-        sex_button = create_button('sex_button','gray','성별',9,170,160,"flat")
+        birth_button = create_button('birth_button','gray','생년월일',9,170,120)
+        sex_button = create_button('sex_button','gray','성별',9,170,160)
         male_rbutton = create_rbutton('male_rbutton',("맑은 고딕",10),'남',var,'남자',250,160)
         female_rbutton = create_rbutton('female_rbutton',("맑은 고딕",10),'여',var,'여자',300,160)
-        phone_button = create_button('phone_button','gray','전화번호',9,170,200,"flat")
+        phone_button = create_button('phone_button','gray','전화번호',9,170,200)
         phone_entry1 = create_entry('phone_entry1',("맑은 고딕",12),10,250,200)
         phone_entry2 = create_entry('phone_entry2',("맑은 고딕",12),10,360,200)
         phone_entry3 = create_entry('phone_entry3',("맑은 고딕",12),10,470,200)
         phone_check = Button(mainwindow,text='중복확인',bg='gray',width=9,command=phonenum_check)
         phone_check.place(x=580,y=200)                      
-        mail_button = create_button('mail_button','gray','이메일 주소',9,170,240,"flat")
+        mail_button = create_button('mail_button','gray','이메일 주소',9,170,240)
         mail_entry = create_entry('mail_entry',("맑은 고딕",12),35,250,240)
         image_find = Button(mainwindow,text='찾아보기',bg='gray',width=9,command=find_image_name)
         image_find.place(x=580,y=280)
-        image_button = create_button('image_button','gray','사진',9,170,280,"flat")
+        image_button = create_button('image_button','gray','사진',9,170,280)
         image_entry = Text(mainwindow, font=("맑은 고딕",12),width=35,height=4)
         image_entry.place(x=250, y = 280)
         reg_button = Button(mainwindow,text='등록',bg='gray',width=9,command=inuser_csv)

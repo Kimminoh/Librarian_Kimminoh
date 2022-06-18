@@ -84,7 +84,6 @@ def BOOK_MANAGEMENT_FIRST():
     # Treeview 목록 더블클릭 시 이벤트 발생
     def click_item(event):
         selected=BOOK_SELECT_BOX.focus()
-        print(selected)
         BOOK_EDIT(int(selected))  # 수정하기 창 실행
         
     # 도서 신규등록 버튼
@@ -136,7 +135,7 @@ def BOOK_MANAGEMENT_FIRST():
 
 #====================================================================================================
     # 검색 버튼 
-    BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black', command = search) 
+    BOOK_SEARCH_BTN = Button(window, text = '검색', fg='black' ,bg='gray', command = search) 
     BOOK_SEARCH_BTN.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
 
 
@@ -148,7 +147,7 @@ def BOOK_MANAGEMENT_FIRST():
     # Treeview를 사용해서 도서 목록 나열
     
     BOOK_SELECT_BOX = ttk.Treeview(window, columns=(1,2,3,4), height = 13,show="headings")
-    BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black')
+    BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='black', bg = 'gray')
     BOOK_SELECT_BTN.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
     BOOK_SELECT_BTN.bind('<Button-1>',click_item)
     
@@ -202,7 +201,7 @@ def BOOK_MANAGEMENT_FIRST():
             BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
 
     #새로고침 버튼 추가
-    REFRESH_BTN = Button(window, text = '새로고침', fg='black' ,bg='white', command = refresh) 
+    REFRESH_BTN = Button(window, text = '새로고침', fg='black' ,bg='gray', command = refresh) 
     REFRESH_BTN.place(relx=0.86,rely=0.5,relwidth=0.1,relheight = 0.07)
         
 
@@ -289,7 +288,6 @@ def BOOK_NEW_REG():
                 csv_pull.to_csv("csv/book.csv", index = True)
                 tkinter.messagebox.showinfo("SUCCES","도서 등록이 완료 되었습니다 !!")
                 # 확인용 tabulate
-                print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
                 window.destroy()
 
     # 중복확인 함수       
@@ -577,7 +575,6 @@ def BOOK_EDIT(selected):
                 csv_pull.to_csv("csv/book.csv", index = True)
                 tkinter.messagebox.showinfo("수정 성공","수정이 완료 되었습니다!")
                 
-                print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
                 window.destroy()
 
     # 중복확인 함수
@@ -612,7 +609,6 @@ def BOOK_EDIT(selected):
     BTN_CANCEL = Button(window, text='취소', bg='gray', width='7', height='1',command=window.destroy )
     BTN_CANCEL.place(x=400, y = 450)
     
-    print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
 
 
 
@@ -719,7 +715,6 @@ def BOOK_LOOKUP():
 
         select_book = int(BOOK_SELECT_BOX.focus())
         #select_book_ISBN = BOOK_SELECT_BOX.item(select_book).get('values')
-        print(select_book)
         
         window = Tk()
         window.title("도서 상세정보")
@@ -731,6 +726,7 @@ def BOOK_LOOKUP():
         IMAGE_label=Label(window,bg="white",width=120,height=150)
         photo = Image.open(csv_pull.loc[select_book]["BOOK_IMAGE"])
         photo2 = photo.resize((120, 200))
+        window.resizable(width=FALSE, height=FALSE)
         photo3 = ImageTk.PhotoImage(photo2,master=window)
         IMAGE_label.configure(image=photo3, width=120, height=150)
         IMAGE_label.image=photo3
@@ -790,7 +786,7 @@ def BOOK_LOOKUP():
         # 대여날짜 불러오기 위해서
         RENT_ISBN_PULL = csv_pull_rent[csv_pull_rent['BOOK_ISBN'] == int(select_book)]
         RENT_ISBN_PULL = RENT_ISBN_PULL.set_index("BOOK_ISBN")
-        print(RENT_ISBN_PULL)
+        
         
         if RENT_ISBN_PULL.empty == False :
             DATE_PULL = RENT_ISBN_PULL.loc[int(select_book)]["RENT_DATE"]
@@ -801,24 +797,24 @@ def BOOK_LOOKUP():
             
             if RENTAL_CHECK == True:
                 IFM_PULL = ('대여일 :\n{}\n\n반납예정일 :\n{}\n\n대여자 전화번호 :\n{}'.format(DATE_PULL,RDATE_PULL,RENTAL_USER))
-                IFM_PULL2 = ('대출 불가 Ⅹ')
+                IFM_PULL2 = ('대출 불가')
                 font_color = 'red'
             else:
-                IFM_PULL = ('대출 가능 ●')
-                IFM_PULL2 = ('대출 가능 ●')
+                IFM_PULL = ('대출 가능')
+                IFM_PULL2 = ('대출 가능')
                 font_color = 'blue'
         else :
             IFM_PULL = ('')
-            IFM_PULL2 = ('대출 가능 ●')
+            IFM_PULL2 = ('대출 가능')
             font_color = 'blue'
 
         
 
         # 대출, 여부 확인    
-        RENT_NOTICE = Label(window, text = IFM_PULL2, bg = 'white',width = '12',
-                            justify=LEFT,height = 2,borderwidth = 6,relief="ridge")
-        RENT_NOTICE.place(relx=0.03, rely=0.5)
-        RENT_NOTICE.configure(font=("강조", 15), fg=font_color)
+        RENT_NOTICE = Label(window, text = IFM_PULL2, width = '12',
+                            justify=LEFT,height = 2)
+        RENT_NOTICE.place(relx=0.05, rely=0.5)
+        RENT_NOTICE.configure(font=("강조", 10), fg=font_color)
         # 대여일, 반납일 확
         RENT_IFM = Label(window, text = IFM_PULL,width = '20', justify=LEFT,height = 8)
         RENT_IFM.place(relx=0.02, rely=0.65)
@@ -831,12 +827,10 @@ def BOOK_LOOKUP():
     def bookrent_selectuser():
         
       select_book = int(BOOK_SELECT_BOX.focus())
-      print(select_book)
       
       rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
       
       a = rent_df['BOOK_ISBN'].tolist() 
-      print(a)
       
       if select_book not in a:
         rent1 = Tk()
@@ -916,13 +910,10 @@ def BOOK_LOOKUP():
             rent_df = rent_df.set_index(rent_df['BOOK_ISBN'])
             rent_df.loc[len(rent_df)+1] = new_rent
             usercnt = user_df.loc[select_user,'USER_RENT_CNT']
-            print(usercnt)
             user_df.loc[select_user,'USER_RENT_CNT'] = usercnt+1
             #rent_df = rent_df.set_index(rent_df['RENT_NUM'])
             #rent_df.reset_index(drop=True,inplace=True)
             rent_df = rent_df.sort_values(by = ["RENT_NUM"]) 
-            print(tabulate(user_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
-            print(tabulate(rent_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
             num += 1
 
                        
@@ -998,14 +989,13 @@ def BOOK_LOOKUP():
          select_book = int(BOOK_SELECT_BOX.focus())         
          global num
          b = rent_df['BOOK_ISBN'].tolist()
-         print(select_book)
-         print(b)
+
          if select_book in b:
            returnMsgBox = tkinter.messagebox.askquestion(" ",'해당 도서를 반납하시겠습니까?')
            if returnMsgBox == 'yes':
                 select_user = rent_df.loc[select_book,'USER_PHONE']
                 usercnt = user_df.loc[select_user,'USER_RENT_CNT']
-                print(usercnt)
+
                 user_df.loc[select_user,'USER_RENT_CNT'] = usercnt-1
                 book_df.loc[select_book,'BOOK_RENTAL']="False"
                 idx = rent_df[rent_df['BOOK_ISBN']==select_book].index
@@ -1013,8 +1003,6 @@ def BOOK_LOOKUP():
 
                 rent_df = rent_df.sort_values(by = ["RENT_NUM"])
               
-                print(tabulate(user_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
-                print(tabulate(rent_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
                 num -= 1
                 book_df.to_csv("csv/book.csv",index=False)
                 user_df.to_csv("csv/user.csv", index = False)
@@ -1031,10 +1019,10 @@ def BOOK_LOOKUP():
 #=======================================================================================
 
     # 검색 버튼
-    BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black',command=search1)
+    BOOK_SEARCH_BTN = Button(window, text = '검색', fg='black' ,bg='gray',command=search1)
     BOOK_SEARCH_BTN.place(relx=0.82,rely=0.2,relwidth=0.1,relheight = 0.05)
     # 선택하기 버튼
-    BOOK_INF = Button(window, text = '선택하기', fg='white', bg = 'black',command=book_information)
+    BOOK_INF = Button(window, text = '선택하기', fg='black', bg = 'gray',command=book_information)
     BOOK_INF.place(relx=0.82,rely=0.28,relwidth=0.1,relheight=0.05)
 
     #rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
@@ -1079,7 +1067,6 @@ def BOOK_DELETE():
     # 클릭 시 이벤트 발생 -> 도서 삭제 즉시 실행
     def click_item(event):
         selected=BOOK_SELECT_BOX.focus()
-        print(selected)
         DLT_BOOK(int(selected))
         
     # 도서 삭제 구현 
@@ -1096,7 +1083,6 @@ def BOOK_DELETE():
         
 
         CHECK_ISBN = csv_pull_1['BOOK_ISBN'].tolist() 
-        print(CHECK_ISBN)
 
         MB = tkinter.messagebox.askquestion("도서 삭제", "{}을 삭제하시겠습니까?".format(name))
         
@@ -1142,10 +1128,10 @@ def BOOK_DELETE():
     BOOK_SEARCH_LABEL = Entry(window)
     BOOK_SEARCH_LABEL.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
     # 버튼 1
-    BOOK_SEARCH_BTN = Button(window, text = '검색', fg='white' ,bg='black', command = search)
+    BOOK_SEARCH_BTN = Button(window, text = '검색', fg='black' ,bg='gray', command = search)
     BOOK_SEARCH_BTN.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
     # 버튼 2
-    BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='white', bg = 'black')
+    BOOK_SELECT_BTN = Button(window, text = '선택하기', fg='black', bg = 'gray')
     BOOK_SELECT_BTN.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
     BOOK_SELECT_BTN.bind('<Button-1>',click_item)
     # csv 파일 가져오기
@@ -1205,7 +1191,7 @@ def BOOK_DELETE():
             BOOK_SELECT_BOX.insert("","end",text="",value=book_add,iid=book_add[0])
 
 #새로고침 버튼 추가
-    REFRESH_BTN = Button(window, text = '새로고침', fg='black' ,bg='white', command = refresh_delete) 
+    REFRESH_BTN = Button(window, text = '새로고침', fg='black' ,bg='gray', command = refresh_delete) 
     REFRESH_BTN.place(relx=0.86,rely=0.5,relwidth=0.1,relheight = 0.07)
         
 
