@@ -24,12 +24,13 @@ rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
 rent_df = rent_df.set_index(rent_df['RENT_NUM'])
 
 try:
-    num = max(rent_df.index.tolist()) + 1
-
+   num = max(rent_df.index.tolist()) + 1
+   
 except:
-    num=1
+   num=1
 
-#num = 0
+
+
 
 # 2번째 화면
 def BOOK_MANAGEMENT():
@@ -863,14 +864,27 @@ def BOOK_LOOKUP():
         
         def event_book_rent():
             global num
+            rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
+            rent_df = rent_df.set_index(rent_df['RENT_NUM'])
+            #number = rent_df['RENT_NUM'].tolist() 
+            
+            number = rent_df['RENT_NUM'].tolist()
+            if num in number:
+                num = max(rent_df.index.tolist()) + 1
+            
+            for i in range(1,len(rent_df)+1):
+                  if i not in number and num > i:
+                     num = i
+            if len(rent_df) == 0:
+                num = 1
             book_df = pd.read_csv("csv/book.csv",encoding = "utf-8")
             book_df = book_df.set_index(book_df['BOOK_ISBN'])
 
             user_df = pd.read_csv("csv/user.csv",encoding = "utf-8")
             user_df = user_df.set_index(user_df['USER_PHONE'])
 
-            rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
-            rent_df = rent_df.set_index(rent_df['RENT_NUM'])
+            
+            
 
             today_D = datetime.now().date() # datetime 모듈이용하여 현재 날짜 저장
             return_D = today_D+timedelta(weeks=2) # timedelta 함수 이용 2주뒤 날짜 저장
@@ -885,20 +899,24 @@ def BOOK_LOOKUP():
             
             
             book_df.loc[select_book,'BOOK_RENTAL']="True"
-
-            rent_df.loc[len(rent_df)] = new_rent
+            rent_df = rent_df.set_index(rent_df['BOOK_ISBN'])
+            rent_df.loc[len(rent_df)+1] = new_rent
             usercnt = user_df.loc[select_user,'USER_RENT_CNT']
             print(usercnt)
             user_df.loc[select_user,'USER_RENT_CNT'] = usercnt+1
+            #rent_df = rent_df.set_index(rent_df['RENT_NUM'])
+            #rent_df.reset_index(drop=True,inplace=True)
+            rent_df = rent_df.sort_values(by = ["RENT_NUM"]) 
             print(tabulate(user_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
             print(tabulate(rent_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
             num += 1
-            
+
+                       
             book_df.to_csv("csv/book.csv",index=False)
             user_df.to_csv("csv/user.csv", index = False)
             rent_df.to_csv("csv/rent.csv", index = False)
             tkinter.messagebox.showinfo("도서 대출", "도서 대출 완료")
-            rent1.destroy()
+            
 
                 
             
@@ -958,6 +976,7 @@ def BOOK_LOOKUP():
     
     def event_book_return():
          book_df = pd.read_csv("csv/book.csv",encoding = "utf-8")
+         book_df = book_df.set_index(book_df['BOOK_ISBN'])
          user_df = pd.read_csv("csv/user.csv",encoding = "utf-8")
          user_df = user_df.set_index(user_df['USER_PHONE'])
          rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
@@ -974,16 +993,12 @@ def BOOK_LOOKUP():
                 usercnt = user_df.loc[select_user,'USER_RENT_CNT']
                 print(usercnt)
                 user_df.loc[select_user,'USER_RENT_CNT'] = usercnt-1
-
-
                 book_df.loc[select_book,'BOOK_RENTAL']="False"
-
                 idx = rent_df[rent_df['BOOK_ISBN']==select_book].index
                 rent_df.drop(idx,inplace=True) # num # 인덱스로 저장한 idx를 참고하여 drop(), 해당 행 삭제
 
-                rent_df = rent_df.set_index(rent_df['RENT_NUM'])
-                rent_df.reset_index(drop=True,inplace=True)
-
+                rent_df = rent_df.sort_values(by = ["RENT_NUM"])
+              
                 print(tabulate(user_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
                 print(tabulate(rent_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
                 num -= 1
