@@ -824,12 +824,14 @@ def BOOK_LOOKUP():
             rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
             rent_df = rent_df.set_index(rent_df['RENT_NUM'])
             #number = rent_df['RENT_NUM'].tolist() 
-            #for i in range(1,num1):
-            #    if i not in number:
-            #        num = i;
+            
             number = rent_df['RENT_NUM'].tolist()
             if num in number:
                 num = max(rent_df.index.tolist()) + 1
+            
+            for i in range(1,len(rent_df)+1):
+                  if i not in number and num > i:
+                     num = i
             if len(rent_df) == 0:
                 num = 1
             book_df = pd.read_csv("csv/book.csv",encoding = "utf-8")
@@ -861,10 +863,12 @@ def BOOK_LOOKUP():
             user_df.loc[select_user,'USER_RENT_CNT'] = usercnt+1
             #rent_df = rent_df.set_index(rent_df['RENT_NUM'])
             #rent_df.reset_index(drop=True,inplace=True)
+            rent_df = rent_df.sort_values(by = ["RENT_NUM"]) 
             print(tabulate(user_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
             print(tabulate(rent_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
             num += 1
-            
+
+                       
             book_df.to_csv("csv/book.csv",index=False)
             user_df.to_csv("csv/user.csv", index = False)
             rent_df.to_csv("csv/rent.csv", index = False)
@@ -950,9 +954,8 @@ def BOOK_LOOKUP():
                 idx = rent_df[rent_df['BOOK_ISBN']==select_book].index
                 rent_df.drop(idx,inplace=True) # num # 인덱스로 저장한 idx를 참고하여 drop(), 해당 행 삭제
 
-                rent_df = rent_df.set_index(rent_df['RENT_NUM'])
-                rent_df.reset_index(drop=True,inplace=True)
-
+                rent_df = rent_df.sort_values(by = ["RENT_NUM"])
+              
                 print(tabulate(user_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
                 print(tabulate(rent_df,headers='keys',tablefmt='pretty',showindex=False,numalign='center',stralign='center'))
                 num -= 1
