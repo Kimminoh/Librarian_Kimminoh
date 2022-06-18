@@ -221,12 +221,7 @@ def user_2(phone1):
         phone_entry2 = create_entry('phone_entry2',phone[4:8],("맑은 고딕",12),10,360,200)
         phone_entry3 = create_entry('phone_entry3',phone[9:13],("맑은 고딕",12),10,470,200)
         phone_check = Button(mainwindow,text='중복확인',bg='gray',width=9,command=phonenum_check)
-        phone_check.place(x=580,y=200)                      
-        if df_user.loc[USER_CHOICE,"USER_RENT_CNT"] != 0:
-            phone_entry1['state'] = 'disabled'
-            phone_entry2['state'] = 'disabled'
-            phone_entry3['state'] = 'disabled'
-            phone_check['state'] = 'disabled'           
+        phone_check.place(x=580,y=200)            
 
         mail_button = create_button('mail_button','orange','이메일 주소',9,170,240)
         mail_entry = create_entry('mail_entry',df_user.loc[phone,'USER_MAIL'],("맑은 고딕",12),35,250,240)
@@ -247,6 +242,13 @@ def user_2(phone1):
         reg_button['state']='disabled'
         cancel_button = Button(mainwindow,bg='gray',text='취소',width=9,command=mainwindow.destroy)
         cancel_button.place(x=400,y=400)
+
+        if df_user.loc[USER_CHOICE,"USER_RENT_CNT"] != 0:
+            phone_entry1['state'] = 'disabled'
+            phone_entry2['state'] = 'disabled'
+            phone_entry3['state'] = 'disabled'
+            phone_check['state'] = 'disabled' 
+            reg_button['state'] = 'normal' 
         
 
     mainwindow = Tk()
