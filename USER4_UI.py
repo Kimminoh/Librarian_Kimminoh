@@ -1,5 +1,4 @@
 import pandas as pd
-from tabulate import tabulate
 from tkinter import *
 from tkinter.simpledialog import *
 from PIL import Image,ImageTk
@@ -121,7 +120,6 @@ def user_2(phone1):
         phone_entry['state'] = 'disabled'
         mail_entry['state'] = 'disabled'
         image_entry['state'] = 'disabled'
-        #phone_check.destroy()
         image_find.destroy()
         
 

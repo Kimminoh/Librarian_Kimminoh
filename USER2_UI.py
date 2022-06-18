@@ -1,7 +1,5 @@
 import pandas as pd
 import USER3_UI
-import USER_UI
-import csv
 from tkinter import *
 from tkinter.simpledialog import *
 from PIL import Image,ImageTk
@@ -126,8 +124,8 @@ def user_2(phone1):
             n1 = phone_entry1.get()
             n2 = phone_entry2.get()
             n3 = phone_entry3.get()
-            phone_number = phone_entry1.get() + '-' + phone_entry2.get() + '-' + phone_entry3.get()
-            a = phone_number
+            phone_number2 = phone_entry1.get() + '-' + phone_entry2.get() + '-' + phone_entry3.get()
+            a = phone_number2
             phone_number = df_user.index.tolist()
             
             if (len(n1) ==3 and len(n2) ==4 and len(n3) ==4):
@@ -139,7 +137,8 @@ def user_2(phone1):
                     check_error1()
                 else:            
                     if ((0 <= int(n1) <=999) and (0 <= int(n2) <=9999) and (0 <= int(n3) <=9999)):
-                        if  str(a) not in phone_number:
+                        
+                        if  str(a) not in phone_number or (str(a) in phone_number and a == phone):
                             check_pass()
                             phone_check['state'] = 'disabled'
                             phone_entry1['state'] = 'disabled'
