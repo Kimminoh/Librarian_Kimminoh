@@ -87,7 +87,8 @@ def USER_1():
         
 
         
-
+        reg_info = Label(mainwindow,fg='black',text='※ 탈퇴/복구는 상세정보에서 가능합니다 ※',width=40)
+        reg_info.place(x=30, y = 450)
         search_button = Button(mainwindow,bg='gray',text='검색',width=9,command=user_search)
         search_button.place(x=560, y = 80)
         update_button = Button(mainwindow,bg='gray',text='수정',width=9,command=button_item)
