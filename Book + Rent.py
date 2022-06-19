@@ -492,7 +492,8 @@ def BOOK_EDIT(selected):
     SEARCH_IMAGE_FIND.insert('1.0',csv_pull.loc[selected,'BOOK_IMAGE'])
     SEARCH_IMAGE_FIND.place(x=250,y=360)
     SEARCH_IMAGE_FIND.get('1.0','end').replace('\n','')
-    
+
+    SEARCH_IMAGE_FIND.configure(state='disable')
     # 안내창
     explain = Label(window, text = '※사진은 필수 정보 입니다. 반드시 입력해 주세요 !!',
                 width = '45', height = 1)
@@ -505,7 +506,7 @@ def BOOK_EDIT(selected):
     # 사진 찾아오기 
     def find_image_name():
         file_name=askopenfilename(parent=window,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
-
+        SEARCH_IMAGE_FIND.configure(state='normal')
         photo=Image.open(file_name)
         photo2=photo.resize((120,150))
         photo3=ImageTk.PhotoImage(photo2,master=window)
@@ -570,11 +571,16 @@ def BOOK_EDIT(selected):
                 csv_pull.loc[selected, 'BOOK_LINK']= f
                 csv_pull.loc[selected, 'BOOK_IMAGE']= g
                 csv_pull.loc[selected, 'BOOK_DESCRIPTION']= h
-                # 수정할 때는 대여 여부 확인 해야함 
-                #csv 저장하기 
+                
+                # ISBN 값 수정하는 코드 추가
+                csv_pull = csv_pull.reset_index()
+                csv_pull.loc[0, 'BOOK_ISBN']= a
+                csv_pull = csv_pull.set_index("BOOK_ISBN")
+                
+                #csv 저장하기   
                 csv_pull.to_csv("csv/book.csv", index = True)
                 tkinter.messagebox.showinfo("수정 성공","수정이 완료 되었습니다!")
-                
+                print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
                 window.destroy()
 
     # 중복확인 함수
