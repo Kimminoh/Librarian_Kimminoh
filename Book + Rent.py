@@ -936,12 +936,15 @@ def BOOK_LOOKUP():
 
         # 책에 맞게 제목 빌려오기
         ABC = csv_pull.loc[int(select_book)]["BOOK_TITLE"]
-        booknamelabel = Label(rent1, text = ABC, bg = 'gray') 
+        booknamelabel = Label(rent1, text = '▶{}◀'.format(ABC), bg = 'gray') 
         booknamelabel.place(relx=0.25,rely=0.2,relwidth=0.6,relheight=0.07)
 
  
         searchuserlabel = Label(rent1, text = '회원정보 입력', bg = 'gray')
         searchuserlabel.place(relx = 0.05,rely=0.3,relwidth=0.15,relheight=0.07)
+
+        Notice = Label(rent1, text = '※ 대출을 원하시는 회원을 선택하고 선택하기 버튼을 눌러주세요',)
+        Notice.place(relx = 0.05,rely=0.8,relwidth=0.5,relheight=0.07)
 
         
         searchuserentry = Entry(rent1)
@@ -974,7 +977,7 @@ def BOOK_LOOKUP():
         userselectbutton = Button(rent1, text = '선택하기',command = event_book_rent)
         userselectbutton.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
 
-        USER_SELECT_BOX.bind('<Double-Button-1>',click_item)
+        #USER_SELECT_BOX.bind('<Double-Button-1>',click_item)
         USER_SELECT_BOX.place(relx=0.05,rely=0.4,relwidth=0.8,relheight = 0.4)
       else:
           tkinter.messagebox.showerror("오류","이미 대출중인 도서입니다.")
