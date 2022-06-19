@@ -136,7 +136,8 @@ def USER_3():
                 
 
         def find_image_name():
-            file_name=askopenfilename(parent=mainwindow,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
+            image_entry['state'] = 'normal'
+            file_name=askopenfilename(parent=mainwindow,filetype=(("PNG파일", "*.png"),("JPG파일", "*.jpg"),("모든 파일","*.*")))
 
             photo = Image.open(file_name)
             photo2 = photo.resize((120, 150))
@@ -145,6 +146,7 @@ def USER_3():
             image_label.image=photo3
             image_entry.delete(1.0,"end")
             image_entry.insert(1.0,file_name)
+            image_entry['state'] = 'disabled'
         
         year = []
         month = []
@@ -197,6 +199,7 @@ def USER_3():
         image_button = create_button('image_button','gray','사진',9,170,280)
         image_entry = Text(mainwindow, font=("맑은 고딕",12),width=35,height=4)
         image_entry.place(x=250, y = 280)
+        image_entry['state'] = 'disabled'
         reg_button = Button(mainwindow,text='등록',bg='gray',width=9,command=inuser_csv)
         reg_button.place(x=200,y=400)
         reg_button['state']='disabled'

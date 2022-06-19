@@ -66,7 +66,8 @@ def user_2(phone1):
         df_user = df_user.set_index(df_user['USER_PHONE'])
         
         def find_image_name():
-            file_name=askopenfilename(parent=mainwindow,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
+            image_entry['state'] = 'normal'
+            file_name=askopenfilename(parent=mainwindow,filetype=(("PNG파일", "*.png"),("JPG파일", "*.jpg"),("모든 파일","*.*")))
             
             photo = Image.open(file_name)
             photo2 = photo.resize((120, 150))
@@ -76,7 +77,7 @@ def user_2(phone1):
             image_entry.delete(1.0,"end")
             image_entry.insert(1.0,file_name)
             image_entry['state'] = 'disabled'
-            image_find['state'] = 'disabled'
+            
         
         var = StringVar(mainwindow)
 
@@ -247,6 +248,7 @@ def user_2(phone1):
         image_entry = Text(mainwindow, font=("맑은 고딕",12),width=35,height=4)
         image_entry.insert(1.0,df_user.loc[phone,'USER_IMAGE'])
         image_entry.place(x=250,y=280)
+        image_entry['state'] = 'disabled'
         image1=image_entry.get('1.0','end').replace('\n','')
         photo = Image.open(image1)
         photo2 = photo.resize((120, 200))
