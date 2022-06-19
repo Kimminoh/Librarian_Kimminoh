@@ -235,9 +235,9 @@ def BOOK_NEW_REG():
 
     # 중복확인시 이벤트 발생
     def ERROR_1():   # 예외처리 1
-        tkinter.messagebox.showinfo("ERROR","해당 도서는 등록 가능 합니다 !")
+        tkinter.messagebox.showinfo("ERROR","해당 ISBN은 사용 가능 합니다 !")
     def ERROR_2():   # 예외처리 2
-        tkinter.messagebox.showerror("ERROR","해당 도서는 등록 불가능 합니다 !")
+        tkinter.messagebox.showerror("ERROR","해당 ISBN은 사용 하실 수 없습니다 !")
     def ERROR_3():   # 예외처리 3
         tkinter.messagebox.showerror("ERROR","중복 확인 후 도서 등록이 가능합니다 !")
     def ERROR_4():   # 예외처리 4
@@ -414,22 +414,13 @@ def BOOK_EDIT(selected):
         a = Entry(window)
         a.place(x= b, y= c,relwidth=d,relheight=e)
 
-    # 예외처리 이벤트
-    def ERROR_7():     # 예외처리 7 #수정 불가인데 에러메세지?
-        tkinter.messagebox.showeinfo("SUCCESS","해당 ISBN으로 수정이 가능합니다 !")
-    def ERROR_8():     # 예외처리 8
-        tkinter.messagebox.showerror("ERROR","해당 ISBN으로는 수정하실 수 없습니다 !")
-    def ERROR_9():     # 예외처리 9
-        tkinter.messagebox.showerror("ERROR","변경사항을 적용 하여야지 등록/수정이 가능합니다 !")
-    def ERROR_10():     # 예외처리 10
-        tkinter.messagebox.showerror("ERROR","해당 부분은 숫자로만 입력이 가능합니다 !")
-        
     # csv파일 불러오기    
     csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
     csv_pull = csv_pull.set_index("BOOK_ISBN")
 
     # csv파일에서 정보 가져오기
-
+    
+    
     #사진 가져오기 + 크기 정렬
     IMAGE_label=Label(window,bg="white",width=120,height=150)
     photo = Image.open(csv_pull.loc[selected]["BOOK_IMAGE"])
@@ -493,7 +484,7 @@ def BOOK_EDIT(selected):
     SEARCH_IMAGE_FIND.place(x=250,y=360)
     SEARCH_IMAGE_FIND.get('1.0','end').replace('\n','')
 
-    SEARCH_IMAGE_FIND.configure(state='disable')
+    SEARCH_IMAGE_FIND['state'] = 'disabled'
     # 안내창
     explain = Label(window, text = '※사진은 필수 정보 입니다. 반드시 입력해 주세요 !!',
                 width = '45', height = 1)
@@ -501,12 +492,13 @@ def BOOK_EDIT(selected):
     explain.configure(font=("Courier", 8, "italic"))
 
 
+
     
     
     # 사진 찾아오기 
     def find_image_name():
         file_name=askopenfilename(parent=window,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
-        SEARCH_IMAGE_FIND.configure(state='normal')
+        SEARCH_IMAGE_FIND['state'] = 'normal'
         photo=Image.open(file_name)
         photo2=photo.resize((120,150))
         photo3=ImageTk.PhotoImage(photo2,master=window)
@@ -523,9 +515,9 @@ def BOOK_EDIT(selected):
 
     #중복확인 시, 예외처리
     def ERROR_1():   # 예외처리 1
-        tkinter.messagebox.showinfo("ERROR","해당 도서는 등록 가능 합니다 !")
+        tkinter.messagebox.showinfo("ERROR","해당 ISBN은 사용 가능 합니다 !")
     def ERROR_2():   # 예외처리 2
-        tkinter.messagebox.showerror("ERROR","해당 도서는 등록 불가능 합니다 !")
+        tkinter.messagebox.showerror("ERROR","해당 ISBN은 사용 하실 수 없습니다 !")
     def ERROR_3():   # 예외처리 3
         tkinter.messagebox.showerror("ERROR","중복 확인 후 도서 등록이 가능합니다 !")
     def ERROR_4():   # 예외처리 4
@@ -534,6 +526,7 @@ def BOOK_EDIT(selected):
         tkinter.messagebox.showerror("ERROR","해당 정보는 숫자로만 입력이 가능합니다 !")
     def ERROR_6():   # 예외처리 6
         tkinter.messagebox.showerror("ERROR","해당 정보는 필수정보 입니다. 다시 작성해주세요 !")
+
     
     def APPLY():  # 확인,적용  버튼 눌렀을 시
         MSB = tkinter.messagebox.askquestion ('도서 수정','도서를 수정 하시겠습니까?')
@@ -546,6 +539,9 @@ def BOOK_EDIT(selected):
             f = SEARCH_BOOK_LINK.get()
             g = SEARCH_IMAGE_FIND.get('1.0','end').replace('\n','')
             h = SEARCH_BOOK_DESCRIPTION.get()
+            
+            csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
+            csv_pull = csv_pull.set_index("BOOK_ISBN")
 
             #하나라도 입력하지 않았을 때
             if a.strip()=="" or b.strip()=="" or c.strip()=="" or d.strip()=="" or e.strip()=="" \
@@ -560,10 +556,9 @@ def BOOK_EDIT(selected):
             # 가격이 정수가 아닐 때
             elif not e.isdigit():
                 ERROR_4()
-                
+               
             else:
-                csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
-                csv_pull = csv_pull.set_index("BOOK_ISBN")
+
                 csv_pull.loc[selected, 'BOOK_TITLE']= b
                 csv_pull.loc[selected, 'BOOK_AUTHOR']= c  
                 csv_pull.loc[selected, 'BOOK_PUBLIC']= d 
@@ -591,11 +586,12 @@ def BOOK_EDIT(selected):
         a = SEARCH_BOOK_ISBN.get()
         # 인덱스 값 리스트로 추출
         ISBN_OVERLAP = csv_pull.index.tolist()
-        if  int(a) in ISBN_OVERLAP and  int(a) != selected :
-            ERROR_2()
                          
-        elif not a.isdigit():  # 정수가 아닐 시 에러
+        if not a.isdigit():  # 정수가 아닐 시 에러
             ERROR_5()
+
+        elif  int(a) in ISBN_OVERLAP and  int(a) != selected :
+            ERROR_2()
                 
         else :
             ERROR_1()
@@ -608,6 +604,15 @@ def BOOK_EDIT(selected):
                            command = ISBN_OVERLAP)
     OVERLAP_CHECK.place(x=620, y = 80)
 
+      # 도서가 대출 중일 때
+    if csv_pull.loc[selected, 'BOOK_RENTAL']== True:
+       SEARCH_BOOK_ISBN['state'] = 'disabled'
+       OVERLAP_CHECK['state'] = 'disabled'
+       edit_notice = Label(window, text = '※ 대출 중인 도서의 ISBN은 수정하실 수 없습니다.',
+                            width = 40, height = 1)
+       edit_notice.place(x=245, y = 55)
+       edit_notice.configure(font=("Courier", 8, "italic"))
+       
     # 적용 버튼 누를 시 수정!
     BTN_APPLY = Button(window, text='적용', bg = 'gray', width='7', height='1',command=APPLY)
     BTN_APPLY.place(x=300, y = 450)
