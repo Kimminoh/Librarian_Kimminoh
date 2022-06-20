@@ -845,161 +845,167 @@ def BOOK_LOOKUP():
 
     def bookrent_selectuser():
         
-      select_book = int(BOOK_SELECT_BOX.focus())
-      
-      rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
-      
-      a = rent_df['BOOK_ISBN'].tolist() 
-      
-      if select_book not in a:
-        rent1 = Tk()
-        rent1.title("도서 대출하기")
-        rent1.geometry("700x500")
-        
-        def click_item(event):
-            window = Tk()
-        
-        df_user = pd.read_csv('csv/user.csv', encoding="utf-8")
-        df_user = df_user.set_index(df_user['USER_PHONE'])
-        USER_SELECT_BOX = ttk.Treeview(rent1, columns=(1,2,3,4),show="headings")
+         select_book = int(BOOK_SELECT_BOX.focus())
+         
+         rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
+          
+         
+         a = rent_df['BOOK_ISBN'].tolist() 
+               
+         if select_book not in a:
+           rent1 = Tk()
+           rent1.title("도서 대출하기")
+           rent1.geometry("700x500")
+           
+           def click_item(event):
+               window = Tk()
+           
+           df_user = pd.read_csv('csv/user.csv', encoding="utf-8")
+           df_user = df_user.set_index(df_user['USER_PHONE'])
+           USER_SELECT_BOX = ttk.Treeview(rent1, columns=(1,2,3,4),show="headings")
 
-         # 필드명
-        USER_SELECT_BOX.heading(1, text='전화번호')
-        USER_SELECT_BOX.heading(2, text='이름')
-        USER_SELECT_BOX.heading(3, text='생년월일')
-        USER_SELECT_BOX.heading(4, text='성별')
-        # 기본 너비 
-        USER_SELECT_BOX.column(1, width='130')
-        USER_SELECT_BOX.column(2, width='130')
-        USER_SELECT_BOX.column(3, width='120')
-        USER_SELECT_BOX.column(4, width='80')
-        for phone in df_user.index.tolist():
-            user_name = df_user.loc[phone, "USER_NAME"]
-            user_birth = df_user.loc[phone, "USER_BIRTH"]
-            user_sex = df_user.loc[phone, "USER_SEX"]
+            # 필드명
+           USER_SELECT_BOX.heading(1, text='전화번호')
+           USER_SELECT_BOX.heading(2, text='이름')
+           USER_SELECT_BOX.heading(3, text='생년월일')
+           USER_SELECT_BOX.heading(4, text='성별')
+           # 기본 너비 
+           USER_SELECT_BOX.column(1, width='130')
+           USER_SELECT_BOX.column(2, width='130')
+           USER_SELECT_BOX.column(3, width='120')
+           USER_SELECT_BOX.column(4, width='80')
+           for phone in df_user.index.tolist():
+               user_name = df_user.loc[phone, "USER_NAME"]
+               user_birth = df_user.loc[phone, "USER_BIRTH"]
+               user_sex = df_user.loc[phone, "USER_SEX"]
+               
+               
+               user_add = (phone,user_name,user_birth, user_sex)
+               USER_SELECT_BOX.insert("","end",text="",value=user_add,iid=phone)
+
+                      
+               #result_info = (user_name, phone, user_birth, user_sex)
+               #USER_SELECT_BOX.insert('','end',values=result_info,iid=phone)
+           
+           
+           
+           def event_book_rent():
             
-            
-            user_add = (phone,user_name,user_birth, user_sex)
-            USER_SELECT_BOX.insert("","end",text="",value=user_add,iid=phone)
+              
+               global num
+               rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
+               rent_df = rent_df.set_index(rent_df['RENT_NUM'])
+               #number = rent_df['RENT_NUM'].tolist() 
+               
+               number = rent_df['RENT_NUM'].tolist()
+               if num in number:
+                   num = max(rent_df.index.tolist()) + 1
+               
+               for i in range(1,len(rent_df)+1):
+                     if i not in number and num > i:
+                        num = i
+               if len(rent_df) == 0:
+                   num = 1
+               book_df = pd.read_csv("csv/book.csv",encoding = "utf-8")
+               book_df = book_df.set_index(book_df['BOOK_ISBN'])
+
+               user_df = pd.read_csv("csv/user.csv",encoding = "utf-8")
+               user_df = user_df.set_index(user_df['USER_PHONE'])
+
+               
+               
+
+               today_D = datetime.now().date() # datetime 모듈이용하여 현재 날짜 저장
+               return_D = today_D+timedelta(weeks=2) # timedelta 함수 이용 2주뒤 날짜 저장
+               select_user = USER_SELECT_BOX.focus()
+               if user_df.loc[select_user,'USER_REG'] == True:
+              
+                  new_rent = { "RENT_NUM": num,
+                           "RENT_DATE": today_D,
+                           "RENT_RDATE": return_D,
+                           "RENT_RYN": False,
+                           "BOOK_ISBN": select_book,
+                           "USER_PHONE": select_user} 
+                  
+                  
+                  book_df.loc[select_book,'BOOK_RENTAL']="True"
+                  rent_df = rent_df.set_index(rent_df['BOOK_ISBN'])
+                  rent_df.loc[len(rent_df)+1] = new_rent
+                  usercnt = user_df.loc[select_user,'USER_RENT_CNT']
+                  user_df.loc[select_user,'USER_RENT_CNT'] = usercnt+1
+                  #rent_df = rent_df.set_index(rent_df['RENT_NUM'])
+                  #rent_df.reset_index(drop=True,inplace=True)
+                  rent_df = rent_df.sort_values(by = ["RENT_NUM"]) 
+                  num += 1
+
+                             
+                  book_df.to_csv("csv/book.csv",index=False)
+                  user_df.to_csv("csv/user.csv", index = False)
+                  rent_df.to_csv("csv/rent.csv", index = False)
+                  tkinter.messagebox.showinfo("도서 대출", "도서 대출 완료")
+                  rent1.destroy()
+                  window.destroy()
+               else :
+                  tkinter.messagebox.showerror("오류","탈퇴한 회원은 대여가 불가능합니다.")
 
                    
-            #result_info = (user_name, phone, user_birth, user_sex)
-            #USER_SELECT_BOX.insert('','end',values=result_info,iid=phone)
+               
            
-        
-        
-        
-        def event_book_rent():
-            global num
-            rent_df = pd.read_csv("csv/rent.csv",encoding = "utf-8")
-            rent_df = rent_df.set_index(rent_df['RENT_NUM'])
-            #number = rent_df['RENT_NUM'].tolist() 
             
-            number = rent_df['RENT_NUM'].tolist()
-            if num in number:
-                num = max(rent_df.index.tolist()) + 1
-            
-            for i in range(1,len(rent_df)+1):
-                  if i not in number and num > i:
-                     num = i
-            if len(rent_df) == 0:
-                num = 1
-            book_df = pd.read_csv("csv/book.csv",encoding = "utf-8")
-            book_df = book_df.set_index(book_df['BOOK_ISBN'])
+           rent1label = Label(rent1, text = '도서 대출하기', bg = 'gray', width = 700, height = 4)
+           rent1label.pack()
+    
+           rent1booklabel = Label(rent1, text = '대출할 도서', bg='gray')
+           rent1booklabel.place(relx=0.05,rely=0.2,relwidth=0.15,relheight=0.07)
 
-            user_df = pd.read_csv("csv/user.csv",encoding = "utf-8")
-            user_df = user_df.set_index(user_df['USER_PHONE'])
+           # 책에 맞게 제목 빌려오기
+           ABC = csv_pull.loc[int(select_book)]["BOOK_TITLE"]
+           booknamelabel = Label(rent1, text = '▶{}◀'.format(ABC), bg = 'gray') 
+           booknamelabel.place(relx=0.25,rely=0.2,relwidth=0.6,relheight=0.07)
 
-            
-            
+    
+           searchuserlabel = Label(rent1, text = '회원정보 입력', bg = 'gray')
+           searchuserlabel.place(relx = 0.05,rely=0.3,relwidth=0.15,relheight=0.07)
 
-            today_D = datetime.now().date() # datetime 모듈이용하여 현재 날짜 저장
-            return_D = today_D+timedelta(weeks=2) # timedelta 함수 이용 2주뒤 날짜 저장
-            select_user = USER_SELECT_BOX.focus()
-            
-            new_rent = { "RENT_NUM": num,
-                     "RENT_DATE": today_D,
-                     "RENT_RDATE": return_D,
-                     "RENT_RYN": False,
-                     "BOOK_ISBN": select_book,
-                     "USER_PHONE": select_user} 
-            
-            
-            book_df.loc[select_book,'BOOK_RENTAL']="True"
-            rent_df = rent_df.set_index(rent_df['BOOK_ISBN'])
-            rent_df.loc[len(rent_df)+1] = new_rent
-            usercnt = user_df.loc[select_user,'USER_RENT_CNT']
-            user_df.loc[select_user,'USER_RENT_CNT'] = usercnt+1
-            #rent_df = rent_df.set_index(rent_df['RENT_NUM'])
-            #rent_df.reset_index(drop=True,inplace=True)
-            rent_df = rent_df.sort_values(by = ["RENT_NUM"]) 
-            num += 1
+           Notice = Label(rent1, text = '※ 대출을 원하시는 회원을 선택하고 선택하기 버튼을 눌러주세요',)
+           Notice.place(relx = 0.05,rely=0.8,relwidth=0.5,relheight=0.07)
 
-                       
-            book_df.to_csv("csv/book.csv",index=False)
-            user_df.to_csv("csv/user.csv", index = False)
-            rent_df.to_csv("csv/rent.csv", index = False)
-            tkinter.messagebox.showinfo("도서 대출", "도서 대출 완료")
-            rent1.destroy()
-            window.destroy()
+           
+           searchuserentry = Entry(rent1)
+           searchuserentry.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
+           def search2 ():        
+               for phone in df_user.index.tolist():
+                   user_name = searchuserentry.get()
+                   
+                   search1 = df_user["USER_PHONE"].str.contains(user_name) # 폰번호 필터링
+                   search2 = df_user["USER_NAME"].str.contains(user_name) # 이름 필터링
+                   # 제목 + 저자로 필터링
+                   csv_2 = df_user.loc[search1 | search2,["USER_PHONE","USER_NAME","USER_SEX"]]
 
-                
-            
-        
-         
-        rent1label = Label(rent1, text = '도서 대출하기', bg = 'gray', width = 700, height = 4)
-        rent1label.pack()
- 
-        rent1booklabel = Label(rent1, text = '대출할 도서', bg='gray')
-        rent1booklabel.place(relx=0.05,rely=0.2,relwidth=0.15,relheight=0.07)
+               # Treeview 기존 목록 삭제
+               for item in USER_SELECT_BOX.get_children(): 
+                   USER_SELECT_BOX.delete(item)
+                   
+               # 제목과 저자로 필터링한 목록 출력
+               for phone in csv_2.index.tolist():
+                   user_name = df_user.loc[phone, "USER_NAME"]
+                   user_birth = df_user.loc[phone, "USER_BIRTH"]
+                   user_sex = df_user.loc[phone, "USER_SEX"]          
+               
+                   user_add = (phone,user_name,user_birth, user_sex)
+                   USER_SELECT_BOX.insert("","end",text="",value=user_add,iid=phone)
+               
+           searchuserbutton = Button(rent1, text = "검색",command=search2)
+           searchuserbutton.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
+    
+           userselectbutton = Button(rent1, text = '선택하기',command = event_book_rent)
+           userselectbutton.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
 
-        # 책에 맞게 제목 빌려오기
-        ABC = csv_pull.loc[int(select_book)]["BOOK_TITLE"]
-        booknamelabel = Label(rent1, text = '▶{}◀'.format(ABC), bg = 'gray') 
-        booknamelabel.place(relx=0.25,rely=0.2,relwidth=0.6,relheight=0.07)
-
- 
-        searchuserlabel = Label(rent1, text = '회원정보 입력', bg = 'gray')
-        searchuserlabel.place(relx = 0.05,rely=0.3,relwidth=0.15,relheight=0.07)
-
-        Notice = Label(rent1, text = '※ 대출을 원하시는 회원을 선택하고 선택하기 버튼을 눌러주세요',)
-        Notice.place(relx = 0.05,rely=0.8,relwidth=0.5,relheight=0.07)
-
-        
-        searchuserentry = Entry(rent1)
-        searchuserentry.place(relx=0.25,rely=0.3,relwidth=0.6,relheight=0.07)
-        def search2 ():        
-            for phone in df_user.index.tolist():
-                user_name = searchuserentry.get()
-                
-                search1 = df_user["USER_PHONE"].str.contains(user_name) # 폰번호 필터링
-                search2 = df_user["USER_NAME"].str.contains(user_name) # 이름 필터링
-                # 제목 + 저자로 필터링
-                csv_2 = df_user.loc[search1 | search2,["USER_PHONE","USER_NAME","USER_SEX"]]
-
-            # Treeview 기존 목록 삭제
-            for item in USER_SELECT_BOX.get_children(): 
-                USER_SELECT_BOX.delete(item)
-                
-            # 제목과 저자로 필터링한 목록 출력
-            for phone in csv_2.index.tolist():
-                user_name = df_user.loc[phone, "USER_NAME"]
-                user_birth = df_user.loc[phone, "USER_BIRTH"]
-                user_sex = df_user.loc[phone, "USER_SEX"]          
-            
-                user_add = (phone,user_name,user_birth, user_sex)
-                USER_SELECT_BOX.insert("","end",text="",value=user_add,iid=phone)
-            
-        searchuserbutton = Button(rent1, text = "검색",command=search2)
-        searchuserbutton.place(relx=0.86,rely=0.3,relwidth=0.1,relheight = 0.07)
- 
-        userselectbutton = Button(rent1, text = '선택하기',command = event_book_rent)
-        userselectbutton.place(relx=0.86,rely=0.4,relwidth=0.1,relheight=0.05)
-
-        #USER_SELECT_BOX.bind('<Double-Button-1>',click_item)
-        USER_SELECT_BOX.place(relx=0.05,rely=0.4,relwidth=0.8,relheight = 0.4)
-      else:
-          tkinter.messagebox.showerror("오류","이미 대출중인 도서입니다.")
+           #USER_SELECT_BOX.bind('<Double-Button-1>',click_item)
+           USER_SELECT_BOX.place(relx=0.05,rely=0.4,relwidth=0.8,relheight = 0.4)
+         else:
+             tkinter.messagebox.showerror("오류","이미 대출중인 도서입니다.")
+      
     
     def event_book_return():
          book_df = pd.read_csv("csv/book.csv",encoding = "utf-8")
