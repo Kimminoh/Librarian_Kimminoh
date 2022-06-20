@@ -284,6 +284,8 @@ def BOOK_NEW_REG():
                 csv_pull.loc[a, 'BOOK_IMAGE']= g
                 csv_pull.loc[a, 'BOOK_DESCRIPTION']= h
                 csv_pull.loc[a, 'BOOK_RENTAL']= "False"
+                
+                csv_pull = csv_pull.sort_values(by = ["BOOK_PRICE"])
                 #csv 저장하기 
                 csv_pull.to_csv("csv/book.csv", index = True)
                 tkinter.messagebox.showinfo("SUCCES","도서 등록이 완료 되었습니다 !!")
@@ -558,22 +560,26 @@ def BOOK_EDIT(selected):
                 ERROR_4()
                
             else:
-
-                csv_pull.loc[selected, 'BOOK_TITLE']= b
-                csv_pull.loc[selected, 'BOOK_AUTHOR']= c  
-                csv_pull.loc[selected, 'BOOK_PUBLIC']= d 
-                csv_pull.loc[selected, 'BOOK_PRICE']= int(e)
-                csv_pull.loc[selected, 'BOOK_LINK']= f
-                csv_pull.loc[selected, 'BOOK_IMAGE']= g
-                csv_pull.loc[selected, 'BOOK_DESCRIPTION']= h
-                
-                # ISBN 값 수정하는 코드 추가
-                csv_pull = csv_pull.reset_index()
-                csv_pull.loc[0, 'BOOK_ISBN']= a
+                csv_pull = pd.read_csv("csv/book.csv",encoding = "utf-8")
                 csv_pull = csv_pull.set_index("BOOK_ISBN")
+
+                csv_pull = csv_pull.drop(selected)
                 
-                #csv 저장하기   
+                csv_pull.loc[a, 'BOOK_TITLE']= b
+                csv_pull.loc[a, 'BOOK_AUTHOR']= c  
+                csv_pull.loc[a, 'BOOK_PUBLIC']= d 
+                csv_pull.loc[a, 'BOOK_PRICE']= int(e)
+                csv_pull.loc[a, 'BOOK_LINK']= f
+                csv_pull.loc[a, 'BOOK_IMAGE']= g
+                csv_pull.loc[a, 'BOOK_DESCRIPTION']= h
+                csv_pull.loc[a, 'BOOK_RENTAL']= "False"
+                
+                csv_pull = csv_pull.sort_values(by = ["BOOK_PRICE"])
+                #csv 저장하기 
                 csv_pull.to_csv("csv/book.csv", index = True)
+
+                
+            
                 tkinter.messagebox.showinfo("수정 성공","수정이 완료 되었습니다!")
                 print(tabulate(csv_pull, headers='keys', tablefmt='psql',numalign='left',stralign='left'))
                 window.destroy()
