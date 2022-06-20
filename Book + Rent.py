@@ -363,6 +363,8 @@ def BOOK_NEW_REG():
     SEARCH_IMAGE_FIND = Entry(window)
     SEARCH_IMAGE_FIND.place(x= 250, y= 360,relwidth=0.5,relheight=0.05)
 
+    SEARCH_IMAGE_FIND['state'] = 'disabled'
+    
     # 안내창
     explain = Label(window, text = '※사진은 필수 정보 입니다. 반드시 입력해 주세요 !!',
                 width = '45', height = 1)
@@ -375,7 +377,7 @@ def BOOK_NEW_REG():
     # 사진 찾는 함수 
     def find_image_name():
         file_name=askopenfilename(parent=window,filetype=(("PNG파일", "*.png"),("모든 파일","*.*")))
-
+        SEARCH_IMAGE_FIND['state'] = 'normal'
         photo1=Image.open(file_name)
         photo2=photo1.resize((120,150))
         photo3=ImageTk.PhotoImage(photo2,master=window)
